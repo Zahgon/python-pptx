@@ -42,12 +42,11 @@ class CT_Boolean_Explicit(BaseOxmlElement):
 
     @property
     def val(self):
-        return self._val
+        pass
 
     @val.setter
     def val(self, value):
-        val_str = "1" if bool(value) is True else "0"
-        self.set("val", val_str)
+        pass
 
 
 class CT_Double(BaseOxmlElement):
@@ -72,10 +71,7 @@ class CT_Layout(BaseOxmlElement):
         c:layout/c:manualLayout/c:xMode@val == "factor". 0.0 if that XPath
         expression finds no match.
         """
-        manualLayout = self.manualLayout
-        if manualLayout is None:
-            return 0.0
-        return manualLayout.horz_offset
+        pass
 
     @horz_offset.setter
     def horz_offset(self, offset):
@@ -84,11 +80,7 @@ class CT_Layout(BaseOxmlElement):
         ./c:manualLayout/c:xMode@val to "factor". Remove ./c:manualLayout if
         *offset* == 0.
         """
-        if offset == 0.0:
-            self._remove_manualLayout()
-            return
-        manualLayout = self.get_or_add_manualLayout()
-        manualLayout.horz_offset = offset
+        pass
 
 
 class CT_LayoutMode(BaseOxmlElement):
@@ -127,18 +119,14 @@ class CT_ManualLayout(BaseOxmlElement):
         The float value in ./c:x@val when ./c:xMode@val == "factor". 0.0 when
         ./c:x is not present or ./c:xMode@val != "factor".
         """
-        x, xMode = self.x, self.xMode
-        if x is None or xMode is None or xMode.val != ST_LayoutMode.FACTOR:
-            return 0.0
-        return x.val
+        pass
 
     @horz_offset.setter
     def horz_offset(self, offset):
         """
         Set the value of ./c:x@val to *offset* and ./c:xMode@val to "factor".
         """
-        self.get_or_add_xMode().val = ST_LayoutMode.FACTOR
-        self.get_or_add_x().val = offset
+        pass
 
 
 class CT_NumFmt(BaseOxmlElement):
@@ -168,24 +156,17 @@ class CT_Title(BaseOxmlElement):
         a cell reference for the axis title text in the chart's Excel
         worksheet.)
         """
-        tx = self.get_or_add_tx()
-        tx._remove_strRef()
-        return tx.get_or_add_rich()
+        pass
 
     @property
     def tx_rich(self):
         """Return `c:tx/c:rich` or |None| if not present."""
-        richs = self.xpath("c:tx/c:rich")
-        if not richs:
-            return None
-        return richs[0]
+        pass
 
     @staticmethod
     def new_title():
         """Return "loose" `c:title` element containing default children."""
-        return parse_xml(
-            "<c:title %s>" "  <c:layout/>" '  <c:overlay val="0"/>' "</c:title>" % nsdecls("c")
-        )
+        pass
 
 
 class CT_Tx(BaseOxmlElement):
@@ -198,17 +179,7 @@ class CT_Tx(BaseOxmlElement):
     rich = ZeroOrOne("c:rich")
 
     def _new_rich(self):
-        return parse_xml(
-            "<c:rich %s>"
-            "  <a:bodyPr/>"
-            "  <a:lstStyle/>"
-            "  <a:p>"
-            "    <a:pPr>"
-            "      <a:defRPr/>"
-            "    </a:pPr>"
-            "  </a:p>"
-            "</c:rich>" % nsdecls("c", "a")
-        )
+        pass
 
 
 class CT_UnsignedInt(BaseOxmlElement):

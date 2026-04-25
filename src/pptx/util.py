@@ -24,7 +24,7 @@ class Length(int):
     @property
     def inches(self) -> float:
         """Floating point length in inches."""
-        return self / float(self._EMUS_PER_INCH)
+        pass
 
     @property
     def centipoints(self) -> int:
@@ -32,27 +32,27 @@ class Length(int):
 
         Used internally because PowerPoint stores font size in centipoints.
         """
-        return self // self._EMUS_PER_CENTIPOINT
+        pass
 
     @property
     def cm(self) -> float:
         """Floating point length in centimeters."""
-        return self / float(self._EMUS_PER_CM)
+        pass
 
     @property
     def emu(self) -> int:
         """Integer length in English Metric Units."""
-        return self
+        pass
 
     @property
     def mm(self) -> float:
         """Floating point length in millimeters."""
-        return self / float(self._EMUS_PER_MM)
+        pass
 
     @property
     def pt(self) -> float:
         """Floating point length in points."""
-        return self / float(self._EMUS_PER_PT)
+        pass
 
 
 class Inches(Length):

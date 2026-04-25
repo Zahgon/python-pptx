@@ -51,7 +51,7 @@ class _BaseSlide(PartElementProxy):
         The same |_Background| object is returned on every call for the same
         slide object.
         """
-        return _Background(self._element.cSld)
+        pass
 
     @property
     def name(self) -> str:
@@ -60,12 +60,11 @@ class _BaseSlide(PartElementProxy):
         Returns an empty string (`''`) if no name is assigned. Assigning an empty string or |None|
         to this property causes any name to be removed.
         """
-        return self._element.cSld.name
+        pass
 
     @name.setter
     def name(self, value: str | None):
-        new_value = "" if value is None else value
-        self._element.cSld.name = new_value
+        pass
 
 
 class _BaseMaster(_BaseSlide):
@@ -80,7 +79,7 @@ class _BaseMaster(_BaseSlide):
 
         Sequence sorted in `idx` order.
         """
-        return MasterPlaceholders(self._element.spTree, self)
+        pass
 
     @lazyproperty
     def shapes(self):
@@ -88,7 +87,7 @@ class _BaseMaster(_BaseSlide):
         Instance of |MasterShapes| containing sequence of shape objects
         appearing on this slide.
         """
-        return MasterShapes(self._element.spTree, self)
+        pass
 
 
 class NotesMaster(_BaseMaster):
@@ -142,10 +141,7 @@ class NotesSlide(_BaseSlide):
         happen if the notes master does not have a body placeholder, or if the notes placeholder
         has been deleted from the notes slide.
         """
-        for placeholder in self.placeholders:
-            if placeholder.placeholder_format.type == PP_PLACEHOLDER.BODY:
-                return placeholder
-        return None
+        pass
 
     @property
     def notes_text_frame(self) -> TextFrame | None:
@@ -154,10 +150,7 @@ class NotesSlide(_BaseSlide):
         |None| if there is no notes placeholder. This is a shortcut to accommodate the common case
         of simply adding "notes" text to the notes "page".
         """
-        notes_placeholder = self.notes_placeholder
-        if notes_placeholder is None:
-            return None
-        return notes_placeholder.text_frame
+        pass
 
     @lazyproperty
     def placeholders(self) -> NotesSlidePlaceholders:
@@ -165,12 +158,12 @@ class NotesSlide(_BaseSlide):
 
         Contains the sequence of placeholder shapes in this notes slide.
         """
-        return NotesSlidePlaceholders(self.element.spTree, self)
+        pass
 
     @lazyproperty
     def shapes(self) -> NotesSlideShapes:
         """Sequence of shape objects appearing on this notes slide."""
-        return NotesSlideShapes(self._element.spTree, self)
+        pass
 
 
 class Slide(_BaseSlide):
@@ -190,7 +183,7 @@ class Slide(_BaseSlide):
         Assigning |True| causes any custom background for this slide to be
         deleted and inheritance from the master restored.
         """
-        return self._element.bg is None
+        pass
 
     @property
     def has_notes_slide(self) -> bool:
@@ -199,7 +192,7 @@ class Slide(_BaseSlide):
         A notes slide is created by :attr:`.notes_slide` when one doesn't exist; use this property
         to test for a notes slide without the possible side effect of creating one.
         """
-        return self.part.has_notes_slide
+        pass
 
     @property
     def notes_slide(self) -> NotesSlide:
@@ -208,17 +201,17 @@ class Slide(_BaseSlide):
         If the slide does not have a notes slide, one is created. The same single instance is
         returned on each call.
         """
-        return self.part.notes_slide
+        pass
 
     @lazyproperty
     def placeholders(self) -> SlidePlaceholders:
         """Sequence of placeholder shapes in this slide."""
-        return SlidePlaceholders(self._element.spTree, self)
+        pass
 
     @lazyproperty
     def shapes(self) -> SlideShapes:
         """Sequence of shape objects appearing on this slide."""
-        return SlideShapes(self._element.spTree, self)
+        pass
 
     @property
     def slide_id(self) -> int:
@@ -227,12 +220,12 @@ class Slide(_BaseSlide):
         The slide id does not change if the position of this slide in the slide sequence is changed
         by adding, rearranging, or deleting slides.
         """
-        return self.part.slide_id
+        pass
 
     @property
     def slide_layout(self) -> SlideLayout:
         """|SlideLayout| object this slide inherits appearance from."""
-        return self.part.slide_layout
+        pass
 
 
 class Slides(ParentedElementProxy):
@@ -267,10 +260,7 @@ class Slides(ParentedElementProxy):
 
     def add_slide(self, slide_layout: SlideLayout) -> Slide:
         """Return a newly added slide that inherits layout from `slide_layout`."""
-        rId, slide = self.part.add_slide(slide_layout)
-        slide.shapes.clone_layout_placeholders(slide_layout)
-        self._sldIdLst.add_sldId(rId)
-        return slide
+        pass
 
     def get(self, slide_id: int, default: Slide | None = None) -> Slide | None:
         """Return the slide identified by int `slide_id` in this presentation.
@@ -321,24 +311,22 @@ class SlideLayout(_BaseSlide):
 
         Placeholders appear in `idx` order.
         """
-        return LayoutPlaceholders(self._element.spTree, self)
+        pass
 
     @lazyproperty
     def shapes(self) -> LayoutShapes:
         """Sequence of shapes appearing on this slide layout."""
-        return LayoutShapes(self._element.spTree, self)
+        pass
 
     @property
     def slide_master(self) -> SlideMaster:
         """Slide master from which this slide-layout inherits properties."""
-        return self.part.slide_master
+        pass
 
     @property
     def used_by_slides(self):
         """Tuple of slide objects based on this slide layout."""
-        # ---getting Slides collection requires going around the horn a bit---
-        slides = self.part.package.presentation_part.presentation.slides
-        return tuple(s for s in slides if s.slide_layout == self)
+        pass
 
 
 class SlideLayouts(ParentedElementProxy):
@@ -372,10 +360,7 @@ class SlideLayouts(ParentedElementProxy):
 
     def get_by_name(self, name: str, default: SlideLayout | None = None) -> SlideLayout | None:
         """Return SlideLayout object having `name`, or `default` if not found."""
-        for slide_layout in self:
-            if slide_layout.name == name:
-                return slide_layout
-        return default
+        pass
 
     def index(self, slide_layout: SlideLayout) -> int:
         """Return zero-based index of `slide_layout` in this collection.
@@ -423,7 +408,7 @@ class SlideMaster(_BaseMaster):
     @lazyproperty
     def slide_layouts(self) -> SlideLayouts:
         """|SlideLayouts| object providing access to this slide-master's layouts."""
-        return SlideLayouts(self._element.get_or_add_sldLayoutIdLst(), self)
+        pass
 
 
 class SlideMasters(ParentedElementProxy):
@@ -494,5 +479,4 @@ class _Background(ElementProxy):
         If the background is already a fill, then accessing this property
         makes no changes to the current background.
         """
-        bgPr = self._cSld.get_or_add_bgPr()
-        return FillFormat.from_fill_parent(bgPr)
+        pass

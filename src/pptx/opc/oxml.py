@@ -39,9 +39,7 @@ def oxml_to_encoded_bytes(
     pretty_print: bool = False,
     standalone: bool | None = None,
 ) -> bytes:
-    return etree.tostring(
-        element, encoding=encoding, pretty_print=pretty_print, standalone=standalone
-    )
+    pass
 
 
 def oxml_tostring(
@@ -50,7 +48,7 @@ def oxml_tostring(
     pretty_print: bool = False,
     standalone: bool | None = None,
 ):
-    return etree.tostring(elm, encoding=encoding, pretty_print=pretty_print, standalone=standalone)
+    pass
 
 
 def serialize_part_xml(part_elm: BaseOxmlElement) -> bytes:
@@ -58,7 +56,7 @@ def serialize_part_xml(part_elm: BaseOxmlElement) -> bytes:
 
     Includes XML-declaration header.
     """
-    return etree.tostring(part_elm, encoding="UTF-8", standalone=True)
+    pass
 
 
 class CT_Default(BaseOxmlElement):
@@ -148,7 +146,7 @@ class CT_Relationships(BaseOxmlElement):
         Suitable for saving in a .rels stream, not pretty printed and with an XML declaration at
         the top.
         """
-        return oxml_to_encoded_bytes(self, encoding="UTF-8", standalone=True)
+        pass
 
 
 class CT_Types(BaseOxmlElement):

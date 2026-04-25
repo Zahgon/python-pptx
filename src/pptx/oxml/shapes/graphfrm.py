@@ -45,7 +45,7 @@ class CT_GraphicalObject(BaseOxmlElement):
     @property
     def chart(self) -> CT_Chart | None:
         """The `c:chart` grandchild element, or |None| if not present."""
-        return self.graphicData.chart
+        pass
 
 
 class CT_GraphicalObjectData(BaseShapeElement):
@@ -67,7 +67,7 @@ class CT_GraphicalObjectData(BaseShapeElement):
         (it is specified optional in the schema) but so far, all OLE objects we've encountered
         specify this value.
         """
-        return None if self._oleObj is None else self._oleObj.rId
+        pass
 
     @property
     def is_embedded_ole_obj(self) -> bool | None:
@@ -76,7 +76,7 @@ class CT_GraphicalObjectData(BaseShapeElement):
         Returns `None` when this `p:graphicData` element does not enclose an OLE object. `True`
         indicates an embedded OLE object and `False` indicates a linked OLE object.
         """
-        return None if self._oleObj is None else self._oleObj.is_embedded
+        pass
 
     @property
     def progId(self) -> str | None:
@@ -90,7 +90,7 @@ class CT_GraphicalObjectData(BaseShapeElement):
         specified optional in the schema) but so far, all OLE objects we've encountered specify
         this value.
         """
-        return None if self._oleObj is None else self._oleObj.progId
+        pass
 
     @property
     def showAsIcon(self) -> bool | None:
@@ -99,7 +99,7 @@ class CT_GraphicalObjectData(BaseShapeElement):
         This value is `None` when this `p:graphicData` element does not enclose an OLE object. It
         is False when the `showAsIcon` attribute is omitted on the `p:oleObj` element.
         """
-        return None if self._oleObj is None else self._oleObj.showAsIcon
+        pass
 
     @property
     def _oleObj(self) -> CT_OleObject | None:
@@ -112,8 +112,7 @@ class CT_GraphicalObjectData(BaseShapeElement):
         choices. The last one should suit best for reading purposes because it contains the lowest
         common denominator.
         """
-        oleObjs = cast("list[CT_OleObject]", self.xpath(".//p:oleObj"))
-        return oleObjs[-1] if oleObjs else None
+        pass
 
 
 class CT_GraphicalObjectFrame(BaseShapeElement):
@@ -133,7 +132,7 @@ class CT_GraphicalObjectFrame(BaseShapeElement):
     @property
     def chart(self) -> CT_Chart | None:
         """The `c:chart` great-grandchild element, or |None| if not present."""
-        return self.graphic.chart
+        pass
 
     @property
     def chart_rId(self) -> str | None:
@@ -141,32 +140,29 @@ class CT_GraphicalObjectFrame(BaseShapeElement):
 
         |None| if not present.
         """
-        chart = self.chart
-        if chart is None:
-            return None
-        return chart.rId
+        pass
 
     def get_or_add_xfrm(self) -> CT_Transform2D:
         """Return the required `p:xfrm` child element.
 
         Overrides version on BaseShapeElement.
         """
-        return self.xfrm
+        pass
 
     @property
     def graphicData(self) -> CT_GraphicalObjectData:
         """`a:graphicData` grandchild of this graphic-frame element."""
-        return self.graphic.graphicData
+        pass
 
     @property
     def graphicData_uri(self) -> str:
         """str value of `uri` attribute of `a:graphicData` grandchild."""
-        return self.graphic.graphicData.uri
+        pass
 
     @property
     def has_oleobj(self) -> bool:
         """`True` for graphicFrame containing an OLE object, `False` otherwise."""
-        return self.graphicData.uri == GRAPHIC_DATA_URI_OLEOBJ
+        pass
 
     @property
     def is_embedded_ole_obj(self) -> bool | None:
@@ -175,18 +171,14 @@ class CT_GraphicalObjectFrame(BaseShapeElement):
         Returns `None` when this `p:graphicFrame` element does not enclose an OLE object. `True`
         indicates an embedded OLE object and `False` indicates a linked OLE object.
         """
-        return self.graphicData.is_embedded_ole_obj
+        pass
 
     @classmethod
     def new_chart_graphicFrame(
         cls, id_: int, name: str, rId: str, x: int, y: int, cx: int, cy: int
     ) -> CT_GraphicalObjectFrame:
         """Return a `p:graphicFrame` element tree populated with a chart element."""
-        graphicFrame = CT_GraphicalObjectFrame.new_graphicFrame(id_, name, x, y, cx, cy)
-        graphicData = graphicFrame.graphic.graphicData
-        graphicData.uri = GRAPHIC_DATA_URI_CHART
-        graphicData.append(CT_Chart.new_chart(rId))
-        return graphicFrame
+        pass
 
     @classmethod
     def new_graphicFrame(
@@ -197,27 +189,7 @@ class CT_GraphicalObjectFrame(BaseShapeElement):
         Note that a graphicFrame element is not a valid shape until it contains a graphical object
         such as a table.
         """
-        return cast(
-            CT_GraphicalObjectFrame,
-            parse_xml(
-                f"<p:graphicFrame {nsdecls('a', 'p')}>\n"
-                f"  <p:nvGraphicFramePr>\n"
-                f'    <p:cNvPr id="{id_}" name="{name}"/>\n'
-                f"    <p:cNvGraphicFramePr>\n"
-                f'      <a:graphicFrameLocks noGrp="1"/>\n'
-                f"    </p:cNvGraphicFramePr>\n"
-                f"    <p:nvPr/>\n"
-                f"  </p:nvGraphicFramePr>\n"
-                f"  <p:xfrm>\n"
-                f'    <a:off x="{x}" y="{y}"/>\n'
-                f'    <a:ext cx="{cx}" cy="{cy}"/>\n'
-                f"  </p:xfrm>\n"
-                f"  <a:graphic>\n"
-                f"    <a:graphicData/>\n"
-                f"  </a:graphic>\n"
-                f"</p:graphicFrame>"
-            ),
-        )
+        pass
 
     @classmethod
     def new_ole_object_graphicFrame(
@@ -244,68 +216,14 @@ class CT_GraphicalObjectFrame(BaseShapeElement):
         `icon_rId` identifies the relationship to an image part used to display the OLE-object as
         an icon (vs. a preview).
         """
-        return cast(
-            CT_GraphicalObjectFrame,
-            parse_xml(
-                f"<p:graphicFrame {nsdecls('a', 'p', 'r')}>\n"
-                f"  <p:nvGraphicFramePr>\n"
-                f'    <p:cNvPr id="{id_}" name="{name}"/>\n'
-                f"    <p:cNvGraphicFramePr>\n"
-                f'      <a:graphicFrameLocks noGrp="1"/>\n'
-                f"    </p:cNvGraphicFramePr>\n"
-                f"    <p:nvPr/>\n"
-                f"  </p:nvGraphicFramePr>\n"
-                f"  <p:xfrm>\n"
-                f'    <a:off x="{x}" y="{y}"/>\n'
-                f'    <a:ext cx="{cx}" cy="{cy}"/>\n'
-                f"  </p:xfrm>\n"
-                f"  <a:graphic>\n"
-                f"    <a:graphicData"
-                f'        uri="http://schemas.openxmlformats.org/presentationml/2006/ole">\n'
-                f'      <p:oleObj showAsIcon="1"'
-                f'                r:id="{ole_object_rId}"'
-                f'                imgW="{imgW}"'
-                f'                imgH="{imgH}"'
-                f'                progId="{progId}">\n'
-                f"        <p:embed/>\n"
-                f"        <p:pic>\n"
-                f"          <p:nvPicPr>\n"
-                f'            <p:cNvPr id="0" name=""/>\n'
-                f"            <p:cNvPicPr/>\n"
-                f"            <p:nvPr/>\n"
-                f"          </p:nvPicPr>\n"
-                f"          <p:blipFill>\n"
-                f'            <a:blip r:embed="{icon_rId}"/>\n'
-                f"            <a:stretch>\n"
-                f"              <a:fillRect/>\n"
-                f"            </a:stretch>\n"
-                f"          </p:blipFill>\n"
-                f"          <p:spPr>\n"
-                f"            <a:xfrm>\n"
-                f'              <a:off x="{x}" y="{y}"/>\n'
-                f'              <a:ext cx="{cx}" cy="{cy}"/>\n'
-                f"            </a:xfrm>\n"
-                f'            <a:prstGeom prst="rect">\n'
-                f"              <a:avLst/>\n"
-                f"            </a:prstGeom>\n"
-                f"          </p:spPr>\n"
-                f"        </p:pic>\n"
-                f"      </p:oleObj>\n"
-                f"    </a:graphicData>\n"
-                f"  </a:graphic>\n"
-                f"</p:graphicFrame>"
-            ),
-        )
+        pass
 
     @classmethod
     def new_table_graphicFrame(
         cls, id_: int, name: str, rows: int, cols: int, x: int, y: int, cx: int, cy: int
     ) -> CT_GraphicalObjectFrame:
         """Return a `p:graphicFrame` element tree populated with a table element."""
-        graphicFrame = cls.new_graphicFrame(id_, name, x, y, cx, cy)
-        graphicFrame.graphic.graphicData.uri = GRAPHIC_DATA_URI_TABLE
-        graphicFrame.graphic.graphicData.append(CT_Table.new_tbl(rows, cols, cx, cy))
-        return graphicFrame
+        pass
 
 
 class CT_GraphicalObjectFrameNonVisual(BaseOxmlElement):
@@ -339,4 +257,4 @@ class CT_OleObject(BaseOxmlElement):
     @property
     def is_embedded(self) -> bool:
         """True when this OLE object is embedded, False when it is linked."""
-        return len(self.xpath("./p:embed")) > 0
+        pass

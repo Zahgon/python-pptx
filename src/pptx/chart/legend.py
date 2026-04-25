@@ -22,9 +22,7 @@ class Legend(object):
         The |Font| object that provides access to the text properties for
         this legend, such as bold, italic, etc.
         """
-        defRPr = self._element.defRPr
-        font = Font(defRPr)
-        return font
+        pass
 
     @property
     def horz_offset(self):
@@ -34,11 +32,11 @@ class Legend(object):
         the chart width. Negative values move the legend left, positive
         values move it to the right. |None| if no setting is specified.
         """
-        return self._element.horz_offset
+        pass
 
     @horz_offset.setter
     def horz_offset(self, value):
-        self._element.horz_offset = value
+        pass
 
     @property
     def include_in_layout(self):
@@ -51,17 +49,11 @@ class Legend(object):
         |True|. This use case should rarely be required and assigning
         a boolean value is recommended.
         """
-        overlay = self._element.overlay
-        if overlay is None:
-            return True
-        return overlay.val
+        pass
 
     @include_in_layout.setter
     def include_in_layout(self, value):
-        if value is None:
-            self._element._remove_overlay()
-            return
-        self._element.get_or_add_overlay().val = bool(value)
+        pass
 
     @property
     def position(self):
@@ -69,11 +61,8 @@ class Legend(object):
         Read/write :ref:`XlLegendPosition` enumeration value specifying the
         general region of the chart in which to place the legend.
         """
-        legendPos = self._element.legendPos
-        if legendPos is None:
-            return XL_LEGEND_POSITION.RIGHT
-        return legendPos.val
+        pass
 
     @position.setter
     def position(self, position):
-        self._element.get_or_add_legendPos().val = position
+        pass

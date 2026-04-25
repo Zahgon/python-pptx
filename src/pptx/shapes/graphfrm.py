@@ -44,17 +44,12 @@ class GraphicFrame(BaseShape):
 
         Raises |ValueError| if this graphic frame does not contain a chart.
         """
-        if not self.has_chart:
-            raise ValueError("shape does not contain a chart")
-        return self.chart_part.chart
+        pass
 
     @property
     def chart_part(self) -> ChartPart:
         """The |ChartPart| object containing the chart in this graphic frame."""
-        chart_rId = self._graphicFrame.chart_rId
-        if chart_rId is None:
-            raise ValueError("this graphic frame does not contain a chart")
-        return cast("ChartPart", self.part.related_part(chart_rId))
+        pass
 
     @property
     def has_chart(self) -> bool:
@@ -62,7 +57,7 @@ class GraphicFrame(BaseShape):
 
         When |True|, the chart object can be accessed using the `.chart` property.
         """
-        return self._graphicFrame.graphicData_uri == GRAPHIC_DATA_URI_CHART
+        pass
 
     @property
     def has_table(self) -> bool:
@@ -70,7 +65,7 @@ class GraphicFrame(BaseShape):
 
         When |True|, the table object can be accessed using the `.table` property.
         """
-        return self._graphicFrame.graphicData_uri == GRAPHIC_DATA_URI_TABLE
+        pass
 
     @property
     def ole_format(self) -> _OleFormat:
@@ -81,9 +76,7 @@ class GraphicFrame(BaseShape):
         An shape that contains an OLE object will have `.shape_type` of either
         `EMBEDDED_OLE_OBJECT` or `LINKED_OLE_OBJECT`.
         """
-        if not self._graphicFrame.has_oleobj:
-            raise ValueError("not an OLE-object shape")
-        return _OleFormat(self._graphicFrame.graphicData, self._parent)
+        pass
 
     @lazyproperty
     def shadow(self) -> ShadowFormat:
@@ -104,19 +97,7 @@ class GraphicFrame(BaseShape):
         This value is `None` when none of these four types apply, for example when the shape
         contains SmartArt.
         """
-        graphicData_uri = self._graphicFrame.graphicData_uri
-        if graphicData_uri == GRAPHIC_DATA_URI_CHART:
-            return MSO_SHAPE_TYPE.CHART
-        elif graphicData_uri == GRAPHIC_DATA_URI_TABLE:
-            return MSO_SHAPE_TYPE.TABLE
-        elif graphicData_uri == GRAPHIC_DATA_URI_OLEOBJ:
-            return (
-                MSO_SHAPE_TYPE.EMBEDDED_OLE_OBJECT
-                if self._graphicFrame.is_embedded_ole_obj
-                else MSO_SHAPE_TYPE.LINKED_OLE_OBJECT
-            )
-        else:
-            return None  # pyright: ignore[reportReturnType]
+        pass
 
     @property
     def table(self) -> Table:
@@ -124,10 +105,7 @@ class GraphicFrame(BaseShape):
 
         Raises |ValueError| if this graphic frame does not contain a table.
         """
-        if not self.has_table:
-            raise ValueError("shape does not contain a table")
-        tbl = self._graphicFrame.graphic.graphicData.tbl
-        return Table(tbl, self)
+        pass
 
 
 class _OleFormat(ParentedElementProxy):
@@ -145,10 +123,7 @@ class _OleFormat(ParentedElementProxy):
 
         This value is `None` if the embedded object does not represent a "file".
         """
-        blob_rId = self._graphicData.blob_rId
-        if blob_rId is None:
-            return None
-        return self.part.related_part(blob_rId).blob
+        pass
 
     @property
     def prog_id(self) -> str | None:
@@ -158,9 +133,9 @@ class _OleFormat(ParentedElementProxy):
         object, or perhaps more precisely, the application (aka. "server" in OLE parlance) to be
         used to open this object.
         """
-        return self._graphicData.progId
+        pass
 
     @property
     def show_as_icon(self) -> bool | None:
         """True when OLE object should appear as an icon (rather than preview)."""
-        return self._graphicData.showAsIcon
+        pass

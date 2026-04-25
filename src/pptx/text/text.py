@@ -50,8 +50,7 @@ class TextFrame(Subshape):
         Return new |_Paragraph| instance appended to the sequence of
         paragraphs contained in this text frame.
         """
-        p = self._txBody.add_p()
-        return _Paragraph(p, self)
+        pass
 
     @property
     def auto_size(self) -> MSO_AUTO_SIZE | None:
@@ -62,11 +61,11 @@ class TextFrame(Subshape):
         |None|, `MSO_AUTO_SIZE.NONE`, `MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT`, or
         `MSO_AUTO_SIZE.TEXT_TO_FIT_SHAPE`.
         """
-        return self._bodyPr.autofit
+        pass
 
     @auto_size.setter
     def auto_size(self, value: MSO_AUTO_SIZE | None):
-        self._bodyPr.autofit = value
+        pass
 
     def clear(self):
         """Remove all paragraphs except one empty one."""
@@ -94,12 +93,7 @@ class TextFrame(Subshape):
         best efforts are made to locate a font file with matchhing `font_family`, `bold`, and
         `italic` installed on the current system (usually succeeds if the font is installed).
         """
-        # ---no-op when empty as fit behavior not defined for that case---
-        if self.text == "":
-            return  # pragma: no cover
-
-        font_size = self._best_fit_font_size(font_family, max_size, bold, italic, font_file)
-        self._apply_fit(font_family, font_size, bold, italic)
+        pass
 
     @property
     def margin_bottom(self) -> Length:
@@ -108,38 +102,38 @@ class TextFrame(Subshape):
         :meth:`pptx.util.Inches` provides a convenient way of setting the value, e.g.
         `text_frame.margin_bottom = Inches(0.05)`.
         """
-        return self._bodyPr.bIns
+        pass
 
     @margin_bottom.setter
     def margin_bottom(self, emu: Length):
-        self._bodyPr.bIns = emu
+        pass
 
     @property
     def margin_left(self) -> Length:
         """Inset of text from left text frame border as |Length| value."""
-        return self._bodyPr.lIns
+        pass
 
     @margin_left.setter
     def margin_left(self, emu: Length):
-        self._bodyPr.lIns = emu
+        pass
 
     @property
     def margin_right(self) -> Length:
         """Inset of text from right text frame border as |Length| value."""
-        return self._bodyPr.rIns
+        pass
 
     @margin_right.setter
     def margin_right(self, emu: Length):
-        self._bodyPr.rIns = emu
+        pass
 
     @property
     def margin_top(self) -> Length:
         """Inset of text from top text frame border as |Length| value."""
-        return self._bodyPr.tIns
+        pass
 
     @margin_top.setter
     def margin_top(self, emu: Length):
-        self._bodyPr.tIns = emu
+        pass
 
     @property
     def paragraphs(self) -> tuple[_Paragraph, ...]:
@@ -147,7 +141,7 @@ class TextFrame(Subshape):
 
         A text frame always contains at least one paragraph.
         """
-        return tuple([_Paragraph(p, self) for p in self._txBody.p_lst])
+        pass
 
     @property
     def text(self) -> str:
@@ -167,15 +161,11 @@ class TextFrame(Subshape):
         Any control character other than newline, tab, or vertical-tab are escaped as plain-text
         like "_x001B_" (for ESC (ASCII 32) in this example).
         """
-        return "\n".join(paragraph.text for paragraph in self.paragraphs)
+        pass
 
     @text.setter
     def text(self, text: str):
-        txBody = self._txBody
-        txBody.clear_content()
-        for p_text in text.split("\n"):
-            p = txBody.add_p()
-            p.append_text(p_text)
+        pass
 
     @property
     def vertical_anchor(self) -> MSO_VERTICAL_ANCHOR | None:
@@ -183,12 +173,11 @@ class TextFrame(Subshape):
 
         |None| indicates the effective value should be inherited from this object's style hierarchy.
         """
-        return self._txBody.bodyPr.anchor
+        pass
 
     @vertical_anchor.setter
     def vertical_anchor(self, value: MSO_VERTICAL_ANCHOR | None):
-        bodyPr = self._txBody.bodyPr
-        bodyPr.anchor = value
+        pass
 
     @property
     def word_wrap(self) -> bool | None:
@@ -198,23 +187,11 @@ class TextFrame(Subshape):
         off, respectively. Assigning None to word wrap causes any word wrap setting to be removed
         from the text frame, causing it to inherit this setting from its style hierarchy.
         """
-        return {
-            ST_TextWrappingType.SQUARE: True,
-            ST_TextWrappingType.NONE: False,
-            None: None,
-        }[self._txBody.bodyPr.wrap]
+        pass
 
     @word_wrap.setter
     def word_wrap(self, value: bool | None):
-        if value not in (True, False, None):
-            raise ValueError(  # pragma: no cover
-                "assigned value must be True, False, or None, got %s" % value
-            )
-        self._txBody.bodyPr.wrap = {
-            True: ST_TextWrappingType.SQUARE,
-            False: ST_TextWrappingType.NONE,
-            None: None,
-        }[value]
+        pass
 
     def _apply_fit(self, font_family: str, font_size: int, is_bold: bool, is_italic: bool):
         """Arrange text in this text frame to fit inside its extents.
@@ -222,9 +199,7 @@ class TextFrame(Subshape):
         This is accomplished by setting auto size off, wrap on, and setting the font of
         all its text to `font_family`, `font_size`, `is_bold`, and `is_italic`.
         """
-        self.auto_size = MSO_AUTO_SIZE.NONE
-        self.word_wrap = True
-        self._set_font(font_family, font_size, is_bold, is_italic)
+        pass
 
     def _best_fit_font_size(
         self, family: str, max_size: int, bold: bool, italic: bool, font_file: str | None
@@ -236,13 +211,11 @@ class TextFrame(Subshape):
         font described by `family`, `bold`, and `italic`. If `font_file` is specified, it is used
         to calculate the fit, whether or not it matches `family`, `bold`, and `italic`.
         """
-        if font_file is None:
-            font_file = FontFiles.find(family, bold, italic)
-        return TextFitter.best_fit_font_size(self.text, self._extents, max_size, font_file)
+        pass
 
     @property
     def _bodyPr(self):
-        return self._txBody.bodyPr
+        pass
 
     @property
     def _extents(self) -> tuple[Length, Length]:
@@ -250,31 +223,11 @@ class TextFrame(Subshape):
 
         Margins are taken into account.
         """
-        parent = cast("ProvidesExtents", self._parent)
-        return (
-            Length(parent.width - self.margin_left - self.margin_right),
-            Length(parent.height - self.margin_top - self.margin_bottom),
-        )
+        pass
 
     def _set_font(self, family: str, size: int, bold: bool, italic: bool):
         """Set the font properties of all the text in this text frame."""
-
-        def iter_rPrs(txBody: CT_TextBody) -> Iterator[CT_TextCharacterProperties]:
-            for p in txBody.p_lst:
-                for elm in p.content_children:
-                    yield elm.get_or_add_rPr()
-                # generate a:endParaRPr for each <a:p> element
-                yield p.get_or_add_endParaRPr()
-
-        def set_rPr_font(
-            rPr: CT_TextCharacterProperties, name: str, size: int, bold: bool, italic: bool
-        ):
-            f = Font(rPr)
-            f.name, f.size, f.bold, f.italic = family, Pt(size), bold, italic
-
-        txBody = self._element
-        for rPr in iter_rPrs(txBody):
-            set_rPr_font(rPr, family, size, bold, italic)
+        pass
 
 
 class Font(object):
@@ -296,18 +249,16 @@ class Font(object):
         setting, or a setting in a style or master. Returns None if no bold attribute is present,
         meaning the effective bold value is inherited from a master or the theme.
         """
-        return self._rPr.b
+        pass
 
     @bold.setter
     def bold(self, value: bool | None):
-        self._rPr.b = value
+        pass
 
     @lazyproperty
     def color(self) -> ColorFormat:
         """The |ColorFormat| instance that provides access to the color settings for this font."""
-        if self.fill.type != MSO_FILL.SOLID:
-            self.fill.solid()
-        return self.fill.fore_color
+        pass
 
     @lazyproperty
     def fill(self) -> FillFormat:
@@ -315,7 +266,7 @@ class Font(object):
 
         Provides access to fill properties such as fill color.
         """
-        return FillFormat.from_fill_parent(self._rPr)
+        pass
 
     @property
     def italic(self) -> bool | None:
@@ -323,11 +274,11 @@ class Font(object):
 
         Has the same behaviors as bold with respect to None values.
         """
-        return self._rPr.i
+        pass
 
     @italic.setter
     def italic(self, value: bool | None):
-        self._rPr.i = value
+        pass
 
     @property
     def language_id(self) -> MSO_LANGUAGE_ID | None:
@@ -336,16 +287,11 @@ class Font(object):
         The language id is a member of the :ref:`MsoLanguageId` enumeration. Assigning |None|
         removes any language setting, the same behavior as assigning `MSO_LANGUAGE_ID.NONE`.
         """
-        lang = self._rPr.lang
-        if lang is None:
-            return MSO_LANGUAGE_ID.NONE
-        return self._rPr.lang
+        pass
 
     @language_id.setter
     def language_id(self, value: MSO_LANGUAGE_ID | None):
-        if value == MSO_LANGUAGE_ID.NONE:
-            value = None
-        self._rPr.lang = value
+        pass
 
     @property
     def name(self) -> str | None:
@@ -355,18 +301,11 @@ class Font(object):
         Returns |None| if the typeface is currently inherited from the theme. Setting it to |None|
         removes any override of the theme typeface.
         """
-        latin = self._rPr.latin
-        if latin is None:
-            return None
-        return latin.typeface
+        pass
 
     @name.setter
     def name(self, value: str | None):
-        if value is None:
-            self._rPr._remove_latin()  # pyright: ignore[reportPrivateUsage]
-        else:
-            latin = self._rPr.get_or_add_latin()
-            latin.typeface = value
+        pass
 
     @property
     def size(self) -> Length | None:
@@ -383,18 +322,11 @@ class Font(object):
             >>> font.size.pt
             24.0
         """
-        sz = self._rPr.sz
-        if sz is None:
-            return None
-        return Centipoints(sz)
+        pass
 
     @size.setter
     def size(self, emu: Length | None):
-        if emu is None:
-            self._rPr.sz = None
-        else:
-            sz = Emu(emu).centipoints
-            self._rPr.sz = sz
+        pass
 
     @property
     def underline(self) -> bool | MSO_TEXT_UNDERLINE_TYPE | None:
@@ -406,20 +338,11 @@ class Font(object):
         |False| indicates no underline. Other settings such as double and wavy underlining are
         indicated with members of the :ref:`MsoTextUnderlineType` enumeration.
         """
-        u = self._rPr.u
-        if u is MSO_UNDERLINE.NONE:
-            return False
-        if u is MSO_UNDERLINE.SINGLE_LINE:
-            return True
-        return u
+        pass
 
     @underline.setter
     def underline(self, value: bool | MSO_TEXT_UNDERLINE_TYPE | None):
-        if value is True:
-            value = MSO_UNDERLINE.SINGLE_LINE
-        elif value is False:
-            value = MSO_UNDERLINE.NONE
-        self._element.u = value
+        pass
 
 
 class _Hyperlink(Subshape):
@@ -438,30 +361,22 @@ class _Hyperlink(Subshape):
 
         Read/write. URL can be on http, https, mailto, or file scheme; others may work.
         """
-        if self._hlinkClick is None:
-            return None
-        return self.part.target_ref(self._hlinkClick.rId)
+        pass
 
     @address.setter
     def address(self, url: str | None):
         # implements all three of add, change, and remove hyperlink
-        if self._hlinkClick is not None:
-            self._remove_hlinkClick()
-        if url:
-            self._add_hlinkClick(url)
+        pass
 
     def _add_hlinkClick(self, url: str):
-        rId = self.part.relate_to(url, RT.HYPERLINK, is_external=True)
-        self._rPr.add_hlinkClick(rId)
+        pass
 
     @property
     def _hlinkClick(self) -> CT_Hyperlink | None:
-        return self._rPr.hlinkClick
+        pass
 
     def _remove_hlinkClick(self):
-        assert self._hlinkClick is not None
-        self.part.drop_rel(self._hlinkClick.rId)
-        self._rPr._remove_hlinkClick()  # pyright: ignore[reportPrivateUsage]
+        pass
 
 
 class _Paragraph(Subshape):
@@ -473,12 +388,11 @@ class _Paragraph(Subshape):
 
     def add_line_break(self):
         """Add line break at end of this paragraph."""
-        self._p.add_br()
+        pass
 
     def add_run(self) -> _Run:
         """Return a new run appended to the runs in this paragraph."""
-        r = self._p.add_r()
-        return _Run(r, self)
+        pass
 
     @property
     def alignment(self) -> PP_PARAGRAPH_ALIGNMENT | None:
@@ -488,11 +402,11 @@ class _Paragraph(Subshape):
         style hierarchy. Assigning |None| removes any explicit setting, causing its inherited
         value to be used.
         """
-        return self._pPr.algn
+        pass
 
     @alignment.setter
     def alignment(self, value: PP_PARAGRAPH_ALIGNMENT | None):
-        self._pPr.algn = value
+        pass
 
     def clear(self):
         """Remove all content from this paragraph.
@@ -511,7 +425,7 @@ class _Paragraph(Subshape):
         as the text frame the paragraph is contained in and they may be overridden by character
         properties set at the run level.
         """
-        return Font(self._defRPr)
+        pass
 
     @property
     def level(self) -> int:
@@ -521,11 +435,11 @@ class _Paragraph(Subshape):
         default value. Indentation level is most commonly encountered in a bulleted list, as is
         found on a word bullet slide.
         """
-        return self._pPr.lvl
+        pass
 
     @level.setter
     def level(self, level: int):
-        self._pPr.lvl = level
+        pass
 
     @property
     def line_spacing(self) -> int | float | Length | None:
@@ -537,20 +451,16 @@ class _Paragraph(Subshape):
         `Pt(12)` indicates spacing is a fixed height. The |Pt| value class is a convenient way to
         apply line spacing in units of points.
         """
-        pPr = self._p.pPr
-        if pPr is None:
-            return None
-        return pPr.line_spacing
+        pass
 
     @line_spacing.setter
     def line_spacing(self, value: int | float | Length | None):
-        pPr = self._p.get_or_add_pPr()
-        pPr.line_spacing = value
+        pass
 
     @property
     def runs(self) -> tuple[_Run, ...]:
         """Sequence of runs in this paragraph."""
-        return tuple(_Run(r, self) for r in self._element.r_lst)
+        pass
 
     @property
     def space_after(self) -> Length | None:
@@ -561,15 +471,11 @@ class _Paragraph(Subshape):
         properties, such as `.pt` and `.inches`, that allow easy conversion to various length
         units.
         """
-        pPr = self._p.pPr
-        if pPr is None:
-            return None
-        return pPr.space_after
+        pass
 
     @space_after.setter
     def space_after(self, value: Length | None):
-        pPr = self._p.get_or_add_pPr()
-        pPr.space_after = value
+        pass
 
     @property
     def space_before(self) -> Length | None:
@@ -579,15 +485,11 @@ class _Paragraph(Subshape):
         inherited from the paragraph's style hierarchy. |Length| objects provide convenience
         properties, such as `.pt` and `.cm`, that allow easy conversion to various length units.
         """
-        pPr = self._p.pPr
-        if pPr is None:
-            return None
-        return pPr.space_before
+        pass
 
     @space_before.setter
     def space_before(self, value: Length | None):
-        pPr = self._p.get_or_add_pPr()
-        pPr.space_before = value
+        pass
 
     @property
     def text(self) -> str:
@@ -608,12 +510,11 @@ class _Paragraph(Subshape):
         instead. Any other control characters in the assigned string are escaped as a hex
         representation like "_x001B_" (for ESC (ASCII 27) in this example).
         """
-        return "".join(elm.text for elm in self._element.content_children)
+        pass
 
     @text.setter
     def text(self, text: str):
-        self.clear()
-        self._element.append_text(text)
+        pass
 
     @property
     def _defRPr(self) -> CT_TextCharacterProperties:
@@ -621,7 +522,7 @@ class _Paragraph(Subshape):
 
         Causes the element to be added if not present.
         """
-        return self._pPr.get_or_add_defRPr()
+        pass
 
     @property
     def _pPr(self) -> CT_TextParagraphProperties:
@@ -629,7 +530,7 @@ class _Paragraph(Subshape):
 
         Causes the element to be added if not present.
         """
-        return self._p.get_or_add_pPr()
+        pass
 
 
 class _Run(Subshape):
@@ -647,8 +548,7 @@ class _Run(Subshape):
         as the paragraph and slide layout the run is contained in. Only those specifically
         overridden at the run level are contained in the font object.
         """
-        rPr = self._r.get_or_add_rPr()
-        return Font(rPr)
+        pass
 
     @lazyproperty
     def hyperlink(self) -> _Hyperlink:
@@ -658,8 +558,7 @@ class _Run(Subshape):
         present or not, and creates or deletes that element as appropriate in response to actions
         on its methods and attributes.
         """
-        rPr = self._r.get_or_add_rPr()
-        return _Hyperlink(rPr, self)
+        pass
 
     @property
     def text(self):
@@ -674,8 +573,8 @@ class _Run(Subshape):
         "_x001B_". Contrast the behavior of `TextFrame.text` and `_Paragraph.text` with
         respect to line-feed and vertical-tab characters.
         """
-        return self._r.text
+        pass
 
     @text.setter
     def text(self, text: str):
-        self._r.text = text
+        pass

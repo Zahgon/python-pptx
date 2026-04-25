@@ -31,19 +31,15 @@ class ColorFormat(object):
         adjustment for this color, e.g. -0.25 is 25% darker and 0.4 is 40%
         lighter. 0 means no brightness adjustment.
         """
-        return self._color.brightness
+        pass
 
     @brightness.setter
     def brightness(self, value):
-        self._validate_brightness_value(value)
-        self._color.brightness = value
+        pass
 
     @classmethod
     def from_colorchoice_parent(cls, eg_colorChoice_parent):
-        xClr = eg_colorChoice_parent.eg_colorChoice
-        color = _Color(xClr)
-        color_format = cls(eg_colorChoice_parent, color)
-        return color_format
+        pass
 
     @property
     def rgb(self):
@@ -54,18 +50,11 @@ class ColorFormat(object):
         theme color with a brightness adjustment, the brightness adjustment
         is removed when changing it to an RGB color.
         """
-        return self._color.rgb
+        pass
 
     @rgb.setter
     def rgb(self, rgb):
-        if not isinstance(rgb, RGBColor):
-            raise ValueError("assigned value must be type RGBColor")
-        # change to rgb color format if not already
-        if not isinstance(self._color, _SRgbColor):
-            srgbClr = self._xFill.get_or_change_to_srgbClr()
-            self._color = _SRgbColor(srgbClr)
-        # call _SRgbColor instance to do the setting
-        self._color.rgb = rgb
+        pass
 
     @property
     def theme_color(self):
@@ -77,15 +66,12 @@ class ColorFormat(object):
         :ref:`MsoThemeColorIndex` causes the color's type to change to
         ``MSO_COLOR_TYPE.SCHEME``.
         """
-        return self._color.theme_color
+        pass
 
     @theme_color.setter
     def theme_color(self, mso_theme_color_idx):
         # change to theme color format if not already
-        if not isinstance(self._color, _SchemeColor):
-            schemeClr = self._xFill.get_or_change_to_schemeClr()
-            self._color = _SchemeColor(schemeClr)
-        self._color.theme_color = mso_theme_color_idx
+        pass
 
     @property
     def type(self):
@@ -94,17 +80,10 @@ class ColorFormat(object):
         corresponding to the way this color is defined, or None if no color
         is defined at the level of this font.
         """
-        return self._color.color_type
+        pass
 
     def _validate_brightness_value(self, value):
-        if value < -1.0 or value > 1.0:
-            raise ValueError("brightness must be number in range -1.0 to 1.0")
-        if isinstance(self._color, _NoneColor):
-            msg = (
-                "can't set brightness when color.type is None. Set color.rgb"
-                " or .theme_color first."
-            )
-            raise ValueError(msg)
+        pass
 
 
 class _Color(object):
@@ -131,71 +110,47 @@ class _Color(object):
 
     @property
     def brightness(self):
-        lumMod, lumOff = self._xClr.lumMod, self._xClr.lumOff
-        # a tint is lighter, a shade is darker
-        # only tints have lumOff child
-        if lumOff is not None:
-            brightness = lumOff.val
-            return brightness
-        # which leaves shades, if lumMod is present
-        if lumMod is not None:
-            brightness = lumMod.val - 1.0
-            return brightness
-        # there's no brightness adjustment if no lum{Mod|Off} elements
-        return 0
+        pass
 
     @brightness.setter
     def brightness(self, value):
-        if value > 0:
-            self._tint(value)
-        elif value < 0:
-            self._shade(value)
-        else:
-            self._xClr.clear_lum()
+        pass
 
     @property
     def color_type(self):  # pragma: no cover
-        tmpl = ".color_type property must be implemented on %s"
-        raise NotImplementedError(tmpl % self.__class__.__name__)
+        pass
 
     @property
     def rgb(self):
         """
         Raises TypeError on access unless overridden by subclass.
         """
-        tmpl = "no .rgb property on color type '%s'"
-        raise AttributeError(tmpl % self.__class__.__name__)
+        pass
 
     @property
     def theme_color(self):
         """
         Raises TypeError on access unless overridden by subclass.
         """
-        return MSO_THEME_COLOR.NOT_THEME_COLOR
+        pass
 
     def _shade(self, value):
-        lumMod_val = 1.0 - abs(value)
-        color_elm = self._xClr.clear_lum()
-        color_elm.add_lumMod(lumMod_val)
+        pass
 
     def _tint(self, value):
-        lumOff_val = value
-        lumMod_val = 1.0 - lumOff_val
-        color_elm = self._xClr.clear_lum()
-        color_elm.add_lumMod(lumMod_val)
-        color_elm.add_lumOff(lumOff_val)
+        pass
 
 
 class _HslColor(_Color):
     @property
     def color_type(self):
-        return MSO_COLOR_TYPE.HSL
+        pass
 
 
 class _NoneColor(_Color):
     @property
     def color_type(self):
-        return None
+        pass
 
     @property
     def theme_color(self):
@@ -203,14 +158,13 @@ class _NoneColor(_Color):
         Raise TypeError on attempt to access .theme_color when no color
         choice is present.
         """
-        tmpl = "no .theme_color property on color type '%s'"
-        raise AttributeError(tmpl % self.__class__.__name__)
+        pass
 
 
 class _PrstColor(_Color):
     @property
     def color_type(self):
-        return MSO_COLOR_TYPE.PRESET
+        pass
 
 
 class _SchemeColor(_Color):
@@ -220,7 +174,7 @@ class _SchemeColor(_Color):
 
     @property
     def color_type(self):
-        return MSO_COLOR_TYPE.SCHEME
+        pass
 
     @property
     def theme_color(self):
@@ -231,17 +185,17 @@ class _SchemeColor(_Color):
         value in MSO_THEME_COLOR causes the color's type to change to
         ``MSO_COLOR_TYPE.SCHEME``.
         """
-        return self._schemeClr.val
+        pass
 
     @theme_color.setter
     def theme_color(self, mso_theme_color_idx):
-        self._schemeClr.val = mso_theme_color_idx
+        pass
 
 
 class _ScRgbColor(_Color):
     @property
     def color_type(self):
-        return MSO_COLOR_TYPE.SCRGB
+        pass
 
 
 class _SRgbColor(_Color):
@@ -251,7 +205,7 @@ class _SRgbColor(_Color):
 
     @property
     def color_type(self):
-        return MSO_COLOR_TYPE.RGB
+        pass
 
     @property
     def rgb(self):
@@ -259,17 +213,17 @@ class _SRgbColor(_Color):
         |RGBColor| value of this color, corresponding to the value in the
         required ``val`` attribute of the ``<a:srgbColr>`` element.
         """
-        return RGBColor.from_string(self._srgbClr.val)
+        pass
 
     @rgb.setter
     def rgb(self, rgb):
-        self._srgbClr.val = str(rgb)
+        pass
 
 
 class _SysColor(_Color):
     @property
     def color_type(self):
-        return MSO_COLOR_TYPE.SYSTEM
+        pass
 
 
 class RGBColor(tuple):
@@ -295,7 +249,4 @@ class RGBColor(tuple):
         """
         Return a new instance from an RGB color hex string like ``'3C2F80'``.
         """
-        r = int(rgb_hex_str[:2], 16)
-        g = int(rgb_hex_str[2:4], 16)
-        b = int(rgb_hex_str[4:], 16)
-        return cls(r, g, b)
+        pass

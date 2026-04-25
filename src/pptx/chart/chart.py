@@ -29,19 +29,7 @@ class Chart(PartElementProxy):
         chart, this is the X axis. Raises |ValueError| if no category
         axis is defined (as is the case for a pie chart, for example).
         """
-        catAx_lst = self._chartSpace.catAx_lst
-        if catAx_lst:
-            return CategoryAxis(catAx_lst[0])
-
-        dateAx_lst = self._chartSpace.dateAx_lst
-        if dateAx_lst:
-            return DateAxis(dateAx_lst[0])
-
-        valAx_lst = self._chartSpace.valAx_lst
-        if valAx_lst:
-            return ValueAxis(valAx_lst[0])
-
-        raise ValueError("chart has no category axis")
+        pass
 
     @property
     def chart_style(self):
@@ -53,17 +41,11 @@ class Chart(PartElementProxy):
         corresponds to the style's position in the chart style gallery in the
         PowerPoint UI.
         """
-        style = self._chartSpace.style
-        if style is None:
-            return None
-        return style.val
+        pass
 
     @chart_style.setter
     def chart_style(self, value):
-        self._chartSpace._remove_style()
-        if value is None:
-            return
-        self._chartSpace._add_style(val=value)
+        pass
 
     @property
     def chart_title(self):
@@ -74,7 +56,7 @@ class Chart(PartElementProxy):
         present. Use :attr:`has_title` to test for presence of a chart title
         non-destructively.
         """
-        return ChartTitle(self._element.get_or_add_title())
+        pass
 
     @property
     def chart_type(self):
@@ -83,14 +65,12 @@ class Chart(PartElementProxy):
         If the chart has two plots, for example, a line plot overlayed on a bar plot,
         the type reported is for the first (back-most) plot. Read-only.
         """
-        first_plot = self.plots[0]
-        return PlotTypeInspector.chart_type(first_plot)
+        pass
 
     @lazyproperty
     def font(self):
         """Font object controlling text format defaults for this chart."""
-        defRPr = self._chartSpace.get_or_add_txPr().p_lst[0].get_or_add_pPr().get_or_add_defRPr()
-        return Font(defRPr)
+        pass
 
     @property
     def has_legend(self):
@@ -100,11 +80,11 @@ class Chart(PartElementProxy):
         have one. Assigning False removes any existing legend definition
         along with any existing legend settings.
         """
-        return self._chartSpace.chart.has_legend
+        pass
 
     @has_legend.setter
     def has_legend(self, value):
-        self._chartSpace.chart.has_legend = bool(value)
+        pass
 
     @property
     def has_title(self):
@@ -114,20 +94,11 @@ class Chart(PartElementProxy):
         Assigning |False| removes any existing title along with its text and
         settings.
         """
-        title = self._chartSpace.chart.title
-        if title is None:
-            return False
-        return True
+        pass
 
     @has_title.setter
     def has_title(self, value):
-        chart = self._chartSpace.chart
-        if bool(value) is False:
-            chart._remove_title()
-            autoTitleDeleted = chart.get_or_add_autoTitleDeleted()
-            autoTitleDeleted.val = True
-            return
-        chart.get_or_add_title()
+        pass
 
     @property
     def legend(self):
@@ -135,10 +106,7 @@ class Chart(PartElementProxy):
         A |Legend| object providing access to the properties of the legend
         for this chart.
         """
-        legend_elm = self._chartSpace.chart.legend
-        if legend_elm is None:
-            return None
-        return Legend(legend_elm)
+        pass
 
     @lazyproperty
     def plots(self):
@@ -153,8 +121,7 @@ class Chart(PartElementProxy):
         membership (e.g. ``p in plots``), iteration, slicing, and indexed
         access (e.g. ``plot = plots[i]``).
         """
-        plotArea = self._chartSpace.chart.plotArea
-        return _Plots(plotArea, self)
+        pass
 
     def replace_data(self, chart_data):
         """
@@ -162,9 +129,7 @@ class Chart(PartElementProxy):
         *chart_data* to replace those in the XML and Excel worksheet for this
         chart.
         """
-        rewriter = SeriesXmlRewriterFactory(self.chart_type, chart_data)
-        rewriter.replace_series_data(self._chartSpace)
-        self._workbook.update_from_xlsx_blob(chart_data.xlsx_blob)
+        pass
 
     @lazyproperty
     def series(self):
@@ -174,7 +139,7 @@ class Chart(PartElementProxy):
         first plot appear before all those for the second, and so on. Series
         within a plot have an explicit ordering and appear in that sequence.
         """
-        return SeriesCollection(self._chartSpace.plotArea)
+        pass
 
     @property
     def value_axis(self):
@@ -183,12 +148,7 @@ class Chart(PartElementProxy):
         axis of this chart. Raises |ValueError| if the chart has no value
         axis.
         """
-        valAx_lst = self._chartSpace.valAx_lst
-        if not valAx_lst:
-            raise ValueError("chart has no value axis")
-
-        idx = 1 if len(valAx_lst) > 1 else 0
-        return ValueAxis(valAx_lst[idx])
+        pass
 
     @property
     def _workbook(self):
@@ -196,7 +156,7 @@ class Chart(PartElementProxy):
         The |ChartWorkbook| object providing access to the Excel source data
         for this chart.
         """
-        return self.part.chart_workbook
+        pass
 
 
 class ChartTitle(ElementProxy):
@@ -218,7 +178,7 @@ class ChartTitle(ElementProxy):
         Return the |ChartFormat| object providing shape formatting properties
         for this chart title, such as its line color and fill.
         """
-        return ChartFormat(self._title)
+        pass
 
     @property
     def has_text_frame(self):
@@ -229,16 +189,11 @@ class ChartTitle(ElementProxy):
         already present. Assigning |False| causes any existing text frame to
         be removed along with its text and formatting.
         """
-        if self._title.tx_rich is None:
-            return False
-        return True
+        pass
 
     @has_text_frame.setter
     def has_text_frame(self, value):
-        if bool(value) is False:
-            self._title._remove_tx()
-            return
-        self._title.get_or_add_tx_rich()
+        pass
 
     @property
     def text_frame(self):
@@ -250,8 +205,7 @@ class ChartTitle(ElementProxy):
         not present. Use :attr:`has_text_frame` to test for the presence of
         a text frame non-destructively.
         """
-        rich = self._title.get_or_add_tx_rich()
-        return TextFrame(rich, self)
+        pass
 
 
 class _Plots(Sequence):

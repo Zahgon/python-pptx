@@ -38,7 +38,7 @@ class BaseSlidePart(XmlPart):
         Raises |KeyError| if no image is related by that id, which would generally indicate a
         corrupted .pptx file.
         """
-        return cast("ImagePart", self.related_part(rId)).image
+        pass
 
     def get_or_add_image_part(self, image_file: str | IO[bytes]):
         """Return `(image_part, rId)` pair corresponding to `image_file`.
@@ -47,14 +47,12 @@ class BaseSlidePart(XmlPart):
         related to this slide with the key `rId`. If either the image part or
         relationship already exists, they are reused, otherwise they are newly created.
         """
-        image_part = self._package.get_or_add_image_part(image_file)
-        rId = self.relate_to(image_part, RT.IMAGE)
-        return image_part, rId
+        pass
 
     @property
     def name(self) -> str:
         """Internal name of this slide."""
-        return self._element.cSld.name
+        pass
 
 
 class NotesMasterPart(BaseSlidePart):
@@ -69,17 +67,14 @@ class NotesMasterPart(BaseSlidePart):
         Create and return a default notes master part, including creating the
         new theme it requires.
         """
-        notes_master_part = cls._new(package)
-        theme_part = cls._new_theme_part(package)
-        notes_master_part.relate_to(theme_part, RT.THEME)
-        return notes_master_part
+        pass
 
     @lazyproperty
     def notes_master(self):
         """
         Return the |NotesMaster| object that proxies this notes master part.
         """
-        return NotesMaster(self._element, self)
+        pass
 
     @classmethod
     def _new(cls, package):
@@ -87,22 +82,12 @@ class NotesMasterPart(BaseSlidePart):
         Create and return a standalone, default notes master part based on
         the built-in template (without any related parts, such as theme).
         """
-        return NotesMasterPart(
-            PackURI("/ppt/notesMasters/notesMaster1.xml"),
-            CT.PML_NOTES_MASTER,
-            package,
-            CT_NotesMaster.new_default(),
-        )
+        pass
 
     @classmethod
     def _new_theme_part(cls, package):
         """Return new default theme-part suitable for use with a notes master."""
-        return XmlPart(
-            package.next_partname("/ppt/theme/theme%d.xml"),
-            CT.OFC_THEME,
-            package,
-            CT_OfficeStyleSheet.new_default(),
-        )
+        pass
 
 
 class NotesSlidePart(BaseSlidePart):
@@ -129,13 +114,12 @@ class NotesSlidePart(BaseSlidePart):
     @lazyproperty
     def notes_master(self):
         """Return the |NotesMaster| object this notes slide inherits from."""
-        notes_master_part = self.part_related_by(RT.NOTES_MASTER)
-        return notes_master_part.notes_master
+        pass
 
     @lazyproperty
     def notes_slide(self):
         """Return the |NotesSlide| object that proxies this notes slide part."""
-        return NotesSlide(self._element, self)
+        pass
 
     @classmethod
     def _add_notes_slide_part(cls, package, slide_part, notes_master_part):
@@ -174,19 +158,13 @@ class SlidePart(BaseSlidePart):
         The chart depicts `chart_data` and is related to the slide contained in this
         part by `rId`.
         """
-        return self.relate_to(ChartPart.new(chart_type, chart_data, self._package), RT.CHART)
+        pass
 
     def add_embedded_ole_object_part(
         self, prog_id: PROG_ID | str, ole_object_file: str | IO[bytes]
     ):
         """Return rId of newly-added OLE-object part formed from `ole_object_file`."""
-        relationship_type = RT.PACKAGE if isinstance(prog_id, PROG_ID) else RT.OLE_OBJECT
-        return self.relate_to(
-            EmbeddedPackagePart.factory(
-                prog_id, self._blob_from_file(ole_object_file), self._package
-            ),
-            relationship_type,
-        )
+        pass
 
     def get_or_add_video_media_part(self, video: Video) -> tuple[str, str]:
         """Return rIds for media and video relationships to media part.
@@ -198,10 +176,7 @@ class SlidePart(BaseSlidePart):
         appears to be for legacy support for an earlier (pre-Office 2010)
         PowerPoint media embedding strategy.
         """
-        media_part = self._package.get_or_add_media_part(video)
-        media_rId = self.relate_to(media_part, RT.MEDIA)
-        video_rId = self.relate_to(media_part, RT.VIDEO)
-        return media_rId, video_rId
+        pass
 
     @property
     def has_notes_slide(self):
@@ -211,11 +186,7 @@ class SlidePart(BaseSlidePart):
         exist; use this property to test for a notes slide without the
         possible side-effect of creating one.
         """
-        try:
-            self.part_related_by(RT.NOTES_SLIDE)
-        except KeyError:
-            return False
-        return True
+        pass
 
     @lazyproperty
     def notes_slide(self) -> NotesSlide:
@@ -224,30 +195,24 @@ class SlidePart(BaseSlidePart):
         If the slide does not have a notes slide, a new one is created. The same single instance
         is returned on each call.
         """
-        try:
-            notes_slide_part = self.part_related_by(RT.NOTES_SLIDE)
-        except KeyError:
-            notes_slide_part = self._add_notes_slide_part()
-        return notes_slide_part.notes_slide
+        pass
 
     @lazyproperty
     def slide(self):
         """
         The |Slide| object representing this slide part.
         """
-        return Slide(self._element, self)
+        pass
 
     @property
     def slide_id(self) -> int:
         """Return the slide identifier stored in the presentation part for this slide part."""
-        presentation_part = self.package.presentation_part
-        return presentation_part.slide_id(self)
+        pass
 
     @property
     def slide_layout(self) -> SlideLayout:
         """|SlideLayout| object the slide in this part inherits appearance from."""
-        slide_layout_part = self.part_related_by(RT.SLIDE_LAYOUT)
-        return slide_layout_part.slide_layout
+        pass
 
     def _add_notes_slide_part(self):
         """
@@ -271,12 +236,12 @@ class SlideLayoutPart(BaseSlidePart):
         """
         The |SlideLayout| object representing this part.
         """
-        return SlideLayout(self._element, self)
+        pass
 
     @property
     def slide_master(self) -> SlideMaster:
         """Slide master from which this slide layout inherits properties."""
-        return self.part_related_by(RT.SLIDE_MASTER).slide_master
+        pass
 
 
 class SlideMasterPart(BaseSlidePart):
@@ -287,11 +252,11 @@ class SlideMasterPart(BaseSlidePart):
 
     def related_slide_layout(self, rId: str) -> SlideLayout:
         """Return |SlideLayout| related to this slide-master by key `rId`."""
-        return self.related_part(rId).slide_layout
+        pass
 
     @lazyproperty
     def slide_master(self):
         """
         The |SlideMaster| object representing this part.
         """
-        return SlideMaster(self._element, self)
+        pass

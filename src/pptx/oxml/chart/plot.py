@@ -30,8 +30,7 @@ class BaseChartElement(BaseOxmlElement):
         Return the `c:cat` element of the first series in this xChart, or
         |None| if not present.
         """
-        cats = self.xpath("./c:ser[1]/c:cat")
-        return cats[0] if cats else None
+        pass
 
     @property
     def cat_pt_count(self):
@@ -43,10 +42,7 @@ class BaseChartElement(BaseOxmlElement):
         does not get a `c:pt` element. Returns 0 if there is no `c:ptCount`
         descendent.
         """
-        cat_ptCounts = self.xpath("./c:ser//c:cat//c:ptCount")
-        if not cat_ptCounts:
-            return 0
-        return cat_ptCounts[0].val
+        pass
 
     @property
     def cat_pts(self):
@@ -58,13 +54,7 @@ class BaseChartElement(BaseOxmlElement):
         Only those in the first ``<c:lvl>`` element are included in the case
         of multi-level categories.
         """
-        cat_pts = self.xpath("./c:ser[1]/c:cat//c:lvl[1]/c:pt")
-        if not cat_pts:
-            cat_pts = self.xpath("./c:ser[1]/c:cat//c:pt")
-
-        cat_pt_dict = dict((pt.idx, pt) for pt in cat_pts)
-
-        return [cat_pt_dict.get(idx, None) for idx in range(self.cat_pt_count)]
+        pass
 
     @property
     def grouping_val(self):
@@ -72,24 +62,14 @@ class BaseChartElement(BaseOxmlElement):
         Return the value of the ``./c:grouping{val=?}`` attribute, taking
         defaults into account when items are not present.
         """
-        grouping = self.grouping
-        if grouping is None:
-            return ST_Grouping.STANDARD
-        val = grouping.val
-        if val is None:
-            return ST_Grouping.STANDARD
-        return val
+        pass
 
     def iter_sers(self):
         """
         Generate each ``<c:ser>`` child element in this xChart in
         c:order/@val sequence (not document or c:idx order).
         """
-
-        def ser_order(ser):
-            return ser.order.val
-
-        return (ser for ser in sorted(self.xpath("./c:ser"), key=ser_order))
+        pass
 
     @property
     def sers(self):
@@ -97,10 +77,10 @@ class BaseChartElement(BaseOxmlElement):
         Sequence of ``<c:ser>`` child elements in this xChart in c:order/@val
         sequence (not document or c:idx order).
         """
-        return tuple(self.iter_sers())
+        pass
 
     def _new_dLbls(self):
-        return CT_DLbls.new_dLbls()
+        pass
 
 
 class CT_Area3DChart(BaseChartElement):
@@ -174,13 +154,7 @@ class CT_BarChart(BaseChartElement):
         Return the value of the ``./c:grouping{val=?}`` attribute, taking
         defaults into account when items are not present.
         """
-        grouping = self.grouping
-        if grouping is None:
-            return ST_Grouping.CLUSTERED
-        val = grouping.val
-        if val is None:
-            return ST_Grouping.CLUSTERED
-        return val
+        pass
 
 
 class CT_BarDir(BaseOxmlElement):

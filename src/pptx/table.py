@@ -37,7 +37,7 @@ class Table(object):
         Return value is an instance of |_Cell|. `row_idx` and `col_idx` are zero-based, e.g.
         cell(0, 0) is the top, left cell in the table.
         """
-        return _Cell(self._tbl.tc(row_idx, col_idx), self)
+        pass
 
     @lazyproperty
     def columns(self) -> _ColumnCollection:
@@ -46,7 +46,7 @@ class Table(object):
         Provides access to |_Column| objects representing the table's columns. |_Column| objects
         are accessed using list notation, e.g. `col = tbl.columns[0]`.
         """
-        return _ColumnCollection(self._tbl, self)
+        pass
 
     @property
     def first_col(self) -> bool:
@@ -55,11 +55,11 @@ class Table(object):
         Read/write. Distinct formatting is used, for example, when the first column contains row
         headings (is a side-heading column).
         """
-        return self._tbl.firstCol
+        pass
 
     @first_col.setter
     def first_col(self, value: bool):
-        self._tbl.firstCol = value
+        pass
 
     @property
     def first_row(self) -> bool:
@@ -68,11 +68,11 @@ class Table(object):
         Read/write. Distinct formatting is used, for example, when the first row contains column
         headings.
         """
-        return self._tbl.firstRow
+        pass
 
     @first_row.setter
     def first_row(self, value: bool):
-        self._tbl.firstRow = value
+        pass
 
     @property
     def horz_banding(self) -> bool:
@@ -81,18 +81,18 @@ class Table(object):
         Read/write. Used to allow rows to be traversed more easily without losing track of which
         row is being read.
         """
-        return self._tbl.bandRow
+        pass
 
     @horz_banding.setter
     def horz_banding(self, value: bool):
-        self._tbl.bandRow = value
+        pass
 
     def iter_cells(self) -> Iterator[_Cell]:
         """Generate _Cell object for each cell in this table.
 
         Each grid cell is generated in left-to-right, top-to-bottom order.
         """
-        return (_Cell(tc, self) for tc in self._tbl.iter_tcs())
+        pass
 
     @property
     def last_col(self) -> bool:
@@ -101,11 +101,11 @@ class Table(object):
         Read/write. Used, for example, when a row totals column appears at the far right of the
         table.
         """
-        return self._tbl.lastCol
+        pass
 
     @last_col.setter
     def last_col(self, value: bool):
-        self._tbl.lastCol = value
+        pass
 
     @property
     def last_row(self) -> bool:
@@ -113,11 +113,11 @@ class Table(object):
 
         Read/write. Used, for example, when a totals row appears as the bottom row.
         """
-        return self._tbl.lastRow
+        pass
 
     @last_row.setter
     def last_row(self, value: bool):
-        self._tbl.lastRow = value
+        pass
 
     def notify_height_changed(self) -> None:
         """Called by a row when its height changes.
@@ -125,8 +125,7 @@ class Table(object):
         Triggers the graphic frame to recalculate its total height (as the sum of the row
         heights).
         """
-        new_table_height = Emu(sum([row.height for row in self.rows]))
-        self._graphic_frame.height = new_table_height
+        pass
 
     def notify_width_changed(self) -> None:
         """Called by a column when its width changes.
@@ -134,13 +133,12 @@ class Table(object):
         Triggers the graphic frame to recalculate its total width (as the sum of the column
         widths).
         """
-        new_table_width = Emu(sum([col.width for col in self.columns]))
-        self._graphic_frame.width = new_table_width
+        pass
 
     @property
     def part(self) -> BaseSlidePart:
         """The package part containing this table."""
-        return self._graphic_frame.part
+        pass
 
     @lazyproperty
     def rows(self):
@@ -149,7 +147,7 @@ class Table(object):
         Provides access to |_Row| objects representing the table's rows. |_Row| objects are
         accessed using list notation, e.g. `col = tbl.rows[0]`.
         """
-        return _RowCollection(self._tbl, self)
+        pass
 
     @property
     def vert_banding(self) -> bool:
@@ -158,11 +156,11 @@ class Table(object):
         Read/write. Used to allow columns to be traversed more easily without losing track of
         which column is being read.
         """
-        return self._tbl.bandCol
+        pass
 
     @vert_banding.setter
     def vert_banding(self, value: bool):
-        self._tbl.bandCol = value
+        pass
 
 
 class _Cell(Subshape):
@@ -193,13 +191,12 @@ class _Cell(Subshape):
 
         Provides access to fill properties such as foreground color.
         """
-        tcPr = self._tc.get_or_add_tcPr()
-        return FillFormat.from_fill_parent(tcPr)
+        pass
 
     @property
     def is_merge_origin(self) -> bool:
         """True if this cell is the top-left grid cell in a merged cell."""
-        return self._tc.is_merge_origin
+        pass
 
     @property
     def is_spanned(self) -> bool:
@@ -211,7 +208,7 @@ class _Cell(Subshape):
         Note this value is |False| for a merge-origin cell. A merge-origin cell spans other grid
         cells, but is not itself a spanned cell.
         """
-        return self._tc.is_spanned
+        pass
 
     @property
     def margin_left(self) -> Length:
@@ -220,42 +217,38 @@ class _Cell(Subshape):
         Read/write. If assigned |None|, the default value is used, 0.1 inches for left and right
         margins and 0.05 inches for top and bottom.
         """
-        return self._tc.marL
+        pass
 
     @margin_left.setter
     def margin_left(self, margin_left: Length | None):
-        self._validate_margin_value(margin_left)
-        self._tc.marL = margin_left
+        pass
 
     @property
     def margin_right(self) -> Length:
         """Right margin of cell."""
-        return self._tc.marR
+        pass
 
     @margin_right.setter
     def margin_right(self, margin_right: Length | None):
-        self._validate_margin_value(margin_right)
-        self._tc.marR = margin_right
+        pass
 
     @property
     def margin_top(self) -> Length:
         """Top margin of cell."""
-        return self._tc.marT
+        pass
 
     @margin_top.setter
     def margin_top(self, margin_top: Length | None):
-        self._validate_margin_value(margin_top)
-        self._tc.marT = margin_top
+        pass
 
     @property
     def margin_bottom(self) -> Length:
         """Bottom margin of cell."""
-        return self._tc.marB
+        pass
 
     @margin_bottom.setter
     def margin_bottom(self, margin_bottom: Length | None):
-        self._validate_margin_value(margin_bottom)
-        self._tc.marB = margin_bottom
+        pass
 
     def merge(self, other_cell: _Cell) -> None:
         """Create merged cell from this cell to `other_cell`.
@@ -267,25 +260,7 @@ class _Cell(Subshape):
         Raises |ValueError| if the specified range already contains merged cells anywhere within
         its extents or if `other_cell` is not in the same table as `self`.
         """
-        tc_range = TcRange(self._tc, other_cell._tc)
-
-        if not tc_range.in_same_table:
-            raise ValueError("other_cell from different table")
-        if tc_range.contains_merged_cell:
-            raise ValueError("range contains one or more merged cells")
-
-        tc_range.move_content_to_origin()
-
-        row_count, col_count = tc_range.dimensions
-
-        for tc in tc_range.iter_top_row_tcs():
-            tc.rowSpan = row_count
-        for tc in tc_range.iter_left_col_tcs():
-            tc.gridSpan = col_count
-        for tc in tc_range.iter_except_left_col_tcs():
-            tc.hMerge = True
-        for tc in tc_range.iter_except_top_row_tcs():
-            tc.vMerge = True
+        pass
 
     @property
     def span_height(self) -> int:
@@ -296,7 +271,7 @@ class _Cell(Subshape):
         property is only intended for use on cells known to be a merge origin by testing
         `.is_merge_origin`.
         """
-        return self._tc.rowSpan
+        pass
 
     @property
     def span_width(self) -> int:
@@ -307,7 +282,7 @@ class _Cell(Subshape):
         property is only intended for use on cells known to be a merge origin by testing
         `.is_merge_origin`.
         """
-        return self._tc.gridSpan
+        pass
 
     def split(self) -> None:
         """Remove merge from this (merge-origin) cell.
@@ -341,17 +316,16 @@ class _Cell(Subshape):
         carriage-return) to be inserted. (The vertical-tab character appears in clipboard text
         copied from PowerPoint as its encoding of line-breaks.)
         """
-        return self.text_frame.text
+        pass
 
     @text.setter
     def text(self, text: str):
-        self.text_frame.text = text
+        pass
 
     @property
     def text_frame(self) -> TextFrame:
         """|TextFrame| containing the text that appears in the cell."""
-        txBody = self._tc.get_or_add_txBody()
-        return TextFrame(txBody, self)
+        pass
 
     @property
     def vertical_anchor(self) -> MSO_VERTICAL_ANCHOR | None:
@@ -364,18 +338,16 @@ class _Cell(Subshape):
         Assigning |None| to this property causes any explicitly applied vertical anchor setting to
         be cleared and inheritance of its effective value to be restored.
         """
-        return self._tc.anchor
+        pass
 
     @vertical_anchor.setter
     def vertical_anchor(self, mso_anchor_idx: MSO_VERTICAL_ANCHOR | None):
-        self._tc.anchor = mso_anchor_idx
+        pass
 
     @staticmethod
     def _validate_margin_value(margin_value: Length | None) -> None:
         """Raise ValueError if `margin_value` is not a positive integer value or |None|."""
-        if not isinstance(margin_value, int) and margin_value is not None:
-            tmpl = "margin value must be integer or None, got '%s'"
-            raise TypeError(tmpl % margin_value)
+        pass
 
 
 class _Column(Subshape):
@@ -389,12 +361,11 @@ class _Column(Subshape):
     @property
     def width(self) -> Length:
         """Width of column in EMU."""
-        return self._gridCol.w
+        pass
 
     @width.setter
     def width(self, width: Length):
-        self._gridCol.w = width
-        self._parent.notify_width_changed()
+        pass
 
 
 class _Row(Subshape):
@@ -411,17 +382,16 @@ class _Row(Subshape):
 
         An individual cell is referenced using list notation, e.g. `cell = row.cells[0]`.
         """
-        return _CellCollection(self._tr, self)
+        pass
 
     @property
     def height(self) -> Length:
         """Height of row in EMU."""
-        return self._tr.h
+        pass
 
     @height.setter
     def height(self, height: Length):
-        self._tr.h = height
-        self._parent.notify_height_changed()
+        pass
 
 
 class _CellCollection(Subshape):
@@ -469,7 +439,7 @@ class _ColumnCollection(Subshape):
 
     def notify_width_changed(self):
         """Called by a column when its width changes. Pass along to parent."""
-        self._parent.notify_width_changed()
+        pass
 
 
 class _RowCollection(Subshape):
@@ -493,4 +463,4 @@ class _RowCollection(Subshape):
 
     def notify_height_changed(self):
         """Called by a row when its height changes. Pass along to parent."""
-        self._parent.notify_height_changed()
+        pass

@@ -69,7 +69,7 @@ class Point(object):
         """
         The |DataLabel| object representing the label on this data point.
         """
-        return DataLabel(self._ser, self._idx)
+        pass
 
     @lazyproperty
     def format(self):
@@ -77,8 +77,7 @@ class Point(object):
         The |ChartFormat| object providing access to the shape formatting
         properties of this data point, such as line and fill.
         """
-        dPt = self._ser.get_or_add_dPt_for_point(self._idx)
-        return ChartFormat(dPt)
+        pass
 
     @lazyproperty
     def marker(self):
@@ -87,8 +86,7 @@ class Point(object):
         properties of the data point marker, such as fill and line. Setting
         these properties overrides any value set at the series level.
         """
-        dPt = self._ser.get_or_add_dPt_for_point(self._idx)
-        return Marker(dPt)
+        pass
 
 
 class XyPoints(_BasePoints):

@@ -43,35 +43,35 @@ class BaseShapeElement(BaseOxmlElement):
 
     @property
     def cx(self) -> Length:
-        return self._get_xfrm_attr("cx")
+        pass
 
     @cx.setter
     def cx(self, value):
-        self._set_xfrm_attr("cx", value)
+        pass
 
     @property
     def cy(self) -> Length:
-        return self._get_xfrm_attr("cy")
+        pass
 
     @cy.setter
     def cy(self, value):
-        self._set_xfrm_attr("cy", value)
+        pass
 
     @property
     def flipH(self):
-        return bool(self._get_xfrm_attr("flipH"))
+        pass
 
     @flipH.setter
     def flipH(self, value):
-        self._set_xfrm_attr("flipH", value)
+        pass
 
     @property
     def flipV(self):
-        return bool(self._get_xfrm_attr("flipV"))
+        pass
 
     @flipV.setter
     def flipV(self, value):
-        self._set_xfrm_attr("flipV", value)
+        pass
 
     def get_or_add_xfrm(self):
         """Return the `a:xfrm` grandchild element, newly-added if not present.
@@ -79,7 +79,7 @@ class BaseShapeElement(BaseOxmlElement):
         This version works for `p:sp`, `p:cxnSp`, and `p:pic` elements, others will need to
         override.
         """
-        return self.spPr.get_or_add_xfrm()
+        pass
 
     @property
     def has_ph_elm(self):
@@ -87,15 +87,12 @@ class BaseShapeElement(BaseOxmlElement):
         True if this shape element has a `p:ph` descendant, indicating it
         is a placeholder shape. False otherwise.
         """
-        return self.ph is not None
+        pass
 
     @property
     def ph(self) -> CT_Placeholder | None:
         """The `p:ph` descendant element if there is one, None otherwise."""
-        ph_elms = self.xpath("./*[1]/p:nvPr/p:ph")
-        if len(ph_elms) == 0:
-            return None
-        return ph_elms[0]
+        pass
 
     @property
     def ph_idx(self) -> int:
@@ -103,10 +100,7 @@ class BaseShapeElement(BaseOxmlElement):
 
         Raises |ValueError| if shape is not a placeholder.
         """
-        ph = self.ph
-        if ph is None:
-            raise ValueError("not a placeholder shape")
-        return ph.idx
+        pass
 
     @property
     def ph_orient(self) -> str:
@@ -114,10 +108,7 @@ class BaseShapeElement(BaseOxmlElement):
 
         Raises |ValueError| if shape is not a placeholder.
         """
-        ph = self.ph
-        if ph is None:
-            raise ValueError("not a placeholder shape")
-        return ph.orient
+        pass
 
     @property
     def ph_sz(self) -> str:
@@ -125,10 +116,7 @@ class BaseShapeElement(BaseOxmlElement):
 
         Raises `ValueError` if shape is not a placeholder.
         """
-        ph = self.ph
-        if ph is None:
-            raise ValueError("not a placeholder shape")
-        return ph.sz
+        pass
 
     @property
     def ph_type(self):
@@ -136,49 +124,43 @@ class BaseShapeElement(BaseOxmlElement):
 
         Raises `ValueError` if shape is not a placeholder.
         """
-        ph = self.ph
-        if ph is None:
-            raise ValueError("not a placeholder shape")
-        return ph.type
+        pass
 
     @property
     def rot(self) -> float:
         """Float representing degrees this shape is rotated clockwise."""
-        xfrm = self.xfrm
-        if xfrm is None or xfrm.rot is None:
-            return 0.0
-        return xfrm.rot
+        pass
 
     @rot.setter
     def rot(self, value: float):
-        self.get_or_add_xfrm().rot = value
+        pass
 
     @property
     def shape_id(self):
         """
         Integer id of this shape
         """
-        return self._nvXxPr.cNvPr.id
+        pass
 
     @property
     def shape_name(self):
         """
         Name of this shape
         """
-        return self._nvXxPr.cNvPr.name
+        pass
 
     @property
     def txBody(self):
         """Child `p:txBody` element, None if not present."""
-        return self.find(qn("p:txBody"))
+        pass
 
     @property
     def x(self) -> Length:
-        return self._get_xfrm_attr("x")
+        pass
 
     @x.setter
     def x(self, value):
-        self._set_xfrm_attr("x", value)
+        pass
 
     @property
     def xfrm(self):
@@ -187,15 +169,15 @@ class BaseShapeElement(BaseOxmlElement):
         This version works for `p:sp`, `p:cxnSp`, and `p:pic` elements, others will need to
         override.
         """
-        return self.spPr.xfrm
+        pass
 
     @property
     def y(self) -> Length:
-        return self._get_xfrm_attr("y")
+        pass
 
     @y.setter
     def y(self, value):
-        self._set_xfrm_attr("y", value)
+        pass
 
     @property
     def _nvXxPr(self):
@@ -204,17 +186,13 @@ class BaseShapeElement(BaseOxmlElement):
         name depends on the shape type, e.g. `p:nvPicPr` for picture
         shape.
         """
-        return self.xpath("./*[1]")[0]
+        pass
 
     def _get_xfrm_attr(self, name: str) -> Length | None:
-        xfrm = self.xfrm
-        if xfrm is None:
-            return None
-        return getattr(xfrm, name)
+        pass
 
     def _set_xfrm_attr(self, name, value):
-        xfrm = self.get_or_add_xfrm()
-        setattr(xfrm, name, value)
+        pass
 
 
 class CT_ApplicationNonVisualDrawingProps(BaseOxmlElement):
@@ -272,7 +250,7 @@ class CT_LineProperties(BaseOxmlElement):
         """
         Required to fulfill the interface used by dml.fill.
         """
-        return self.eg_lineFillProperties
+        pass
 
     @property
     def prstDash_val(self):
@@ -280,16 +258,11 @@ class CT_LineProperties(BaseOxmlElement):
 
         Return |None| if not present.
         """
-        prstDash = self.prstDash
-        if prstDash is None:
-            return None
-        return prstDash.val
+        pass
 
     @prstDash_val.setter
     def prstDash_val(self, val):
-        self._remove_custDash()
-        prstDash = self.get_or_add_prstDash()
-        prstDash.val = val
+        pass
 
 
 class CT_NonVisualDrawingProps(BaseOxmlElement):
@@ -400,20 +373,14 @@ class CT_ShapeProperties(BaseOxmlElement):
         """
         Shape width as an instance of Emu, or None if not present.
         """
-        cx_str_lst = self.xpath("./a:xfrm/a:ext/@cx")
-        if not cx_str_lst:
-            return None
-        return Emu(cx_str_lst[0])
+        pass
 
     @property
     def cy(self):
         """
         Shape height as an instance of Emu, or None if not present.
         """
-        cy_str_lst = self.xpath("./a:xfrm/a:ext/@cy")
-        if not cy_str_lst:
-            return None
-        return Emu(cy_str_lst[0])
+        pass
 
     @property
     def x(self) -> Length | None:
@@ -421,10 +388,7 @@ class CT_ShapeProperties(BaseOxmlElement):
 
         0 if not present.
         """
-        x_str_lst = self.xpath("./a:xfrm/a:off/@x")
-        if not x_str_lst:
-            return None
-        return Emu(x_str_lst[0])
+        pass
 
     @property
     def y(self):
@@ -432,13 +396,10 @@ class CT_ShapeProperties(BaseOxmlElement):
         The offset of the top of the shape from the top of the slide, as an
         instance of Emu. None if not present.
         """
-        y_str_lst = self.xpath("./a:xfrm/a:off/@y")
-        if not y_str_lst:
-            return None
-        return Emu(y_str_lst[0])
+        pass
 
     def _new_gradFill(self):
-        return CT_GradientFillProperties.new_gradFill()
+        pass
 
 
 class CT_Transform2D(BaseOxmlElement):
@@ -464,60 +425,38 @@ class CT_Transform2D(BaseOxmlElement):
 
     @property
     def x(self):
-        off = self.off
-        if off is None:
-            return None
-        return off.x
+        pass
 
     @x.setter
     def x(self, value):
-        off = self.get_or_add_off()
-        off.x = value
+        pass
 
     @property
     def y(self):
-        off = self.off
-        if off is None:
-            return None
-        return off.y
+        pass
 
     @y.setter
     def y(self, value):
-        off = self.get_or_add_off()
-        off.y = value
+        pass
 
     @property
     def cx(self):
-        ext = self.ext
-        if ext is None:
-            return None
-        return ext.cx
+        pass
 
     @cx.setter
     def cx(self, value):
-        ext = self.get_or_add_ext()
-        ext.cx = value
+        pass
 
     @property
     def cy(self):
-        ext = self.ext
-        if ext is None:
-            return None
-        return ext.cy
+        pass
 
     @cy.setter
     def cy(self, value):
-        ext = self.get_or_add_ext()
-        ext.cy = value
+        pass
 
     def _new_ext(self):
-        ext = OxmlElement("a:ext")
-        ext.cx = 0
-        ext.cy = 0
-        return ext
+        pass
 
     def _new_off(self):
-        off = OxmlElement("a:off")
-        off.x = 0
-        off.y = 0
-        return off
+        pass

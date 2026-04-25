@@ -23,49 +23,28 @@ class BaseSimpleType:
 
     @classmethod
     def to_xml(cls, value: Any) -> str:
-        cls.validate(value)
-        str_value = cls.convert_to_xml(value)
-        return str_value
+        pass
 
     @classmethod
     def validate_float(cls, value: Any):
         """Note that int values are accepted."""
-        if not isinstance(value, (int, float)):
-            raise TypeError("value must be a number, got %s" % type(value))
+        pass
 
     @classmethod
     def validate_int(cls, value):
-        if not isinstance(value, numbers.Integral):
-            raise TypeError("value must be an integral type, got %s" % type(value))
+        pass
 
     @classmethod
     def validate_float_in_range(cls, value, min_inclusive, max_inclusive):
-        cls.validate_float(value)
-        if value < min_inclusive or value > max_inclusive:
-            raise ValueError(
-                "value must be in range %s to %s inclusive, got %s"
-                % (min_inclusive, max_inclusive, value)
-            )
+        pass
 
     @classmethod
     def validate_int_in_range(cls, value, min_inclusive, max_inclusive):
-        cls.validate_int(value)
-        if value < min_inclusive or value > max_inclusive:
-            raise ValueError(
-                "value must be in range %d to %d inclusive, got %d"
-                % (min_inclusive, max_inclusive, value)
-            )
+        pass
 
     @classmethod
     def validate_string(cls, value):
-        if isinstance(value, str):
-            return value
-        try:
-            if isinstance(value, basestring):
-                return value
-        except NameError:  # means we're on Python 3
-            pass
-        raise TypeError("value must be a string, got %s" % type(value))
+        pass
 
 
 class BaseFloatType(BaseSimpleType):
@@ -75,12 +54,11 @@ class BaseFloatType(BaseSimpleType):
 
     @classmethod
     def convert_to_xml(cls, value):
-        return str(float(value))
+        pass
 
     @classmethod
     def validate(cls, value):
-        if not isinstance(value, (int, float)):
-            raise TypeError("value must be a number, got %s" % type(value))
+        pass
 
 
 class BaseIntType(BaseSimpleType):
@@ -95,11 +73,11 @@ class BaseIntType(BaseSimpleType):
 
     @classmethod
     def convert_to_xml(cls, value):
-        return str(value)
+        pass
 
     @classmethod
     def validate(cls, value):
-        cls.validate_int(value)
+        pass
 
 
 class BaseStringType(BaseSimpleType):
@@ -109,19 +87,17 @@ class BaseStringType(BaseSimpleType):
 
     @classmethod
     def convert_to_xml(cls, value):
-        return value
+        pass
 
     @classmethod
     def validate(cls, value):
-        cls.validate_string(value)
+        pass
 
 
 class BaseStringEnumerationType(BaseStringType):
     @classmethod
     def validate(cls, value):
-        cls.validate_string(value)
-        if value not in cls._members:
-            raise ValueError("must be one of %s, got '%s'" % (cls._members, value))
+        pass
 
 
 class XsdAnyUri(BaseStringType):
@@ -143,14 +119,11 @@ class XsdBoolean(BaseSimpleType):
 
     @classmethod
     def convert_to_xml(cls, value):
-        return {True: "1", False: "0"}[value]
+        pass
 
     @classmethod
     def validate(cls, value):
-        if value not in (True, False):
-            raise TypeError(
-                "only True or False (and possibly None) may be assigned, got" " '%s'" % value
-            )
+        pass
 
 
 class XsdDouble(BaseFloatType):
@@ -167,13 +140,13 @@ class XsdId(BaseStringType):
 class XsdInt(BaseIntType):
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, -2147483648, 2147483647)
+        pass
 
 
 class XsdLong(BaseIntType):
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, -9223372036854775808, 9223372036854775807)
+        pass
 
 
 class XsdString(BaseStringType):
@@ -203,19 +176,19 @@ class XsdTokenEnumeration(BaseStringEnumerationType):
 class XsdUnsignedByte(BaseIntType):
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 0, 255)
+        pass
 
 
 class XsdUnsignedInt(BaseIntType):
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 0, 4294967295)
+        pass
 
 
 class XsdUnsignedShort(BaseIntType):
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 0, 65535)
+        pass
 
 
 class ST_Angle(XsdInt):
@@ -238,13 +211,11 @@ class ST_Angle(XsdInt):
         Convert signed angle float like -42.42 to int 60000 per degree,
         normalized to positive value.
         """
-        # modulo normalizes negative and >360 degree values
-        rot = int(round(value * cls.DEGREE_INCREMENTS)) % cls.THREE_SIXTY
-        return str(rot)
+        pass
 
     @classmethod
     def validate(cls, value):
-        BaseFloatType.validate(value)
+        pass
 
 
 class ST_AxisUnit(XsdDouble):
@@ -254,9 +225,7 @@ class ST_AxisUnit(XsdDouble):
 
     @classmethod
     def validate(cls, value):
-        super(ST_AxisUnit, cls).validate(value)
-        if value <= 0.0:
-            raise ValueError("must be positive numeric value, got %s" % value)
+        pass
 
 
 class ST_BarDir(XsdStringEnumeration):
@@ -284,7 +253,7 @@ class ST_BubbleScale(BaseIntType):
 
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 0, 300)
+        pass
 
 
 class ST_ContentType(XsdString):
@@ -306,11 +275,11 @@ class ST_Coordinate(BaseSimpleType):
 
     @classmethod
     def convert_to_xml(cls, value):
-        return str(value)
+        pass
 
     @classmethod
     def validate(cls, value):
-        ST_CoordinateUnqualified.validate(value)
+        pass
 
 
 class ST_Coordinate32(BaseSimpleType):
@@ -326,11 +295,11 @@ class ST_Coordinate32(BaseSimpleType):
 
     @classmethod
     def convert_to_xml(cls, value):
-        return ST_Coordinate32Unqualified.convert_to_xml(value)
+        pass
 
     @classmethod
     def validate(cls, value):
-        ST_Coordinate32Unqualified.validate(value)
+        pass
 
 
 class ST_Coordinate32Unqualified(XsdInt):
@@ -342,7 +311,7 @@ class ST_Coordinate32Unqualified(XsdInt):
 class ST_CoordinateUnqualified(XsdLong):
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, -27273042329600, 27273042316900)
+        pass
 
 
 class ST_Direction(XsdTokenEnumeration):
@@ -382,7 +351,7 @@ class ST_GapAmount(BaseIntType):
 
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 0, 500)
+        pass
 
 
 class ST_Grouping(XsdStringEnumeration):
@@ -405,22 +374,12 @@ class ST_HexColorRGB(BaseStringType):
         """
         Keep alpha characters all uppercase just for consistency.
         """
-        return value.upper()
+        pass
 
     @classmethod
     def validate(cls, value):
         # must be string ---------------
-        str_value = cls.validate_string(value)
-
-        # must be 6 chars long----------
-        if len(str_value) != 6:
-            raise ValueError("RGB string must be six characters long, got '%s'" % str_value)
-
-        # must parse as hex int --------
-        try:
-            int(str_value, 16)
-        except ValueError:
-            raise ValueError("RGB string must be valid hex string, got '%s'" % str_value)
+        pass
 
 
 class ST_LayoutMode(XsdStringEnumeration):
@@ -449,7 +408,7 @@ class ST_LblOffset(XsdUnsignedShort):
 
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 0, 1000)
+        pass
 
 
 class ST_LineWidth(XsdInt):
@@ -459,17 +418,13 @@ class ST_LineWidth(XsdInt):
 
     @classmethod
     def validate(cls, value):
-        super(ST_LineWidth, cls).validate(value)
-        if value < 0 or value > 20116800:
-            raise ValueError(
-                "value must be in range 0-20116800 inclusive (0-1584 points)" ", got %d" % value
-            )
+        pass
 
 
 class ST_MarkerSize(XsdUnsignedByte):
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 2, 72)
+        pass
 
 
 class ST_Orientation(XsdStringEnumeration):
@@ -495,7 +450,7 @@ class ST_Overlap(BaseIntType):
 
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, -100, 100)
+        pass
 
 
 class ST_Percentage(BaseIntType):
@@ -514,11 +469,11 @@ class ST_Percentage(BaseIntType):
 
     @classmethod
     def convert_to_xml(cls, value):
-        return str(int(round(value * 100000.0)))
+        pass
 
     @classmethod
     def validate(cls, value):
-        cls.validate_float_in_range(value, -21474.83648, 21474.83647)
+        pass
 
     @classmethod
     def _convert_from_percent_literal(cls, str_value):
@@ -546,7 +501,7 @@ class ST_PositiveCoordinate(XsdLong):
 
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 0, 27273042316900)
+        pass
 
 
 class ST_PositiveFixedAngle(ST_Angle):
@@ -562,13 +517,7 @@ class ST_PositiveFixedAngle(ST_Angle):
 
         Value is normalized to a positive value less than 360 degrees.
         """
-        if degrees < 0.0:
-            degrees %= -360
-            degrees += 360
-        elif degrees > 0.0:
-            degrees %= 360
-
-        return str(int(round(degrees * cls.DEGREE_INCREMENTS)))
+        pass
 
 
 class ST_PositiveFixedPercentage(ST_Percentage):
@@ -582,7 +531,7 @@ class ST_PositiveFixedPercentage(ST_Percentage):
 
     @classmethod
     def validate(cls, value):
-        cls.validate_float_in_range(value, 0.0, 1.0)
+        pass
 
 
 class ST_RelationshipId(XsdString):
@@ -592,7 +541,7 @@ class ST_RelationshipId(XsdString):
 class ST_SlideId(XsdUnsignedInt):
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 256, 2147483647)
+        pass
 
 
 class ST_SlideSizeCoordinate(BaseIntType):
@@ -602,17 +551,13 @@ class ST_SlideSizeCoordinate(BaseIntType):
 
     @classmethod
     def validate(cls, value):
-        cls.validate_int(value)
-        if value < 914400 or value > 51206400:
-            raise ValueError(
-                "value must be in range(914400, 51206400) (1-56 inches), got" " %d" % value
-            )
+        pass
 
 
 class ST_Style(XsdUnsignedByte):
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 1, 48)
+        pass
 
 
 class ST_TargetMode(XsdString):
@@ -623,9 +568,7 @@ class ST_TargetMode(XsdString):
 
     @classmethod
     def validate(cls, value):
-        cls.validate_string(value)
-        if value not in ("External", "Internal"):
-            raise ValueError("must be one of 'Internal' or 'External', got '%s'" % value)
+        pass
 
 
 class ST_TextFontScalePercentOrPercentString(BaseFloatType):
@@ -642,25 +585,23 @@ class ST_TextFontScalePercentOrPercentString(BaseFloatType):
 
     @classmethod
     def convert_to_xml(cls, value):
-        return str(int(value * 1000.0))
+        pass
 
     @classmethod
     def validate(cls, value):
-        BaseFloatType.validate(value)
-        if value < 1.0 or value > 100.0:
-            raise ValueError("value must be in range 1.0..100.0 (percent), got %s" % value)
+        pass
 
 
 class ST_TextFontSize(BaseIntType):
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 100, 400000)
+        pass
 
 
 class ST_TextIndentLevelType(BaseIntType):
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 0, 8)
+        pass
 
 
 class ST_TextSpacingPercentOrPercentString(BaseFloatType):
@@ -682,12 +623,11 @@ class ST_TextSpacingPercentOrPercentString(BaseFloatType):
         """
         1.75 -> '175000'
         """
-        lines = value * 100000.0
-        return str(int(round(lines)))
+        pass
 
     @classmethod
     def validate(cls, value):
-        cls.validate_float_in_range(value, 0.0, 132.0)
+        pass
 
 
 class ST_TextSpacingPoint(BaseIntType):
@@ -700,12 +640,11 @@ class ST_TextSpacingPoint(BaseIntType):
 
     @classmethod
     def convert_to_xml(cls, value):
-        length = Emu(value)  # just to make sure
-        return str(length.centipoints)
+        pass
 
     @classmethod
     def validate(cls, value):
-        cls.validate_int_in_range(value, 0, 20116800)
+        pass
 
 
 class ST_TextTypeface(XsdString):

@@ -53,8 +53,7 @@ class BaseShape(object):
         shape, not a run of text within the shape. An |ActionSetting| object is always returned,
         even when no click behavior is defined on the shape.
         """
-        cNvPr = self._element._nvXxPr.cNvPr  # pyright: ignore[reportPrivateUsage]
-        return ActionSetting(cNvPr, self)
+        pass
 
     @property
     def element(self) -> ShapeElement:
@@ -72,9 +71,7 @@ class BaseShape(object):
         |False| otherwise. When |True|, the chart object can be accessed using the ``.chart``
         property.
         """
-        # This implementation is unconditionally False, the True version is
-        # on GraphicFrame subclass.
-        return False
+        pass
 
     @property
     def has_table(self) -> bool:
@@ -83,24 +80,21 @@ class BaseShape(object):
         |False| otherwise. When |True|, the table object can be accessed using the ``.table``
         property.
         """
-        # This implementation is unconditionally False, the True version is
-        # on GraphicFrame subclass.
-        return False
+        pass
 
     @property
     def has_text_frame(self) -> bool:
         """|True| if this shape can contain text."""
-        # overridden on Shape to return True. Only <p:sp> has text frame
-        return False
+        pass
 
     @property
     def height(self) -> Length:
         """Read/write. Integer distance between top and bottom extents of shape in EMUs."""
-        return self._element.cy
+        pass
 
     @height.setter
     def height(self, value: Length):
-        self._element.cy = value
+        pass
 
     @property
     def is_placeholder(self) -> bool:
@@ -108,7 +102,7 @@ class BaseShape(object):
 
         A shape is a placeholder if it has a <p:ph> element.
         """
-        return self._element.has_ph_elm
+        pass
 
     @property
     def left(self) -> Length:
@@ -116,20 +110,20 @@ class BaseShape(object):
 
         Read/write. Expressed in English Metric Units (EMU)
         """
-        return self._element.x
+        pass
 
     @left.setter
     def left(self, value: Length):
-        self._element.x = value
+        pass
 
     @property
     def name(self) -> str:
         """Name of this shape, e.g. 'Picture 7'."""
-        return self._element.shape_name
+        pass
 
     @name.setter
     def name(self, value: str):
-        self._element._nvXxPr.cNvPr.name = value  # pyright: ignore[reportPrivateUsage]
+        pass
 
     @property
     def part(self) -> BaseSlidePart:
@@ -138,7 +132,7 @@ class BaseShape(object):
         A |BaseSlidePart| subclass in this case. Access to a slide part should only be required if
         you are extending the behavior of |pp| API objects.
         """
-        return cast("BaseSlidePart", self._parent.part)
+        pass
 
     @property
     def placeholder_format(self) -> _PlaceholderFormat:
@@ -146,10 +140,7 @@ class BaseShape(object):
 
         Raises |ValueError| on access if the shape is not a placeholder.
         """
-        ph = self._element.ph
-        if ph is None:
-            raise ValueError("shape is not a placeholder")
-        return _PlaceholderFormat(ph)
+        pass
 
     @property
     def rotation(self) -> float:
@@ -158,11 +149,11 @@ class BaseShape(object):
         Read/write float. Negative values can be assigned to indicate counter-clockwise rotation,
         e.g. assigning -45.0 will change setting to 315.0.
         """
-        return self._element.rot
+        pass
 
     @rotation.setter
     def rotation(self, value: float):
-        self._element.rot = value
+        pass
 
     @lazyproperty
     def shadow(self) -> ShadowFormat:
@@ -172,7 +163,7 @@ class BaseShape(object):
         explicitly defined on this shape (i.e. it inherits its shadow
         behavior).
         """
-        return ShadowFormat(self._element.spPr)
+        pass
 
     @property
     def shape_id(self) -> int:
@@ -180,7 +171,7 @@ class BaseShape(object):
 
         The id of a shape is unique among all shapes on a slide.
         """
-        return self._element.shape_id
+        pass
 
     @property
     def shape_type(self) -> MSO_SHAPE_TYPE:
@@ -196,11 +187,11 @@ class BaseShape(object):
 
         Read/write. Expressed in English Metric Units (EMU)
         """
-        return self._element.y
+        pass
 
     @top.setter
     def top(self, value: Length):
-        self._element.y = value
+        pass
 
     @property
     def width(self) -> Length:
@@ -208,11 +199,11 @@ class BaseShape(object):
 
         Read/write. Expressed in English Metric Units (EMU).
         """
-        return self._element.cx
+        pass
 
     @width.setter
     def width(self, value: Length):
-        self._element.cx = value
+        pass
 
 
 class _PlaceholderFormat(ElementProxy):
@@ -233,7 +224,7 @@ class _PlaceholderFormat(ElementProxy):
     @property
     def idx(self) -> int:
         """Integer placeholder 'idx' attribute."""
-        return self._ph.idx
+        pass
 
     @property
     def type(self) -> PP_PLACEHOLDER:
@@ -241,4 +232,4 @@ class _PlaceholderFormat(ElementProxy):
 
         A member of the :ref:`PpPlaceholderType` enumeration, e.g. PP_PLACEHOLDER.CHART
         """
-        return self._ph.type
+        pass

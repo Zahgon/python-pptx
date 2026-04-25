@@ -47,10 +47,7 @@ class CT_Chart(BaseOxmlElement):
         """
         True if this chart has a legend defined, False otherwise.
         """
-        legend = self.legend
-        if legend is None:
-            return False
-        return True
+        pass
 
     @has_legend.setter
     def has_legend(self, bool_value):
@@ -60,19 +57,15 @@ class CT_Chart(BaseOxmlElement):
         ``<c:legend>`` element is present, a new default element is added.
         When |False|, any existing legend element is removed.
         """
-        if bool(bool_value) is False:
-            self._remove_legend()
-        else:
-            if self.legend is None:
-                self._add_legend()
+        pass
 
     @staticmethod
     def new_chart(rId: str) -> CT_Chart:
         """Return a new `c:chart` element."""
-        return cast(CT_Chart, parse_xml(f'<c:chart {nsdecls("c")} {nsdecls("r")} r:id="{rId}"/>'))
+        pass
 
     def _new_title(self):
-        return CT_Title.new_title()
+        pass
 
 
 class CT_ChartSpace(BaseOxmlElement):
@@ -103,7 +96,7 @@ class CT_ChartSpace(BaseOxmlElement):
 
     @property
     def catAx_lst(self):
-        return self.chart.plotArea.catAx_lst
+        pass
 
     @property
     def date_1904(self):
@@ -112,18 +105,15 @@ class CT_ChartSpace(BaseOxmlElement):
         |False| otherwise. This value indicates whether date number values
         are based on the 1900 or 1904 epoch.
         """
-        date1904 = self.date1904
-        if date1904 is None:
-            return False
-        return date1904.val
+        pass
 
     @property
     def dateAx_lst(self):
-        return self.xpath("c:chart/c:plotArea/c:dateAx")
+        pass
 
     def get_or_add_title(self):
         """Return the `c:title` grandchild, newly created if not present."""
-        return self.chart.get_or_add_title()
+        pass
 
     @property
     def plotArea(self):
@@ -131,11 +121,11 @@ class CT_ChartSpace(BaseOxmlElement):
         Return the required `c:chartSpace/c:chart/c:plotArea` grandchild
         element.
         """
-        return self.chart.plotArea
+        pass
 
     @property
     def valAx_lst(self):
-        return self.chart.plotArea.valAx_lst
+        pass
 
     @property
     def xlsx_part_rId(self):
@@ -144,23 +134,17 @@ class CT_ChartSpace(BaseOxmlElement):
         `<c:externalData>` child, or |None| if no externalData element is
         present.
         """
-        externalData = self.externalData
-        if externalData is None:
-            return None
-        return externalData.rId
+        pass
 
     def _add_externalData(self):
         """
         Always add a ``<c:autoUpdate val="0"/>`` child so auto-updating
         behavior is off by default.
         """
-        externalData = self._new_externalData()
-        externalData._add_autoUpdate(val=False)
-        self._insert_externalData(externalData)
-        return externalData
+        pass
 
     def _new_txPr(self):
-        return CT_TextBody.new_txPr()
+        pass
 
 
 class CT_ExternalData(BaseOxmlElement):
@@ -187,37 +171,13 @@ class CT_PlotArea(BaseOxmlElement):
         the document order of the containing xChart element, then by their
         ordering within the xChart element (not necessarily document order).
         """
-        for xChart in self.iter_xCharts():
-            for ser in xChart.iter_sers():
-                yield ser
+        pass
 
     def iter_xCharts(self):
         """
         Generate each xChart child element in document.
         """
-        plot_tags = (
-            qn("c:area3DChart"),
-            qn("c:areaChart"),
-            qn("c:bar3DChart"),
-            qn("c:barChart"),
-            qn("c:bubbleChart"),
-            qn("c:doughnutChart"),
-            qn("c:line3DChart"),
-            qn("c:lineChart"),
-            qn("c:ofPieChart"),
-            qn("c:pie3DChart"),
-            qn("c:pieChart"),
-            qn("c:radarChart"),
-            qn("c:scatterChart"),
-            qn("c:stockChart"),
-            qn("c:surface3DChart"),
-            qn("c:surfaceChart"),
-        )
-
-        for child in self.iterchildren():
-            if child.tag not in plot_tags:
-                continue
-            yield child
+        pass
 
     @property
     def last_ser(self):
@@ -225,11 +185,7 @@ class CT_PlotArea(BaseOxmlElement):
         Return the last `<c:ser>` element in the last xChart element, based
         on series order (not necessarily the same element as document order).
         """
-        last_xChart = self.xCharts[-1]
-        sers = last_xChart.sers
-        if not sers:
-            return None
-        return sers[-1]
+        pass
 
     @property
     def next_idx(self):
@@ -238,10 +194,7 @@ class CT_PlotArea(BaseOxmlElement):
         this chart, the maximum idx value found on existing series,
         incremented by one.
         """
-        idx_vals = [s.idx.val for s in self.sers]
-        if not idx_vals:
-            return 0
-        return max(idx_vals) + 1
+        pass
 
     @property
     def next_order(self):
@@ -250,10 +203,7 @@ class CT_PlotArea(BaseOxmlElement):
         this chart, the maximum order value found on existing series,
         incremented by one.
         """
-        order_vals = [s.order.val for s in self.sers]
-        if not order_vals:
-            return 0
-        return max(order_vals) + 1
+        pass
 
     @property
     def sers(self):
@@ -263,7 +213,7 @@ class CT_PlotArea(BaseOxmlElement):
         then by their ordering within the xChart element (not necessarily
         document order).
         """
-        return tuple(self.iter_sers())
+        pass
 
     @property
     def xCharts(self):
@@ -271,7 +221,7 @@ class CT_PlotArea(BaseOxmlElement):
         Return a sequence containing all the `c:{x}Chart` elements in this
         chart, in document order.
         """
-        return tuple(self.iter_xCharts())
+        pass
 
 
 class CT_Style(BaseOxmlElement):

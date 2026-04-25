@@ -43,13 +43,12 @@ class PackageReader(Container[bytes]):
         Returns `None` if no rels item is present for `partname`. `partname` is a |PackURI|
         instance.
         """
-        blob_reader, uri = self._blob_reader, partname.rels_uri
-        return blob_reader[uri] if uri in blob_reader else None
+        pass
 
     @lazyproperty
     def _blob_reader(self) -> _PhysPkgReader:
         """|_PhysPkgReader| subtype providing read access to the package file."""
-        return _PhysPkgReader.factory(self._pkg_file)
+        pass
 
 
 class PackageWriter:
@@ -76,14 +75,11 @@ class PackageWriter:
         The serialized package contains `pkg_rels` and `parts`, a content-types stream based on
         the content type of each part, and a .rels file for each part that has relationships.
         """
-        cls(pkg_file, pkg_rels, parts)._write()
+        pass
 
     def _write(self) -> None:
         """Write physical package (.pptx file)."""
-        with _PhysPkgWriter.factory(self._pkg_file) as phys_writer:
-            self._write_content_types_stream(phys_writer)
-            self._write_pkg_rels(phys_writer)
-            self._write_parts(phys_writer)
+        pass
 
     def _write_content_types_stream(self, phys_writer: _PhysPkgWriter) -> None:
         """Write `[Content_Types].xml` part to the physical package.
@@ -91,24 +87,18 @@ class PackageWriter:
         This part must contain an appropriate content type lookup target for each part in the
         package.
         """
-        phys_writer.write(
-            CONTENT_TYPES_URI,
-            serialize_part_xml(_ContentTypesItem.xml_for(self._parts)),
-        )
+        pass
 
     def _write_parts(self, phys_writer: _PhysPkgWriter) -> None:
         """Write blob of each part in `parts` to the package.
 
         A rels item for each part is also written when the part has relationships.
         """
-        for part in self._parts:
-            phys_writer.write(part.partname, part.blob)
-            if part._rels:  # pyright: ignore[reportPrivateUsage]
-                phys_writer.write(part.partname.rels_uri, part.rels.xml)
+        pass
 
     def _write_pkg_rels(self, phys_writer: _PhysPkgWriter) -> None:
         """Write the XML rels item for `pkg_rels` ('/_rels/.rels') to the package."""
-        phys_writer.write(PACKAGE_URI.rels_uri, self._pkg_rels.xml)
+        pass
 
 
 class _PhysPkgReader(Container[PackURI]):
@@ -129,19 +119,7 @@ class _PhysPkgReader(Container[PackURI]):
     @classmethod
     def factory(cls, pkg_file: str | IO[bytes]) -> _PhysPkgReader:
         """Return |_PhysPkgReader| subtype instance appropriage for `pkg_file`."""
-        # --- for pkg_file other than str, assume it's a stream and pass it to Zip
-        # --- reader to sort out
-        if not isinstance(pkg_file, str):
-            return _ZipPkgReader(pkg_file)
-
-        # --- otherwise we treat `pkg_file` as a path ---
-        if os.path.isdir(pkg_file):
-            return _DirPkgReader(pkg_file)
-
-        if zipfile.is_zipfile(pkg_file):
-            return _ZipPkgReader(pkg_file)
-
-        raise PackageNotFoundError("Package not found at '%s'" % pkg_file)
+        pass
 
 
 class _DirPkgReader(_PhysPkgReader):
@@ -191,8 +169,7 @@ class _ZipPkgReader(_PhysPkgReader):
     @lazyproperty
     def _blobs(self) -> dict[PackURI, bytes]:
         """dict mapping partname to package part binaries."""
-        with zipfile.ZipFile(self._pkg_file, "r") as z:
-            return {PackURI("/%s" % name): z.read(name) for name in z.namelist()}
+        pass
 
 
 class _PhysPkgWriter:
@@ -205,7 +182,7 @@ class _PhysPkgWriter:
         Currently the only subtype is `_ZipPkgWriter`, but a `_DirPkgWriter` could be implemented
         or even a `_StreamPkgWriter`.
         """
-        return _ZipPkgWriter(pkg_file)
+        pass
 
     def write(self, pack_uri: PackURI, blob: bytes) -> None:
         """Write `blob` to package with membername corresponding to `pack_uri`."""
@@ -233,14 +210,12 @@ class _ZipPkgWriter(_PhysPkgWriter):
 
     def write(self, pack_uri: PackURI, blob: bytes) -> None:
         """Write `blob` to zip package with membername corresponding to `pack_uri`."""
-        self._zipf.writestr(pack_uri.membername, blob)
+        pass
 
     @lazyproperty
     def _zipf(self) -> zipfile.ZipFile:
         """`ZipFile` instance open for writing."""
-        return zipfile.ZipFile(
-            self._pkg_file, "w", compression=zipfile.ZIP_DEFLATED, strict_timestamps=False
-        )
+        pass
 
 
 class _ContentTypesItem:
@@ -255,7 +230,7 @@ class _ContentTypesItem:
 
         The resulting XML is suitable for storage as `[Content_Types].xml` in an OPC package.
         """
-        return cls(parts)._xml
+        pass
 
     @lazyproperty
     def _xml(self) -> CT_Types:
@@ -282,15 +257,4 @@ class _ContentTypesItem:
 
         `defaults` is {ext: content_type} and overrides is {partname: content_type}.
         """
-        defaults = CaseInsensitiveDict(rels=CT.OPC_RELATIONSHIPS, xml=CT.XML)
-        overrides: dict[PackURI, str] = {}
-
-        for part in self._parts:
-            partname, content_type = part.partname, part.content_type
-            ext = partname.ext
-            if (ext.lower(), content_type) in default_content_types:
-                defaults[ext] = content_type
-            else:
-                overrides[partname] = content_type
-
-        return defaults, overrides
+        pass

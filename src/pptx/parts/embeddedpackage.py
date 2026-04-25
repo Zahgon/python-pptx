@@ -29,23 +29,7 @@ class EmbeddedPackagePart(Part):
         used to open the "file-type" of `object_blob`. The returned part contains the
         bytes of `object_blob` and has the content-type also determined by `prog_id`.
         """
-        # --- a generic OLE object has no subclass ---
-        if not isinstance(prog_id, PROG_ID):
-            return cls(
-                package.next_partname("/ppt/embeddings/oleObject%d.bin"),
-                CT.OFC_OLE_OBJECT,
-                package,
-                object_blob,
-            )
-
-        # --- A Microsoft Office file-type is a distinguished package object ---
-        EmbeddedPartCls = {
-            PROG_ID.DOCX: EmbeddedDocxPart,
-            PROG_ID.PPTX: EmbeddedPptxPart,
-            PROG_ID.XLSX: EmbeddedXlsxPart,
-        }[prog_id]
-
-        return EmbeddedPartCls.new(object_blob, package)
+        pass
 
     @classmethod
     def new(cls, blob: bytes, package: Package):

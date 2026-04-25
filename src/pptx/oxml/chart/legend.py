@@ -33,9 +33,7 @@ class CT_Legend(BaseOxmlElement):
         `./c:txPr/a:p/a:pPr/a:defRPr` great-great-grandchild element, added
         with its ancestors if not present.
         """
-        txPr = self.get_or_add_txPr()
-        defRPr = txPr.defRPr
-        return defRPr
+        pass
 
     @property
     def horz_offset(self):
@@ -44,10 +42,7 @@ class CT_Legend(BaseOxmlElement):
         ./c:layout/c:manualLayout/c:xMode@val == "factor". 0.0 if that
         XPath expression has no match.
         """
-        layout = self.layout
-        if layout is None:
-            return 0.0
-        return layout.horz_offset
+        pass
 
     @horz_offset.setter
     def horz_offset(self, offset):
@@ -56,11 +51,10 @@ class CT_Legend(BaseOxmlElement):
         ./c:layout/c:manualLayout/c:xMode@val to "factor". Remove
         ./c:layout/c:manualLayout if *offset* == 0.
         """
-        layout = self.get_or_add_layout()
-        layout.horz_offset = offset
+        pass
 
     def _new_txPr(self):
-        return CT_TextBody.new_txPr()
+        pass
 
 
 class CT_LegendPos(BaseOxmlElement):

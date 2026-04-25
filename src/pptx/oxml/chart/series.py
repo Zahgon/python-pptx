@@ -30,7 +30,7 @@ class CT_AxDataSource(BaseOxmlElement):
         is a `c:multiLvlStrRef` element. Returns an empty list when no
         `c:lvl` descendent elements are present.
         """
-        return self.xpath(".//c:lvl")
+        pass
 
 
 class CT_DPt(BaseOxmlElement):
@@ -60,9 +60,7 @@ class CT_DPt(BaseOxmlElement):
         Return a newly created "loose" `c:dPt` element containing its default
         subtree.
         """
-        dPt = OxmlElement("c:dPt")
-        dPt.append(OxmlElement("c:idx"))
-        return dPt
+        pass
 
 
 class CT_Lvl(BaseOxmlElement):
@@ -91,8 +89,7 @@ class CT_NumDataSource(BaseOxmlElement):
         disruptive way to degrade when no cached point data is available.
         This situation is not expected, but is valid according to the schema.
         """
-        results = self.xpath(".//c:ptCount/@val")
-        return int(results[0]) if results else 0
+        pass
 
     def pt_v(self, idx):
         """
@@ -157,10 +154,7 @@ class CT_SeriesComposite(BaseOxmlElement):
         Return the number of bubble size values as reflected in the `val`
         attribute of `./c:bubbleSize//c:ptCount`, or 0 if not present.
         """
-        vals = self.xpath("./c:bubbleSize//c:ptCount/@val")
-        if not vals:
-            return 0
-        return int(vals[0])
+        pass
 
     @property
     def cat_ptCount_val(self):
@@ -168,40 +162,28 @@ class CT_SeriesComposite(BaseOxmlElement):
         Return the number of categories as reflected in the `val` attribute
         of `./c:cat//c:ptCount`, or 0 if not present.
         """
-        vals = self.xpath("./c:cat//c:ptCount/@val")
-        if not vals:
-            return 0
-        return int(vals[0])
+        pass
 
     def get_dLbl(self, idx):
         """
         Return the `c:dLbl` element representing the label for the data point
         at offset *idx* in this series, or |None| if not present.
         """
-        dLbls = self.dLbls
-        if dLbls is None:
-            return None
-        return dLbls.get_dLbl_for_point(idx)
+        pass
 
     def get_or_add_dLbl(self, idx):
         """
         Return the `c:dLbl` element representing the label of the point at
         offset *idx* in this series, newly created if not yet present.
         """
-        dLbls = self.get_or_add_dLbls()
-        return dLbls.get_or_add_dLbl_for_point(idx)
+        pass
 
     def get_or_add_dPt_for_point(self, idx):
         """
         Return the `c:dPt` child representing the visual properties of the
         data point at index *idx*.
         """
-        matches = self.xpath('c:dPt[c:idx[@val="%d"]]' % idx)
-        if matches:
-            return matches[0]
-        dPt = self._add_dPt()
-        dPt.idx.val = idx
-        return dPt
+        pass
 
     @property
     def xVal_ptCount_val(self):
@@ -209,10 +191,7 @@ class CT_SeriesComposite(BaseOxmlElement):
         Return the number of X values as reflected in the `val` attribute of
         `./c:xVal//c:ptCount`, or 0 if not present.
         """
-        vals = self.xpath("./c:xVal//c:ptCount/@val")
-        if not vals:
-            return 0
-        return int(vals[0])
+        pass
 
     @property
     def yVal_ptCount_val(self):
@@ -220,21 +199,18 @@ class CT_SeriesComposite(BaseOxmlElement):
         Return the number of Y values as reflected in the `val` attribute of
         `./c:yVal//c:ptCount`, or 0 if not present.
         """
-        vals = self.xpath("./c:yVal//c:ptCount/@val")
-        if not vals:
-            return 0
-        return int(vals[0])
+        pass
 
     def _new_dLbls(self):
         """Override metaclass method that creates `c:dLbls` element."""
-        return CT_DLbls.new_dLbls()
+        pass
 
     def _new_dPt(self):
         """
         Overrides the metaclass generated method to get `c:dPt` with minimal
         subtree.
         """
-        return CT_DPt.new_dPt()
+        pass
 
 
 class CT_StrVal_NumVal_Composite(BaseOxmlElement):
@@ -251,4 +227,4 @@ class CT_StrVal_NumVal_Composite(BaseOxmlElement):
         """
         The float value of the text in the required ``<c:v>`` child.
         """
-        return float(self.v.text)
+        pass

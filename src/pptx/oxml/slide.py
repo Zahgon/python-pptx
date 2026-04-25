@@ -31,7 +31,7 @@ class _BaseSlideElement(BaseOxmlElement):
     @property
     def spTree(self) -> CT_GroupShape:
         """Return required `p:cSld/p:spTree` grandchild."""
-        return self.cSld.spTree
+        pass
 
 
 class CT_Background(BaseOxmlElement):
@@ -50,10 +50,7 @@ class CT_Background(BaseOxmlElement):
 
     def add_noFill_bgPr(self):
         """Return a new `p:bgPr` element with noFill properties."""
-        xml = "<p:bgPr %s>\n" "  <a:noFill/>\n" "  <a:effectLst/>\n" "</p:bgPr>" % nsdecls("a", "p")
-        bgPr = cast(CT_BackgroundProperties, parse_xml(xml))
-        self._insert_bgPr(bgPr)
-        return bgPr
+        pass
 
 
 class CT_BackgroundProperties(BaseOxmlElement):
@@ -85,7 +82,7 @@ class CT_BackgroundProperties(BaseOxmlElement):
 
     def _new_gradFill(self):
         """Override default to add default gradient subtree."""
-        return CT_GradientFillProperties.new_gradFill()
+        pass
 
 
 class CT_CommonSlideData(BaseOxmlElement):
@@ -110,20 +107,14 @@ class CT_CommonSlideData(BaseOxmlElement):
         If no such grandchild is present, any existing `p:bg` child is first removed and a new
         default `p:bg` with noFill settings is added.
         """
-        bg = self.bg
-        if bg is None or bg.bgPr is None:
-            bg = self._change_to_noFill_bg()
-        return cast(CT_BackgroundProperties, bg.bgPr)
+        pass
 
     def _change_to_noFill_bg(self) -> CT_Background:
         """Establish a `p:bg` child with no-fill settings.
 
         Any existing `p:bg` child is first removed.
         """
-        self._remove_bg()
-        bg = self.get_or_add_bg()
-        bg.add_noFill_bgPr()
-        return bg
+        pass
 
 
 class CT_NotesMaster(_BaseSlideElement):
@@ -136,7 +127,7 @@ class CT_NotesMaster(_BaseSlideElement):
     @classmethod
     def new_default(cls) -> CT_NotesMaster:
         """Return a new `p:notesMaster` element based on the built-in default template."""
-        return cast(CT_NotesMaster, parse_from_template("notesMaster"))
+        pass
 
 
 class CT_NotesSlide(_BaseSlideElement):
@@ -173,7 +164,7 @@ class CT_Slide(_BaseSlideElement):
     @property
     def bg(self):
         """Return `p:bg` grandchild or None if not present."""
-        return self.cSld.bg
+        pass
 
     def get_or_add_childTnLst(self):
         """Return parent element for a new `p:video` child element.
@@ -188,10 +179,7 @@ class CT_Slide(_BaseSlideElement):
         available to me one way or the other, so I've taken the simple
         approach.
         """
-        childTnLst = self._childTnLst
-        if childTnLst is None:
-            childTnLst = self._add_childTnLst()
-        return childTnLst
+        pass
 
     def _add_childTnLst(self):
         """Add `./p:timing/p:tnLst/p:par/p:cTn/p:childTnLst` descendant.
@@ -199,10 +187,7 @@ class CT_Slide(_BaseSlideElement):
         Any existing `p:timing` child element is ruthlessly removed and
         replaced.
         """
-        self.remove(self.get_or_add_timing())
-        timing = parse_xml(self._childTnLst_timing_xml())
-        self._insert_timing(timing)
-        return timing.xpath("./p:tnLst/p:par/p:cTn/p:childTnLst")[0]
+        pass
 
     @property
     def _childTnLst(self):
@@ -210,25 +195,11 @@ class CT_Slide(_BaseSlideElement):
 
         Return None if that element is not present.
         """
-        childTnLsts = self.xpath("./p:timing/p:tnLst/p:par/p:cTn/p:childTnLst")
-        if not childTnLsts:
-            return None
-        return childTnLsts[0]
+        pass
 
     @staticmethod
     def _childTnLst_timing_xml():
-        return (
-            "<p:timing %s>\n"
-            "  <p:tnLst>\n"
-            "    <p:par>\n"
-            '      <p:cTn id="1" dur="indefinite" restart="never" nodeType="'
-            'tmRoot">\n'
-            "        <p:childTnLst/>\n"
-            "      </p:cTn>\n"
-            "    </p:par>\n"
-            "  </p:tnLst>\n"
-            "</p:timing>" % nsdecls("p")
-        )
+        pass
 
     @staticmethod
     def _sld_xml():
@@ -314,29 +285,12 @@ class CT_TimeNodeList(BaseOxmlElement):
 
     def add_video(self, shape_id):
         """Add a new `p:video` child element for movie having *shape_id*."""
-        video_xml = (
-            "<p:video %s>\n"
-            '  <p:cMediaNode vol="80000">\n'
-            '    <p:cTn id="%d" fill="hold" display="0">\n'
-            "      <p:stCondLst>\n"
-            '        <p:cond delay="indefinite"/>\n'
-            "      </p:stCondLst>\n"
-            "    </p:cTn>\n"
-            "    <p:tgtEl>\n"
-            '      <p:spTgt spid="%d"/>\n'
-            "    </p:tgtEl>\n"
-            "  </p:cMediaNode>\n"
-            "</p:video>\n" % (nsdecls("p"), self._next_cTn_id, shape_id)
-        )
-        video = parse_xml(video_xml)
-        self.append(video)
+        pass
 
     @property
     def _next_cTn_id(self):
         """Return the next available unique ID (int) for p:cTn element."""
-        cTn_id_strs = self.xpath("/p:sld/p:timing//p:cTn/@id")
-        ids = [int(id_str) for id_str in cTn_id_strs]
-        return max(ids) + 1
+        pass
 
 
 class CT_TLMediaNodeVideo(BaseOxmlElement):

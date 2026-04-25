@@ -50,14 +50,11 @@ class Adjustment:
         at more extreme shape proportions (e.g. width is much greater than height), the value can
         become negative or greater than 1.0.
         """
-        raw_value = self.actual if self.actual is not None else self.def_val
-        return self._normalize(raw_value)
+        pass
 
     @effective_value.setter
     def effective_value(self, value: float):
-        if not isinstance(value, Number):
-            raise ValueError(f"adjustment value must be numeric, got {repr(value)}")
-        self.actual = self._denormalize(value)
+        pass
 
     @staticmethod
     def _denormalize(value: float) -> int:
@@ -65,7 +62,7 @@ class Adjustment:
 
         See Adjustment.normalize for additional details.
         """
-        return int(value * 100000.0)
+        pass
 
     @staticmethod
     def _normalize(raw_value: int) -> float:
@@ -75,7 +72,7 @@ class Adjustment:
         100,000. Raw values less than 0 and greater than 100,000 are valid and return values
         calculated on the same unit basis of 100,000.
         """
-        return raw_value / 100000.0
+        pass
 
     @property
     def val(self) -> int:
@@ -83,7 +80,7 @@ class Adjustment:
 
         Expressed in shape coordinates, this is suitable for using in the XML.
         """
-        return self.actual if self.actual is not None else self.def_val
+        pass
 
 
 class AdjustmentCollection:
@@ -112,20 +109,14 @@ class AdjustmentCollection:
 
     def _initialized_adjustments(self, prstGeom: CT_PresetGeometry2D | None) -> list[Adjustment]:
         """Return an initialized list of adjustment values based on the contents of `prstGeom`."""
-        if prstGeom is None:
-            return []
-        davs = AutoShapeType.default_adjustment_values(prstGeom.prst)
-        adjustments = [Adjustment(name, def_val) for name, def_val in davs]
-        self._update_adjustments_with_actuals(adjustments, prstGeom.gd_lst)
-        return adjustments
+        pass
 
     def _rewrite_guides(self):
         """Write `a:gd` elements to the XML, one for each adjustment value.
 
         Any existing guide elements are overwritten.
         """
-        guides = [(adj.name, adj.val) for adj in self._adjustments_]
-        self._prstGeom.rewrite_guides(guides)
+        pass
 
     @staticmethod
     def _update_adjustments_with_actuals(
@@ -136,21 +127,12 @@ class AdjustmentCollection:
         `guides` is a list of `a:gd` elements. Guides with a name that does not match an adjustment
         object are skipped.
         """
-        adjustments_by_name = dict((adj.name, adj) for adj in adjustments)
-        for gd in guides:
-            name = gd.name
-            actual = int(gd.fmla[4:])
-            try:
-                adjustment = adjustments_by_name[name]
-            except KeyError:
-                continue
-            adjustment.actual = actual
-        return
+        pass
 
     @property
     def _adjustments(self) -> tuple[Adjustment, ...]:
         """Sequence of |Adjustment| objects contained in collection."""
-        return tuple(self._adjustments_)
+        pass
 
     def __len__(self):
         """Implement built-in function len()"""
@@ -216,7 +198,7 @@ class AutoShapeType:
     @property
     def autoshape_type_id(self) -> MSO_AUTO_SHAPE_TYPE:
         """MSO_AUTO_SHAPE_TYPE enumeration member identifying this auto shape type."""
-        return self._autoshape_type_id
+        pass
 
     @property
     def basename(self) -> str:
@@ -227,12 +209,12 @@ class AutoShapeType:
         integer. This value is escaped because at least one autoshape-type name includes double
         quotes ('"No" Symbol').
         """
-        return saxutils.escape(self._basename, {'"': "&quot;"})
+        pass
 
     @classmethod
     def default_adjustment_values(cls, prst: MSO_AUTO_SHAPE_TYPE) -> tuple[AdjustmentValue, ...]:
         """Sequence of (name, value) pair adjustment value defaults for `prst` autoshape-type."""
-        return autoshape_types[prst]["avLst"]
+        pass
 
     @classmethod
     def id_from_prst(cls, prst: str) -> MSO_AUTO_SHAPE_TYPE:
@@ -240,7 +222,7 @@ class AutoShapeType:
 
         e.g. `MSO_SHAPE.RECTANGLE` corresponding to preset geometry keyword `"rect"`.
         """
-        return MSO_AUTO_SHAPE_TYPE.from_xml(prst)
+        pass
 
     @property
     def prst(self):
@@ -249,7 +231,7 @@ class AutoShapeType:
         `prst` attribute of `a:prstGeom` element to specify the geometry
         to be used in rendering the shape, for example `'roundRect'`.
         """
-        return MSO_AUTO_SHAPE_TYPE.to_xml(self._autoshape_type_id)
+        pass
 
 
 class Shape(BaseShape):
@@ -266,7 +248,7 @@ class Shape(BaseShape):
     @lazyproperty
     def adjustments(self) -> AdjustmentCollection:
         """Read-only reference to |AdjustmentCollection| instance for this shape."""
-        return AdjustmentCollection(self._sp.prstGeom)
+        pass
 
     @property
     def auto_shape_type(self):
@@ -274,9 +256,7 @@ class Shape(BaseShape):
 
         Like `MSO_SHAPE.ROUNDED_RECTANGLE`. Raises |ValueError| if this shape is not an auto shape.
         """
-        if not self._sp.is_autoshape:
-            raise ValueError("shape is not an auto shape")
-        return self._sp.prst
+        pass
 
     @lazyproperty
     def fill(self):
@@ -284,16 +264,16 @@ class Shape(BaseShape):
 
         Provides access to fill properties such as fill color.
         """
-        return FillFormat.from_fill_parent(self._sp.spPr)
+        pass
 
     def get_or_add_ln(self):
         """Return the `a:ln` element containing the line format properties XML for this shape."""
-        return self._sp.get_or_add_ln()
+        pass
 
     @property
     def has_text_frame(self) -> bool:
         """|True| if this shape can contain text. Always |True| for an AutoShape."""
-        return True
+        pass
 
     @lazyproperty
     def line(self):
@@ -301,7 +281,7 @@ class Shape(BaseShape):
 
         Provides access to line properties such as line color.
         """
-        return LineFormat(self)
+        pass
 
     @property
     def ln(self):
@@ -309,20 +289,12 @@ class Shape(BaseShape):
 
         |None| if no `a:ln` element is present.
         """
-        return self._sp.ln
+        pass
 
     @property
     def shape_type(self) -> MSO_SHAPE_TYPE:
         """Unique integer identifying the type of this shape, like `MSO_SHAPE_TYPE.TEXT_BOX`."""
-        if self.is_placeholder:
-            return MSO_SHAPE_TYPE.PLACEHOLDER
-        if self._sp.has_custom_geometry:
-            return MSO_SHAPE_TYPE.FREEFORM
-        if self._sp.is_autoshape:
-            return MSO_SHAPE_TYPE.AUTO_SHAPE
-        if self._sp.is_textbox:
-            return MSO_SHAPE_TYPE.TEXT_BOX
-        raise NotImplementedError("Shape instance of unrecognized shape type")
+        pass
 
     @property
     def text(self) -> str:
@@ -339,11 +311,11 @@ class Shape(BaseShape):
         character appears in clipboard text copied from PowerPoint as its str encoding of
         line-breaks.)
         """
-        return self.text_frame.text
+        pass
 
     @text.setter
     def text(self, text: str):
-        self.text_frame.text = text
+        pass
 
     @property
     def text_frame(self):
@@ -351,5 +323,4 @@ class Shape(BaseShape):
 
         Contains the text of the shape and provides access to text formatting properties.
         """
-        txBody = self._sp.get_or_add_txBody()
-        return TextFrame(txBody, self)
+        pass

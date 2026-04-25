@@ -36,7 +36,7 @@ class _RelatableMixin:
         Raises |KeyError| if no such relationship is found and |ValueError| if more than one such
         relationship is found.
         """
-        return self._rels.part_with_reltype(reltype)
+        pass
 
     def relate_to(self, target: Part | str, reltype: str, is_external: bool = False) -> str:
         """Return rId key of relationship of `reltype` to `target`.
@@ -52,11 +52,11 @@ class _RelatableMixin:
 
     def related_part(self, rId: str) -> Part:
         """Return related |Part| subtype identified by `rId`."""
-        return self._rels[rId].target_part
+        pass
 
     def target_ref(self, rId: str) -> str:
         """Return URL contained in target ref of relationship identified by `rId`."""
-        return self._rels[rId].target_ref
+        pass
 
     @lazyproperty
     def _rels(self) -> _Relationships:
@@ -79,7 +79,7 @@ class OpcPackage(_RelatableMixin):
     @classmethod
     def open(cls, pkg_file: str | IO[bytes]) -> Self:
         """Return an |OpcPackage| instance loaded with the contents of `pkg_file`."""
-        return cls(pkg_file)._load()
+        pass
 
     def drop_rel(self, rId: str) -> None:
         """Remove relationship identified by `rId`."""
@@ -128,7 +128,7 @@ class OpcPackage(_RelatableMixin):
 
         In this case it will be a |Presentation| part.
         """
-        return cast("PresentationPart", self.part_related_by(RT.OFFICE_DOCUMENT))
+        pass
 
     def next_partname(self, tmpl: str) -> PackURI:
         """Return |PackURI| next available partname matching `tmpl`.
@@ -153,7 +153,7 @@ class OpcPackage(_RelatableMixin):
 
         `file` can be either a path to a file (a string) or a file-like object.
         """
-        PackageWriter.write(pkg_file, self._rels, tuple(self.iter_parts()))
+        pass
 
     def _load(self) -> Self:
         """Return the package after loading all parts and relationships."""
@@ -164,7 +164,7 @@ class OpcPackage(_RelatableMixin):
     @lazyproperty
     def _rels(self) -> _Relationships:
         """|Relationships| object containing relationships of this package."""
-        return _Relationships(PACKAGE_URI.baseURI)
+        pass
 
 
 class _PackageLoader:
@@ -204,12 +204,12 @@ class _PackageLoader:
 
         Provides a content-type (MIME-type) for any given partname.
         """
-        return _ContentTypeMap.from_xml(self._package_reader[CONTENT_TYPES_URI])
+        pass
 
     @lazyproperty
     def _package_reader(self) -> PackageReader:
         """|PackageReader| object providing access to package-items in pkg_file."""
-        return PackageReader(self._pkg_file)
+        pass
 
     @lazyproperty
     def _parts(self) -> dict[PackURI, Part]:
@@ -219,22 +219,7 @@ class _PackageLoader:
         relationship can resolve a reference to its target part when required. This reference can
         only be reliably carried out once the all parts have been loaded.
         """
-        content_types = self._content_types
-        package = self._package
-        package_reader = self._package_reader
-
-        return {
-            partname: PartFactory(
-                partname,
-                content_types[partname],
-                package,
-                blob=package_reader[partname],
-            )
-            for partname in (p for p in self._xml_rels if p != "/")
-            # -- invalid partnames can arise in some packages; ignore those rather than raise an
-            # -- exception.
-            if partname in package_reader
-        }
+        pass
 
     @lazyproperty
     def _xml_rels(self) -> dict[PackURI, CT_Relationships]:
@@ -243,26 +228,7 @@ class _PackageLoader:
         This is used as the basis for other loading operations such as loading parts and
         populating their relationships.
         """
-        xml_rels: dict[PackURI, CT_Relationships] = {}
-        visited_partnames: Set[PackURI] = set()
-
-        def load_rels(source_partname: PackURI, rels: CT_Relationships):
-            """Populate `xml_rels` dict by traversing relationships depth-first."""
-            xml_rels[source_partname] = rels
-            visited_partnames.add(source_partname)
-            base_uri = source_partname.baseURI
-
-            # --- recursion stops when there are no unvisited partnames in rels ---
-            for rel in rels.relationship_lst:
-                if rel.targetMode == RTM.EXTERNAL:
-                    continue
-                target_partname = PackURI.from_rel_ref(base_uri, rel.target_ref)
-                if target_partname in visited_partnames:
-                    continue
-                load_rels(target_partname, self._xml_rels_for(target_partname))
-
-        load_rels(PACKAGE_URI, self._xml_rels_for(PACKAGE_URI))
-        return xml_rels
+        pass
 
     def _xml_rels_for(self, partname: PackURI) -> CT_Relationships:
         """Return CT_Relationships object formed by parsing rels XML for `partname`.
@@ -270,12 +236,7 @@ class _PackageLoader:
         A CT_Relationships object is returned in all cases. A part that has no relationships
         receives an "empty" CT_Relationships object, i.e. containing no `CT_Relationship` objects.
         """
-        rels_xml = self._package_reader.rels_xml_for(partname)
-        return (
-            CT_Relationships.new()
-            if rels_xml is None
-            else cast(CT_Relationships, parse_xml(rels_xml))
-        )
+        pass
 
 
 class Part(_RelatableMixin):
@@ -311,7 +272,7 @@ class Part(_RelatableMixin):
         Intended to be overridden by subclasses. Default behavior is to return the blob initial
         loaded during `Package.open()` operation.
         """
-        return self._blob or b""
+        pass
 
     @blob.setter
     def blob(self, blob: bytes):
@@ -320,12 +281,12 @@ class Part(_RelatableMixin):
         In particular, the |XmlPart| subclass uses its `self._element` to serialize a blob on
         demand. This works fine for binary parts though.
         """
-        self._blob = blob
+        pass
 
     @lazyproperty
     def content_type(self) -> str:
         """Content-type (MIME-type) of this part."""
-        return self._content_type
+        pass
 
     def load_rels_from_xml(self, xml_rels: CT_Relationships, parts: dict[PackURI, Part]) -> None:
         """load _Relationships for this part from `xml_rels`.
@@ -339,44 +300,30 @@ class Part(_RelatableMixin):
     @lazyproperty
     def package(self) -> Package:
         """Package this part belongs to."""
-        return self._package
+        pass
 
     @property
     def partname(self) -> PackURI:
         """|PackURI| partname for this part, e.g. "/ppt/slides/slide1.xml"."""
-        return self._partname
+        pass
 
     @partname.setter
     def partname(self, partname: PackURI):
-        if not isinstance(partname, PackURI):  # pyright: ignore[reportUnnecessaryIsInstance]
-            raise TypeError(  # pragma: no cover
-                "partname must be instance of PackURI, got '%s'" % type(partname).__name__
-            )
-        self._partname = partname
+        pass
 
     @lazyproperty
     def rels(self) -> _Relationships:
         """Collection of relationships from this part to other parts."""
-        # --- this must be public to allow the part graph to be traversed ---
-        return self._rels
+        pass
 
     def _blob_from_file(self, file: str | IO[bytes]) -> bytes:
         """Return bytes of `file`, which is either a str path or a file-like object."""
-        # --- a str `file` is assumed to be a path ---
-        if isinstance(file, str):
-            with open(file, "rb") as f:
-                return f.read()
-
-        # --- otherwise, assume `file` is a file-like object
-        # --- reposition file cursor if it has one
-        if callable(getattr(file, "seek")):
-            file.seek(0)
-        return file.read()
+        pass
 
     @lazyproperty
     def _rels(self) -> _Relationships:
         """Relationships from this part to others."""
-        return _Relationships(self._partname.baseURI)
+        pass
 
 
 class XmlPart(Part):
@@ -402,7 +349,7 @@ class XmlPart(Part):
     @property
     def blob(self) -> bytes:  # pyright: ignore[reportIncompatibleMethodOverride]
         """bytes XML serialization of this part."""
-        return serialize_part_xml(self._element)
+        pass
 
     # -- XmlPart cannot set its blob, which is why pyright complains --
 
@@ -423,7 +370,7 @@ class XmlPart(Part):
         that contains them so must ask their parent object. That chain of delegation ends here for
         child objects.
         """
-        return self
+        pass
 
     def _rel_ref_count(self, rId: str) -> int:
         """Return int count of references in this part's XML to `rId`."""
@@ -449,9 +396,7 @@ class PartFactory:
 
         Returns |Part| if no custom class is registered for `content_type`.
         """
-        if content_type in cls.part_type_for:
-            return cls.part_type_for[content_type]
-        return Part
+        pass
 
 
 class _ContentTypeMap:
@@ -574,15 +519,7 @@ class _Relationships(Mapping[str, "_Relationship"]):
         Raises |KeyError| if not found and |ValueError| if more than one matching relationship is
         found.
         """
-        rels_of_reltype = self._rels_by_reltype[reltype]
-
-        if len(rels_of_reltype) == 0:
-            raise KeyError("no relationship of type '%s' in collection" % reltype)
-
-        if len(rels_of_reltype) > 1:
-            raise ValueError("multiple relationships of type '%s' in collection" % reltype)
-
-        return rels_of_reltype[0].target_part
+        pass
 
     def pop(self, rId: str) -> _Relationship:
         """Return |_Relationship| identified by `rId` after removing it from collection.
@@ -652,29 +589,17 @@ class _Relationships(Mapping[str, "_Relationship"]):
         The next rId is the first unused key starting from "rId1" and making use of any gaps in
         numbering, e.g. 'rId2' for rIds ['rId1', 'rId3'].
         """
-        # --- The common case is where all sequential numbers starting at "rId1" are
-        # --- used and the next available rId is "rId%d" % (len(rels)+1). So we start
-        # --- there and count down to produce the best performance.
-        for n in range(len(self) + 1, 0, -1):
-            rId_candidate = "rId%d" % n  # like 'rId19'
-            if rId_candidate not in self._rels:
-                return rId_candidate
-        raise Exception(
-            "ProgrammingError: Impossible to have more distinct rIds than relationships"
-        )
+        pass
 
     @lazyproperty
     def _rels(self) -> dict[str, _Relationship]:
         """dict {rId: _Relationship} containing relationships of this collection."""
-        return {}
+        pass
 
     @property
     def _rels_by_reltype(self) -> dict[str, list[_Relationship]]:
         """defaultdict {reltype: [rels]} for all relationships in collection."""
-        D: DefaultDict[str, list[_Relationship]] = collections.defaultdict(list)
-        for rel in self.values():
-            D[rel.reltype].append(rel)
-        return D
+        pass
 
 
 class _Relationship:
@@ -706,12 +631,12 @@ class _Relationship:
         An external relationship is a link to a resource outside the package, such as a
         web-resource (URL).
         """
-        return self._target_mode == RTM.EXTERNAL
+        pass
 
     @lazyproperty
     def reltype(self) -> str:
         """Member of RELATIONSHIP_TYPE describing relationship of target to source."""
-        return self._reltype
+        pass
 
     @lazyproperty
     def rId(self) -> str:
@@ -720,18 +645,12 @@ class _Relationship:
         Corresponds to the `Id` attribute on the `CT_Relationship` element and uniquely identifies
         this relationship within its peers for the source-part or package.
         """
-        return self._rId
+        pass
 
     @lazyproperty
     def target_part(self) -> Part:
         """|Part| or subtype referred to by this relationship."""
-        if self.is_external:
-            raise ValueError(
-                "`.target_part` property on _Relationship is undefined when "
-                "target-mode is external"
-            )
-        assert isinstance(self._target, Part)
-        return self._target
+        pass
 
     @lazyproperty
     def target_partname(self) -> PackURI:
@@ -740,13 +659,7 @@ class _Relationship:
         Raises `ValueError` on reference if target_mode is external. Use :attr:`target_mode` to
         check before referencing.
         """
-        if self.is_external:
-            raise ValueError(
-                "`.target_partname` property on _Relationship is undefined when "
-                "target-mode is external"
-            )
-        assert isinstance(self._target, Part)
-        return self._target.partname
+        pass
 
     @lazyproperty
     def target_ref(self) -> str:
@@ -755,8 +668,4 @@ class _Relationship:
         For internal relationships this is the relative partname, suitable for serialization
         purposes. For an external relationship it is typically a URL.
         """
-        if self.is_external:
-            assert isinstance(self._target, str)
-            return self._target
-
-        return self.target_partname.relative_ref(self._base_uri)
+        pass

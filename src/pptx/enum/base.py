@@ -81,19 +81,12 @@ class BaseXmlEnum(int, enum.Enum):
     @classmethod
     def to_xml(cls: Type[_T], value: int | _T) -> str:
         """XML value of this enum member, generally an XML attribute value."""
-        # -- presence of multi-arg `__new__()` method fools type-checker, but getting a
-        # -- member by its value using EnumCls(val) works as usual.
-        member = cls(value)
-        xml_value = member.xml_value
-        if not xml_value:
-            raise ValueError(f"{cls.__name__}.{member.name} has no XML representation")
-        return xml_value
+        pass
 
     @classmethod
     def validate(cls: Type[_T], value: _T):
         """Raise |ValueError| if `value` is not an assignable value."""
-        if value not in cls:
-            raise ValueError(f"{value} not a member of {cls.__name__} enumeration")
+        pass
 
 
 class DocsPageFormatter(object):
@@ -109,14 +102,7 @@ class DocsPageFormatter(object):
         The RestructuredText documentation page for the enumeration. This is
         the only API member for the class.
         """
-        tmpl = ".. _%s:\n\n%s\n\n%s\n\n----\n\n%s"
-        components = (
-            self._ms_name,
-            self._page_title,
-            self._intro_text,
-            self._member_defs,
-        )
-        return tmpl % components
+        pass
 
     @property
     def _intro_text(self):
@@ -124,29 +110,14 @@ class DocsPageFormatter(object):
         The docstring of the enumeration, formatted for use at the top of the
         documentation page
         """
-        try:
-            cls_docstring = self._clsdict["__doc__"]
-        except KeyError:
-            cls_docstring = ""
-
-        if cls_docstring is None:
-            return ""
-
-        return textwrap.dedent(cls_docstring).strip()
+        pass
 
     def _member_def(self, member: BaseEnum | BaseXmlEnum):
         """Return an individual member definition formatted as an RST glossary entry.
 
         Output is wrapped to fit within 78 columns.
         """
-        member_docstring = textwrap.dedent(member.__doc__ or "").strip()
-        member_docstring = textwrap.fill(
-            member_docstring,
-            width=78,
-            initial_indent=" " * 4,
-            subsequent_indent=" " * 4,
-        )
-        return "%s\n%s\n" % (member.name, member_docstring)
+        pass
 
     @property
     def _member_defs(self):
@@ -154,16 +125,14 @@ class DocsPageFormatter(object):
         A single string containing the aggregated member definitions section
         of the documentation page
         """
-        members = self._clsdict["__members__"]
-        member_defs = [self._member_def(member) for member in members if member.name is not None]
-        return "\n".join(member_defs)
+        pass
 
     @property
     def _ms_name(self):
         """
         The Microsoft API name for this enumeration
         """
-        return self._clsdict["__ms_name__"]
+        pass
 
     @property
     def _page_title(self):
@@ -171,5 +140,4 @@ class DocsPageFormatter(object):
         The title for the documentation page, formatted as code (surrounded
         in double-backtics) and underlined with '=' characters
         """
-        title_underscore = "=" * (len(self._clsname) + 4)
-        return "``%s``\n%s" % (self._clsname, title_underscore)
+        pass

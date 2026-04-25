@@ -22,12 +22,7 @@ class Package(OpcPackage):
 
         Creates a default core properties part if one is not present (not common).
         """
-        try:
-            return self.part_related_by(RT.CORE_PROPERTIES)
-        except KeyError:
-            core_props = CorePropertiesPart.default(self)
-            self.relate_to(core_props, RT.CORE_PROPERTIES)
-            return core_props
+        pass
 
     def get_or_add_image_part(self, image_file: str | IO[bytes]):
         """
@@ -35,7 +30,7 @@ class Package(OpcPackage):
         the image part already exists in this package, it is reused,
         otherwise a new one is created.
         """
-        return self._image_parts.get_or_add_image_part(image_file)
+        pass
 
     def get_or_add_media_part(self, media):
         """Return a |MediaPart| object containing the media in *media*.
@@ -43,7 +38,7 @@ class Package(OpcPackage):
         If a media part for this media bytestream ("file") is already present
         in this package, it is reused, otherwise a new one is created.
         """
-        return self._media_parts.get_or_add_media_part(media)
+        pass
 
     def next_image_partname(self, ext: str) -> PackURI:
         """Return a |PackURI| instance representing the next available image partname.
@@ -102,7 +97,7 @@ class Package(OpcPackage):
         """
         Reference to the |Presentation| instance contained in this package.
         """
-        return self.main_document_part
+        pass
 
     @lazyproperty
     def _image_parts(self):
@@ -110,7 +105,7 @@ class Package(OpcPackage):
         |_ImageParts| object providing access to the image parts in this
         package.
         """
-        return _ImageParts(self)
+        pass
 
     @lazyproperty
     def _media_parts(self):
@@ -119,7 +114,7 @@ class Package(OpcPackage):
         The media parts object provides access to all the media parts in this
         package.
         """
-        return _MediaParts(self)
+        pass
 
 
 class _ImageParts(object):
@@ -150,9 +145,7 @@ class _ImageParts(object):
         containing an image. If an image part containing this same image already exists,
         that instance is returned, otherwise a new image part is created.
         """
-        image = Image.from_file(image_file)
-        image_part = self._find_by_sha1(image.sha1)
-        return image_part if image_part else ImagePart.new(self._package, image)
+        pass
 
     def _find_by_sha1(self, sha1: str) -> ImagePart | None:
         """
@@ -160,13 +153,7 @@ class _ImageParts(object):
         no matching image part is found. The image part is identified by the
         SHA1 hash digest of the image binary it contains.
         """
-        for image_part in self:
-            # ---skip unknown/unsupported image types, like SVG---
-            if not hasattr(image_part, "sha1"):
-                continue
-            if image_part.sha1 == sha1:
-                return image_part
-        return None
+        pass
 
 
 class _MediaParts(object):
@@ -204,10 +191,7 @@ class _MediaParts(object):
         bytestream, that instance is returned, otherwise a new media part is
         created.
         """
-        media_part = self._find_by_sha1(media.sha1)
-        if media_part is None:
-            media_part = MediaPart.new(self._package, media)
-        return media_part
+        pass
 
     def _find_by_sha1(self, sha1):
         """Return |MediaPart| object having *sha1* hash or None if not found.
@@ -216,7 +200,4 @@ class _MediaParts(object):
         part is identified by the SHA1 hash digest of its bytestream
         ("file").
         """
-        for media_part in self:
-            if media_part.sha1 == sha1:
-                return media_part
-        return None
+        pass

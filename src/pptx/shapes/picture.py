@@ -30,11 +30,11 @@ class _BasePicture(BaseShape):
         Read/write. 1.0 represents 100%. For example, 25% is represented by 0.25. Negative values
         are valid as are values greater than 1.0.
         """
-        return self._pic.srcRect_b
+        pass
 
     @crop_bottom.setter
     def crop_bottom(self, value: float):
-        self._pic.srcRect_b = value
+        pass
 
     @property
     def crop_left(self) -> float:
@@ -43,11 +43,11 @@ class _BasePicture(BaseShape):
         Read/write. 1.0 represents 100%. A negative value extends the side beyond the image
         boundary.
         """
-        return self._pic.srcRect_l
+        pass
 
     @crop_left.setter
     def crop_left(self, value: float):
-        self._pic.srcRect_l = value
+        pass
 
     @property
     def crop_right(self) -> float:
@@ -55,11 +55,11 @@ class _BasePicture(BaseShape):
 
         Read/write. 1.0 represents 100%.
         """
-        return self._pic.srcRect_r
+        pass
 
     @crop_right.setter
     def crop_right(self, value: float):
-        self._pic.srcRect_r = value
+        pass
 
     @property
     def crop_top(self) -> float:
@@ -67,23 +67,23 @@ class _BasePicture(BaseShape):
 
         Read/write. 1.0 represents 100%.
         """
-        return self._pic.srcRect_t
+        pass
 
     @crop_top.setter
     def crop_top(self, value: float):
-        self._pic.srcRect_t = value
+        pass
 
     def get_or_add_ln(self):
         """Return the `a:ln` element for this `p:pic`-based image.
 
         The `a:ln` element contains the line format properties XML.
         """
-        return self._pic.get_or_add_ln()
+        pass
 
     @lazyproperty
     def line(self) -> LineFormat:
         """Provides access to properties of the picture outline, such as its color and width."""
-        return LineFormat(self)
+        pass
 
     @property
     def ln(self) -> CT_LineProperties | None:
@@ -92,7 +92,7 @@ class _BasePicture(BaseShape):
         Contains the line format properties such as line color and width. |None| if no `a:ln`
         element is present.
         """
-        return self._pic.ln
+        pass
 
 
 class Movie(_BasePicture):
@@ -108,7 +108,7 @@ class Movie(_BasePicture):
 
         The |_MediaFormat| object provides access to formatting properties for the movie.
         """
-        return _MediaFormat(self._pic, self)
+        pass
 
     @property
     def media_type(self) -> PP_MEDIA_TYPE:
@@ -116,7 +116,7 @@ class Movie(_BasePicture):
 
         The return value is unconditionally `PP_MEDIA_TYPE.MOVIE` in this case.
         """
-        return PP_MEDIA_TYPE.MOVIE
+        pass
 
     @property
     def poster_frame(self):
@@ -124,10 +124,7 @@ class Movie(_BasePicture):
 
         Returns |None| if this movie has no poster frame (uncommon).
         """
-        slide_part, rId = self.part, self._pic.blip_rId
-        if rId is None:
-            return None
-        return slide_part.get_image(rId)
+        pass
 
     @property
     def shape_type(self) -> MSO_SHAPE_TYPE:
@@ -136,7 +133,7 @@ class Movie(_BasePicture):
         The return value is unconditionally `MSO_SHAPE_TYPE.MEDIA` in this
         case.
         """
-        return MSO_SHAPE_TYPE.MEDIA
+        pass
 
 
 class Picture(_BasePicture):
@@ -163,20 +160,11 @@ class Picture(_BasePicture):
         have no visible representation on the slide, although it can be selected. This is because
         without geometry, there is no "inside-the-shape" for it to appear in.
         """
-        prstGeom = self._pic.spPr.prstGeom
-        if prstGeom is None:  # ---generally means cropped with freeform---
-            return None
-        return prstGeom.prst
+        pass
 
     @auto_shape_type.setter
     def auto_shape_type(self, member: MSO_SHAPE):
-        MSO_SHAPE.validate(member)
-        spPr = self._pic.spPr
-        prstGeom = spPr.prstGeom
-        if prstGeom is None:
-            spPr._remove_custGeom()  # pyright: ignore[reportPrivateUsage]
-            prstGeom = spPr._add_prstGeom()  # pyright: ignore[reportPrivateUsage]
-        prstGeom.prst = member
+        pass
 
     @property
     def image(self):
@@ -184,15 +172,12 @@ class Picture(_BasePicture):
 
         Provides access to the properties and bytes of the image in this picture shape.
         """
-        slide_part, rId = self.part, self._pic.blip_rId
-        if rId is None:
-            raise ValueError("no embedded image")
-        return slide_part.get_image(rId)
+        pass
 
     @property
     def shape_type(self) -> MSO_SHAPE_TYPE:
         """Unconditionally `MSO_SHAPE_TYPE.PICTURE` in this case."""
-        return MSO_SHAPE_TYPE.PICTURE
+        pass
 
 
 class _MediaFormat(ParentedElementProxy):

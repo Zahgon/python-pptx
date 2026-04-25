@@ -25,26 +25,20 @@ class _BaseColorElement(BaseOxmlElement):
         """
         Return a newly added <a:lumMod> child element.
         """
-        lumMod = self._add_lumMod()
-        lumMod.val = value
-        return lumMod
+        pass
 
     def add_lumOff(self, value):
         """
         Return a newly added <a:lumOff> child element.
         """
-        lumOff = self._add_lumOff()
-        lumOff.val = value
-        return lumOff
+        pass
 
     def clear_lum(self):
         """
         Return self after removing any <a:lumMod> and <a:lumOff> child
         elements.
         """
-        self._remove_lumMod()
-        self._remove_lumOff()
-        return self
+        pass
 
 
 class CT_Color(BaseOxmlElement):

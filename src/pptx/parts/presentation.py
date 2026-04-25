@@ -27,11 +27,7 @@ class PresentationPart(XmlPart):
 
         New slide inherits appearance from `slide_layout`.
         """
-        partname = self._next_slide_partname
-        slide_layout_part = slide_layout.part
-        slide_part = SlidePart.new(partname, self.package, slide_layout_part)
-        rId = self.relate_to(slide_part, RT.SLIDE)
-        return rId, slide_part.slide
+        pass
 
     @property
     def core_properties(self) -> CorePropertiesPart:
@@ -39,7 +35,7 @@ class PresentationPart(XmlPart):
 
         Provides read/write access to the Dublin Core properties of this presentation.
         """
-        return self.package.core_properties
+        pass
 
     def get_slide(self, slide_id: int) -> Slide | None:
         """Return optional related |Slide| object identified by `slide_id`.
@@ -59,7 +55,7 @@ class PresentationPart(XmlPart):
         a default template. The same single instance is returned on each
         call.
         """
-        return self.notes_master_part.notes_master
+        pass
 
     @lazyproperty
     def notes_master_part(self) -> NotesMasterPart:
@@ -68,12 +64,7 @@ class PresentationPart(XmlPart):
         If the presentation does not have a notes master, one is created from a default template.
         The same single instance is returned on each call.
         """
-        try:
-            return self.part_related_by(RT.NOTES_MASTER)
-        except KeyError:
-            notes_master_part = NotesMasterPart.create_default(self.package)
-            self.relate_to(notes_master_part, RT.NOTES_MASTER)
-            return notes_master_part
+        pass
 
     @lazyproperty
     def presentation(self):
@@ -81,15 +72,15 @@ class PresentationPart(XmlPart):
         A |Presentation| object providing access to the content of this
         presentation.
         """
-        return Presentation(self._element, self)
+        pass
 
     def related_slide(self, rId: str) -> Slide:
         """Return |Slide| object for related |SlidePart| related by `rId`."""
-        return self.related_part(rId).slide
+        pass
 
     def related_slide_master(self, rId: str) -> SlideMaster:
         """Return |SlideMaster| object for |SlideMasterPart| related by `rId`."""
-        return self.related_part(rId).slide_master
+        pass
 
     def rename_slide_parts(self, rIds: Iterable[str]):
         """Assign incrementing partnames to the slide parts identified by `rIds`.
@@ -99,9 +90,7 @@ class PresentationPart(XmlPart):
         continuous sequence starting at 1 (e.g. 1, 2, ... 10, ...). The extension is always
         `.xml`.
         """
-        for idx, rId in enumerate(rIds):
-            slide_part = self.related_part(rId)
-            slide_part.partname = PackURI("/ppt/slides/slide%d.xml" % (idx + 1))
+        pass
 
     def save(self, path_or_stream: str | IO[bytes]):
         """Save this presentation package to `path_or_stream`.
@@ -109,18 +98,13 @@ class PresentationPart(XmlPart):
         `path_or_stream` can be either a path to a filesystem location (a string) or a
         file-like object.
         """
-        self.package.save(path_or_stream)
+        pass
 
     def slide_id(self, slide_part):
         """Return the slide-id associated with `slide_part`."""
-        for sldId in self._element.sldIdLst:
-            if self.related_part(sldId.rId) is slide_part:
-                return sldId.id
-        raise ValueError("matching slide_part not found")
+        pass
 
     @property
     def _next_slide_partname(self):
         """Return |PackURI| instance containing next available slide partname."""
-        sldIdLst = self._element.get_or_add_sldIdLst()
-        partname_str = "/ppt/slides/slide%d.xml" % (len(sldIdLst) + 1)
-        return PackURI(partname_str)
+        pass

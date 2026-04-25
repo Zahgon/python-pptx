@@ -44,12 +44,7 @@ class _BaseChartData(Sequence):
         The total integer number of data points appearing in the series of
         this chart that are prior to *series* in this sequence.
         """
-        count = 0
-        for this_series in self:
-            if series is this_series:
-                return count
-            count += len(this_series)
-        raise ValueError("series not in chart data object")
+        pass
 
     @property
     def number_format(self):
@@ -60,7 +55,7 @@ class _BaseChartData(Sequence):
         value for that series. Likewise, a distinct number format can be
         specified for a particular data point within a series.
         """
-        return self._number_format
+        pass
 
     def series_index(self, series):
         """
@@ -76,14 +71,14 @@ class _BaseChartData(Sequence):
         Return the Excel worksheet reference to the cell containing the name
         for *series*.
         """
-        return self._workbook_writer.series_name_ref(series)
+        pass
 
     def x_values_ref(self, series):
         """
         The Excel worksheet reference to the X values for *series* (not
         including the column label).
         """
-        return self._workbook_writer.x_values_ref(series)
+        pass
 
     @property
     def xlsx_blob(self):
@@ -91,7 +86,7 @@ class _BaseChartData(Sequence):
         Return a blob containing an Excel workbook file populated with the
         contents of this chart data object.
         """
-        return self._workbook_writer.xlsx_blob
+        pass
 
     def xml_bytes(self, chart_type):
         """
@@ -106,7 +101,7 @@ class _BaseChartData(Sequence):
         The Excel worksheet reference to the Y values for *series* (not
         including the column label).
         """
-        return self._workbook_writer.y_values_ref(series)
+        pass
 
     @property
     def _workbook_writer(self):
@@ -155,7 +150,7 @@ class _BaseSeriesData(Sequence):
         The integer count of data points that appear in all chart series
         prior to this one.
         """
-        return self._chart_data.data_point_offset(self)
+        pass
 
     @property
     def index(self):
@@ -172,7 +167,7 @@ class _BaseSeriesData(Sequence):
         column heading for the y-values of this series and may also appear in
         the chart legend and perhaps other chart locations.
         """
-        return self._name if self._name is not None else ""
+        pass
 
     @property
     def name_ref(self):
@@ -180,7 +175,7 @@ class _BaseSeriesData(Sequence):
         The Excel worksheet reference to the cell containing the name for
         this series.
         """
-        return self._chart_data.series_name_ref(self)
+        pass
 
     @property
     def number_format(self):
@@ -190,10 +185,7 @@ class _BaseSeriesData(Sequence):
         for example '#,##0.0'. If not specified for this series, it is
         inherited from the parent chart data object.
         """
-        number_format = self._number_format
-        if number_format is None:
-            return self._chart_data.number_format
-        return number_format
+        pass
 
     @property
     def x_values(self):
@@ -201,7 +193,7 @@ class _BaseSeriesData(Sequence):
         A sequence containing the X value of each datapoint in this series,
         in data point order.
         """
-        return [dp.x for dp in self._data_points]
+        pass
 
     @property
     def x_values_ref(self):
@@ -209,7 +201,7 @@ class _BaseSeriesData(Sequence):
         The Excel worksheet reference to the X values for this chart (not
         including the column heading).
         """
-        return self._chart_data.x_values_ref(self)
+        pass
 
     @property
     def y_values(self):
@@ -217,7 +209,7 @@ class _BaseSeriesData(Sequence):
         A sequence containing the Y value of each datapoint in this series,
         in data point order.
         """
-        return [dp.y for dp in self._data_points]
+        pass
 
     @property
     def y_values_ref(self):
@@ -225,7 +217,7 @@ class _BaseSeriesData(Sequence):
         The Excel worksheet reference to the Y values for this chart (not
         including the column heading).
         """
-        return self._chart_data.y_values_ref(self)
+        pass
 
 
 class _BaseDataPoint(object):
@@ -246,10 +238,7 @@ class _BaseDataPoint(object):
         spreadsheet; for example '#,##0.0'. If not specified for this data
         point, it is inherited from the parent series data object.
         """
-        number_format = self._number_format
-        if number_format is None:
-            return self._series_data.number_format
-        return number_format
+        pass
 
 
 class CategoryChartData(_BaseChartData):
@@ -277,7 +266,7 @@ class CategoryChartData(_BaseChartData):
         same type. All category labels in a chart having multi-level
         categories must be strings.
         """
-        return self.categories.add_category(label)
+        pass
 
     def add_series(self, name, values=(), number_format=None):
         """
@@ -287,11 +276,7 @@ class CategoryChartData(_BaseChartData):
         and may be a string, e.g. '#,##0' corresponding to an Excel number
         format.
         """
-        series_data = CategorySeriesData(self, name, number_format)
-        self.append(series_data)
-        for value in values:
-            series_data.add_data_point(value)
-        return series_data
+        pass
 
     @property
     def categories(self):
@@ -304,16 +289,11 @@ class CategoryChartData(_BaseChartData):
         Creating a chart from chart data having date categories will cause the chart to
         have a |DateAxis| for its category axis.
         """
-        if not getattr(self, "_categories", False):
-            self._categories = Categories()
-        return self._categories
+        pass
 
     @categories.setter
     def categories(self, category_labels):
-        categories = Categories()
-        for label in category_labels:
-            categories.add_category(label)
-        self._categories = categories
+        pass
 
     @property
     def categories_ref(self):
@@ -321,14 +301,14 @@ class CategoryChartData(_BaseChartData):
         The Excel worksheet reference to the categories for this chart (not
         including the column heading).
         """
-        return self._workbook_writer.categories_ref
+        pass
 
     def values_ref(self, series):
         """
         The Excel worksheet reference to the values for *series* (not
         including the column heading).
         """
-        return self._workbook_writer.values_ref(series)
+        pass
 
     @lazyproperty
     def _workbook_writer(self):
@@ -336,7 +316,7 @@ class CategoryChartData(_BaseChartData):
         The worksheet writer object to which layout and writing of the Excel
         worksheet for this chart will be delegated.
         """
-        return CategoryWorkbookWriter(self)
+        pass
 
 
 class Categories(Sequence):
@@ -373,9 +353,7 @@ class Categories(Sequence):
         Creating a chart from chart data having date categories will cause
         the chart to have a |DateAxis| for its category axis.
         """
-        category = Category(label, self)
-        self._categories.append(category)
-        return category
+        pass
 
     @property
     def are_dates(self):
@@ -387,13 +365,7 @@ class Categories(Sequence):
         False when this category collection is hierarchical, because
         hierarchical categories can only be written as string labels.
         """
-        if self.depth != 1:
-            return False
-        first_cat_label = self[0].label
-        date_types = (datetime.date, datetime.datetime)
-        if isinstance(first_cat_label, date_types):
-            return True
-        return False
+        pass
 
     @property
     def are_numeric(self):
@@ -406,17 +378,7 @@ class Categories(Sequence):
         False when this category collection is hierarchical, because
         hierarchical categories can only be written as string labels.
         """
-        if self.depth != 1:
-            return False
-        # This method only tests the first category. The categories must
-        # be of uniform type, and if they're not, there will be problems
-        # later in the process, but it's not this method's job to validate
-        # the caller's input.
-        first_cat_label = self[0].label
-        numeric_types = (Number, datetime.date, datetime.datetime)
-        if isinstance(first_cat_label, numeric_types):
-            return True
-        return False
+        pass
 
     @property
     def depth(self):
@@ -424,14 +386,7 @@ class Categories(Sequence):
         The number of hierarchy levels in this category graph. Returns 0 if
         it contains no categories.
         """
-        categories = self._categories
-        if not categories:
-            return 0
-        first_depth = categories[0].depth
-        for category in categories[1:]:
-            if category.depth != first_depth:
-                raise ValueError("category depth not uniform")
-        return first_depth
+        pass
 
     def index(self, category):
         """
@@ -452,7 +407,7 @@ class Categories(Sequence):
         value is the same as that of `len()` only when the hierarchy is
         single level.
         """
-        return sum(c.leaf_count for c in self._categories)
+        pass
 
     @property
     def levels(self):
@@ -461,18 +416,7 @@ class Categories(Sequence):
         hierarchy from the bottom up. The first level contains all leaf
         categories, and each subsequent is the next level up.
         """
-
-        def levels(categories):
-            # yield all lower levels
-            sub_categories = [sc for c in categories for sc in c.sub_categories]
-            if sub_categories:
-                for level in levels(sub_categories):
-                    yield level
-            # yield this level
-            yield [(cat.idx, cat.label) for cat in categories]
-
-        for level in levels(self):
-            yield level
+        pass
 
     @property
     def number_format(self):
@@ -484,26 +428,11 @@ class Categories(Sequence):
         are string labels. Assigning |None| causes the default number format
         to be used, based on the type of the category labels.
         """
-        GENERAL = "General"
-
-        # defined value takes precedence
-        if self._number_format is not None:
-            return self._number_format
-
-        # multi-level (should) always be string labels
-        # zero depth means empty in which case we can't tell anyway
-        if self.depth != 1:
-            return GENERAL
-
-        # everything except dates gets 'General'
-        first_cat_label = self[0].label
-        if isinstance(first_cat_label, (datetime.date, datetime.datetime)):
-            return r"yyyy\-mm\-dd"
-        return GENERAL
+        pass
 
     @number_format.setter
     def number_format(self, value):
-        self._number_format = value
+        pass
 
 
 class Category(object):
@@ -524,9 +453,7 @@ class Category(object):
         Return a newly created |data.Category| object having *label* and
         appended to the end of the sub-category sequence for this category.
         """
-        category = Category(label, self)
-        self._sub_categories.append(category)
-        return category
+        pass
 
     @property
     def depth(self):
@@ -534,14 +461,7 @@ class Category(object):
         The number of hierarchy levels rooted at this category node. Returns
         1 if this category has no sub-categories.
         """
-        sub_categories = self._sub_categories
-        if not sub_categories:
-            return 1
-        first_depth = sub_categories[0].depth
-        for category in sub_categories[1:]:
-            if category.depth != first_depth:
-                raise ValueError("category depth not uniform")
-        return first_depth + 1
+        pass
 
     @property
     def idx(self):
@@ -550,7 +470,7 @@ class Category(object):
         categories. A non-leaf category gets the index of its first
         sub-category.
         """
-        return self._parent.index(self)
+        pass
 
     def index(self, sub_category):
         """
@@ -570,9 +490,7 @@ class Category(object):
         The number of leaf category nodes under this category. Returns
         1 if this category has no sub-categories.
         """
-        if not self._sub_categories:
-            return 1
-        return sum(category.leaf_count for category in self._sub_categories)
+        pass
 
     @property
     def label(self):
@@ -581,7 +499,7 @@ class Category(object):
         be a string, a number, or a datetime.date or datetime.datetime
         object.
         """
-        return self._label if self._label is not None else ""
+        pass
 
     def numeric_str_val(self, date_1904=False):
         """
@@ -590,17 +508,14 @@ class Category(object):
         category. The optional *date_1904* parameter specifies the epoch used
         for calculating Excel date numbers.
         """
-        label = self._label
-        if isinstance(label, (datetime.date, datetime.datetime)):
-            return "%.1f" % self._excel_date_number(date_1904)
-        return str(self._label)
+        pass
 
     @property
     def sub_categories(self):
         """
         The sequence of child categories for this category.
         """
-        return self._sub_categories
+        pass
 
     def _excel_date_number(self, date_1904):
         """
@@ -608,18 +523,7 @@ class Category(object):
         number of days since January 1, 1900 (or 1904 if date_1904 is
         |True|).
         """
-        date, label = datetime.date, self._label
-        # -- get date from label in type-independent-ish way
-        date_ = date(label.year, label.month, label.day)
-        epoch = date(1904, 1, 1) if date_1904 else date(1899, 12, 31)
-        delta = date_ - epoch
-        excel_day_number = delta.days
-
-        # -- adjust for Excel mistaking 1900 for a leap year --
-        if not date_1904 and excel_day_number > 59:
-            excel_day_number += 1
-
-        return excel_day_number
+        pass
 
 
 class ChartData(CategoryChartData):
@@ -644,9 +548,7 @@ class CategorySeriesData(_BaseSeriesData):
         Return a CategoryDataPoint object newly created with value *value*,
         an optional *number_format*, and appended to this sequence.
         """
-        data_point = CategoryDataPoint(self, value, number_format)
-        self.append(data_point)
-        return data_point
+        pass
 
     @property
     def categories(self):
@@ -654,7 +556,7 @@ class CategorySeriesData(_BaseSeriesData):
         The |data.Categories| object that provides access to the category
         objects for this series.
         """
-        return self._chart_data.categories
+        pass
 
     @property
     def categories_ref(self):
@@ -662,7 +564,7 @@ class CategorySeriesData(_BaseSeriesData):
         The Excel worksheet reference to the categories for this chart (not
         including the column heading).
         """
-        return self._chart_data.categories_ref
+        pass
 
     @property
     def values(self):
@@ -678,7 +580,7 @@ class CategorySeriesData(_BaseSeriesData):
         The Excel worksheet reference to the (Y) values for this series (not
         including the column heading).
         """
-        return self._chart_data.values_ref(self)
+        pass
 
 
 class XyChartData(_BaseChartData):
@@ -694,9 +596,7 @@ class XyChartData(_BaseChartData):
         this sequence, identified by *name* and values formatted with
         *number_format*.
         """
-        series_data = XySeriesData(self, name, number_format)
-        self.append(series_data)
-        return series_data
+        pass
 
     @lazyproperty
     def _workbook_writer(self):
@@ -704,7 +604,7 @@ class XyChartData(_BaseChartData):
         The worksheet writer object to which layout and writing of the Excel
         worksheet for this chart will be delegated.
         """
-        return XyWorkbookWriter(self)
+        pass
 
 
 class BubbleChartData(XyChartData):
@@ -720,16 +620,14 @@ class BubbleChartData(XyChartData):
         of this sequence, and having series named *name* and values formatted
         with *number_format*.
         """
-        series_data = BubbleSeriesData(self, name, number_format)
-        self.append(series_data)
-        return series_data
+        pass
 
     def bubble_sizes_ref(self, series):
         """
         The Excel worksheet reference for the range containing the bubble
         sizes for *series*.
         """
-        return self._workbook_writer.bubble_sizes_ref(series)
+        pass
 
     @lazyproperty
     def _workbook_writer(self):
@@ -737,7 +635,7 @@ class BubbleChartData(XyChartData):
         The worksheet writer object to which layout and writing of the Excel
         worksheet for this chart will be delegated.
         """
-        return BubbleWorkbookWriter(self)
+        pass
 
 
 class XySeriesData(_BaseSeriesData):
@@ -757,9 +655,7 @@ class XySeriesData(_BaseSeriesData):
         Return an XyDataPoint object newly created with values *x* and *y*,
         and appended to this sequence.
         """
-        data_point = XyDataPoint(self, x, y, number_format)
-        self.append(data_point)
-        return data_point
+        pass
 
 
 class BubbleSeriesData(XySeriesData):
@@ -780,9 +676,7 @@ class BubbleSeriesData(XySeriesData):
         *size*. The optional *number_format* is used to format the Y value.
         If not provided, the number format is inherited from the series data.
         """
-        data_point = BubbleDataPoint(self, x, y, size, number_format)
-        self.append(data_point)
-        return data_point
+        pass
 
     @property
     def bubble_sizes(self):
@@ -790,7 +684,7 @@ class BubbleSeriesData(XySeriesData):
         A sequence containing the bubble size for each datapoint in this
         series, in data point order.
         """
-        return [dp.bubble_size for dp in self._data_points]
+        pass
 
     @property
     def bubble_sizes_ref(self):
@@ -798,7 +692,7 @@ class BubbleSeriesData(XySeriesData):
         The Excel worksheet reference for the range containing the bubble
         sizes for this series.
         """
-        return self._chart_data.bubble_sizes_ref(self)
+        pass
 
 
 class CategoryDataPoint(_BaseDataPoint):
@@ -817,7 +711,7 @@ class CategoryDataPoint(_BaseDataPoint):
         """
         The (Y) value for this category data point.
         """
-        return self._value
+        pass
 
 
 class XyDataPoint(_BaseDataPoint):
@@ -836,14 +730,14 @@ class XyDataPoint(_BaseDataPoint):
         """
         The X value for this XY data point.
         """
-        return self._x
+        pass
 
     @property
     def y(self):
         """
         The Y value for this XY data point.
         """
-        return self._y
+        pass
 
 
 class BubbleDataPoint(XyDataPoint):
@@ -861,4 +755,4 @@ class BubbleDataPoint(XyDataPoint):
         """
         The value representing the size of the bubble for this data point.
         """
-        return self._size
+        pass

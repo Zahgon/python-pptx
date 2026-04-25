@@ -23,7 +23,7 @@ class Video(object):
     @classmethod
     def from_blob(cls, blob: bytes, mime_type: str | None, filename: str | None = None):
         """Return a new |Video| object loaded from image binary in *blob*."""
-        return cls(blob, mime_type, filename)
+        pass
 
     @classmethod
     def from_path_or_file_like(cls, movie_file: str | IO[bytes], mime_type: str | None) -> Video:
@@ -32,27 +32,17 @@ class Video(object):
         *movie_file* can be either a path (string) or a file-like
         (e.g. StringIO) object.
         """
-        if isinstance(movie_file, str):
-            # treat movie_file as a path
-            with open(movie_file, "rb") as f:
-                blob = f.read()
-            filename = os.path.basename(movie_file)
-        else:
-            # assume movie_file is a file-like object
-            blob = movie_file.read()
-            filename = None
-
-        return cls.from_blob(blob, mime_type, filename)
+        pass
 
     @property
     def blob(self):
         """The bytestream of the media "file"."""
-        return self._blob
+        pass
 
     @property
     def content_type(self):
         """MIME-type of this media, e.g. `'video/mp4'`."""
-        return self._mime_type
+        pass
 
     @property
     def ext(self):
@@ -62,19 +52,7 @@ class Video(object):
         it is the lowercase canonical extension for the video's MIME type.
         'vid' is used if the MIME type is 'video/unknown'.
         """
-        if self._filename:
-            return os.path.splitext(self._filename)[1].lstrip(".")
-        return {
-            CT.ASF: "asf",
-            CT.AVI: "avi",
-            CT.MOV: "mov",
-            CT.MP4: "mp4",
-            CT.MPG: "mpg",
-            CT.MS_VIDEO: "avi",
-            CT.SWF: "swf",
-            CT.WMV: "wmv",
-            CT.X_MS_VIDEO: "avi",
-        }.get(self._mime_type, "vid")
+        pass
 
     @property
     def filename(self) -> str:
@@ -86,9 +64,7 @@ class Video(object):
         'movie.{ext}' is used where 'ext' is suitable to the video format,
         such as 'mp4'.
         """
-        if self._filename is not None:
-            return self._filename
-        return "movie.%s" % self.ext
+        pass
 
     @lazyproperty
     def sha1(self):
@@ -96,7 +72,7 @@ class Video(object):
 
         Example: `'1be010ea47803b00e140b852765cdf84f491da47'`
         """
-        return hashlib.sha1(self._blob).hexdigest()
+        pass
 
 
 SPEAKER_IMAGE_BYTES = base64.b64decode(

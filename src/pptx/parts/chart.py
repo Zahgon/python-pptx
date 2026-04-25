@@ -43,7 +43,7 @@ class ChartPart(XmlPart):
     @lazyproperty
     def chart(self):
         """|Chart| object representing the chart in this part."""
-        return Chart(self._element, self)
+        pass
 
     @lazyproperty
     def chart_workbook(self):
@@ -51,7 +51,7 @@ class ChartPart(XmlPart):
         The |ChartWorkbook| object providing access to the external chart
         data in a linked or embedded Excel workbook.
         """
-        return ChartWorkbook(self._element, self)
+        pass
 
 
 class ChartWorkbook(object):
@@ -81,8 +81,7 @@ class ChartWorkbook(object):
         This related part has its rId at `c:chartSpace/c:externalData/@rId`. This value
         is |None| if there is no `<c:externalData>` element.
         """
-        xlsx_part_rId = self._chartSpace.xlsx_part_rId
-        return None if xlsx_part_rId is None else self._chart_part.related_part(xlsx_part_rId)
+        pass
 
     @xlsx_part.setter
     def xlsx_part(self, xlsx_part):
@@ -90,6 +89,4 @@ class ChartWorkbook(object):
         Set the related |EmbeddedXlsxPart| to *xlsx_part*. Assume one does
         not already exist.
         """
-        rId = self._chart_part.relate_to(xlsx_part, RT.PACKAGE)
-        externalData = self._chartSpace.get_or_add_externalData()
-        externalData.rId = rId
+        pass

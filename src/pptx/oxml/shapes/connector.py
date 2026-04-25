@@ -46,42 +46,7 @@ class CT_Connector(BaseShapeElement):
         flipV: bool,
     ) -> CT_Connector:
         """Return a new `p:cxnSp` element tree configured as a base connector."""
-        flip = (' flipH="1"' if flipH else "") + (' flipV="1"' if flipV else "")
-        return cast(
-            CT_Connector,
-            parse_xml(
-                f"<p:cxnSp {nsdecls('a', 'p')}>\n"
-                f"  <p:nvCxnSpPr>\n"
-                f'    <p:cNvPr id="{id_}" name="{name}"/>\n'
-                f"    <p:cNvCxnSpPr/>\n"
-                f"    <p:nvPr/>\n"
-                f"  </p:nvCxnSpPr>\n"
-                f"  <p:spPr>\n"
-                f"    <a:xfrm{flip}>\n"
-                f'      <a:off x="{x}" y="{y}"/>\n'
-                f'      <a:ext cx="{cx}" cy="{cy}"/>\n'
-                f"    </a:xfrm>\n"
-                f'    <a:prstGeom prst="{prst}">\n'
-                f"      <a:avLst/>\n"
-                f"    </a:prstGeom>\n"
-                f"  </p:spPr>\n"
-                f"  <p:style>\n"
-                f'    <a:lnRef idx="2">\n'
-                f'      <a:schemeClr val="accent1"/>\n'
-                f"    </a:lnRef>\n"
-                f'    <a:fillRef idx="0">\n'
-                f'      <a:schemeClr val="accent1"/>\n'
-                f"    </a:fillRef>\n"
-                f'    <a:effectRef idx="1">\n'
-                f'      <a:schemeClr val="accent1"/>\n'
-                f"    </a:effectRef>\n"
-                f'    <a:fontRef idx="minor">\n'
-                f'      <a:schemeClr val="tx1"/>\n'
-                f"    </a:fontRef>\n"
-                f"  </p:style>\n"
-                f"</p:cxnSp>"
-            ),
-        )
+        pass
 
 
 class CT_ConnectorNonVisual(BaseOxmlElement):

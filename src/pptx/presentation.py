@@ -31,7 +31,7 @@ class Presentation(PartElementProxy):
 
         Provides read/write access to the Dublin Core document properties for the presentation.
         """
-        return self.part.core_properties
+        pass
 
     @property
     def notes_master(self) -> NotesMaster:
@@ -40,14 +40,14 @@ class Presentation(PartElementProxy):
         If the presentation does not have a notes master, one is created from a default template
         and returned. The same single instance is returned on each call.
         """
-        return self.part.notes_master
+        pass
 
     def save(self, file: str | IO[bytes]):
         """Writes this presentation to `file`.
 
         `file` can be either a file-path or a file-like object open for writing bytes.
         """
-        self.part.save(file)
+        pass
 
     @property
     def slide_height(self) -> Length | None:
@@ -55,15 +55,11 @@ class Presentation(PartElementProxy):
 
         Returns |None| if no slide width is defined. Read/write.
         """
-        sldSz = self._element.sldSz
-        if sldSz is None:
-            return None
-        return sldSz.cy
+        pass
 
     @slide_height.setter
     def slide_height(self, height: Length):
-        sldSz = self._element.get_or_add_sldSz()
-        sldSz.cy = height
+        pass
 
     @property
     def slide_layouts(self) -> SlideLayouts:
@@ -73,7 +69,7 @@ class Presentation(PartElementProxy):
         of layouts. This property is a convenience for the common case where the presentation has
         only a single slide master.
         """
-        return self.slide_masters[0].slide_layouts
+        pass
 
     @property
     def slide_master(self):
@@ -82,12 +78,12 @@ class Presentation(PartElementProxy):
         presentations have only a single slide master. This property provides
         simpler access in that common case.
         """
-        return self.slide_masters[0]
+        pass
 
     @lazyproperty
     def slide_masters(self) -> SlideMasters:
         """|SlideMasters| collection of slide-masters belonging to this presentation."""
-        return SlideMasters(self._element.get_or_add_sldMasterIdLst(), self)
+        pass
 
     @property
     def slide_width(self):
@@ -95,19 +91,13 @@ class Presentation(PartElementProxy):
         Width of slides in this presentation, in English Metric Units (EMU).
         Returns |None| if no slide width is defined. Read/write.
         """
-        sldSz = self._element.sldSz
-        if sldSz is None:
-            return None
-        return sldSz.cx
+        pass
 
     @slide_width.setter
     def slide_width(self, width: Length):
-        sldSz = self._element.get_or_add_sldSz()
-        sldSz.cx = width
+        pass
 
     @lazyproperty
     def slides(self):
         """|Slides| object containing the slides in this presentation."""
-        sldIdLst = self._element.get_or_add_sldIdLst()
-        self.part.rename_slide_parts([cast("CT_SlideId", sldId).rId for sldId in sldIdLst])
-        return Slides(sldIdLst, self)
+        pass

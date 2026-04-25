@@ -1005,19 +1005,19 @@ class PROG_ID(enum.Enum):
 
     @property
     def height(self):
-        return self._height
+        pass
 
     @property
     def icon_filename(self):
-        return self._icon_filename
+        pass
 
     @property
     def progId(self):
-        return self._progId
+        pass
 
     @property
     def width(self):
-        return self._width
+        pass
 
     DOCX = ("DOCX", "Word.Document.12", "docx-icon.emf", 965200, 609600)
     """`progId` for an embedded Word 2007+ (.docx) document."""

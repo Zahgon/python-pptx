@@ -26,10 +26,7 @@ class CT_Marker(BaseOxmlElement):
         marker in points. Returns |None| if no `c:size` element is present or
         its val attribute is not present.
         """
-        size = self.size
-        if size is None:
-            return None
-        return size.val
+        pass
 
     @property
     def symbol_val(self):
@@ -37,10 +34,7 @@ class CT_Marker(BaseOxmlElement):
         Return the value of `./c:symbol/@val`, specifying the shape of this
         marker. Returns |None| if no `c:symbol` element is present.
         """
-        symbol = self.symbol
-        if symbol is None:
-            return None
-        return symbol.val
+        pass
 
 
 class CT_MarkerSize(BaseOxmlElement):

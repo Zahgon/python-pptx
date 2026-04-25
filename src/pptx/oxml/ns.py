@@ -48,13 +48,11 @@ class NamespacePrefixedTag(str):
 
     @classmethod
     def from_clark_name(cls, clark_name: str) -> NamespacePrefixedTag:
-        nsuri, local_name = clark_name[1:].split("}")
-        nstag = "%s:%s" % (pfxmap[nsuri], local_name)
-        return cls(nstag)
+        pass
 
     @property
     def clark_name(self):
-        return "{%s}%s" % (self._ns_uri, self._local_part)
+        pass
 
     @property
     def local_part(self):
@@ -62,7 +60,7 @@ class NamespacePrefixedTag(str):
         Return the local part of the tag as a string. E.g. 'foobar' is
         returned for tag 'f:foobar'.
         """
-        return self._local_part
+        pass
 
     @property
     def nsmap(self):
@@ -71,7 +69,7 @@ class NamespacePrefixedTag(str):
         this tag to it's namespace name (e.g. {'f': 'http://foo/bar'}). This
         is handy for passing to xpath calls and other uses.
         """
-        return {self._pfx: self._ns_uri}
+        pass
 
     @property
     def nspfx(self):
@@ -79,7 +77,7 @@ class NamespacePrefixedTag(str):
         Return the string namespace prefix for the tag, e.g. 'f' is returned
         for tag 'f:foobar'.
         """
-        return self._pfx
+        pass
 
     @property
     def nsuri(self):
@@ -88,7 +86,7 @@ class NamespacePrefixedTag(str):
         returned for tag 'f:foobar' if the 'f' prefix maps to
         'http://foo/bar' in _nsmap.
         """
-        return self._ns_uri
+        pass
 
 
 def namespaces(*prefixes: str):
@@ -96,7 +94,7 @@ def namespaces(*prefixes: str):
 
     Any number of namespace prefixes can be supplied, e.g. namespaces('a', 'r', 'p').
     """
-    return {pfx: _nsmap[pfx] for pfx in prefixes}
+    pass
 
 
 nsmap = namespaces  # alias for more compact use with Element()
@@ -114,7 +112,7 @@ def nsuri(nspfx: str):
         >>> nsuri("p")
         "http://schemas.openxmlformats.org/presentationml/2006/main"
     """
-    return _nsmap[nspfx]
+    pass
 
 
 def qn(namespace_prefixed_tag: str) -> str:

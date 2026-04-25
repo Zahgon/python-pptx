@@ -27,18 +27,14 @@ class TextFitter(tuple):
         `max_size` that allows `text` to fit completely within `extents` when rendered
         using font defined in `font_file`.
         """
-        line_source = _LineSource(text)
-        text_fitter = cls(line_source, extents, font_file)
-        return text_fitter._best_fit_font_size(max_size)
+        pass
 
     def _best_fit_font_size(self, max_size):
         """
         Return the largest whole-number point size less than or equal to
         *max_size* that this fitter can fit.
         """
-        predicate = self._fits_inside_predicate
-        sizes = _BinarySearchTree.from_ordered_sequence(range(1, int(max_size) + 1))
-        return sizes.find_max(predicate)
+        pass
 
     def _break_line(self, line_source, point_size):
         """
@@ -46,9 +42,7 @@ class TextFitter(tuple):
         *line_source* that will fit in this fitter's width and *remainder* is
         a |_LineSource| object containing the text following the break point.
         """
-        lines = _BinarySearchTree.from_ordered_sequence(line_source)
-        predicate = self._fits_in_width_predicate(point_size)
-        return lines.find_max(predicate)
+        pass
 
     def _fits_in_width_predicate(self, point_size):
         """
@@ -56,16 +50,7 @@ class TextFitter(tuple):
         that text fits in this fitter when rendered at *point_size*. Used as
         predicate for _break_line()
         """
-
-        def predicate(line):
-            """
-            Return |True| if *line* fits in this fitter when rendered at
-            *point_size*.
-            """
-            cx = _rendered_size(line.text, point_size, self._font_file)[0]
-            return cx <= self._width
-
-        return predicate
+        pass
 
     @property
     def _fits_inside_predicate(self):
@@ -74,34 +59,23 @@ class TextFitter(tuple):
         The function returns |True| if the text in this fitter can be wrapped to fit
         entirely within its extents when rendered at that point size.
         """
-
-        def predicate(point_size):
-            """Return |True| when text in `line_source` can be wrapped to fit.
-
-            Fit means text can be broken into lines that fit entirely within `extents`
-            when rendered at `point_size` using the font defined in `font_file`.
-            """
-            text_lines = self._wrap_lines(self._line_source, point_size)
-            cy = _rendered_size("Ty", point_size, self._font_file)[1]
-            return (cy * len(text_lines)) <= self._height
-
-        return predicate
+        pass
 
     @property
     def _font_file(self):
-        return self[3]
+        pass
 
     @property
     def _height(self):
-        return self[2]
+        pass
 
     @property
     def _line_source(self):
-        return self[0]
+        pass
 
     @property
     def _width(self):
-        return self[1]
+        pass
 
     def _wrap_lines(self, line_source, point_size):
         """
@@ -109,11 +83,7 @@ class TextFitter(tuple):
         *line_source* wrapped within this fitter when rendered at
         *point_size*.
         """
-        text, remainder = self._break_line(line_source, point_size)
-        lines = [text]
-        if remainder:
-            lines.extend(self._wrap_lines(remainder, point_size))
-        return lines
+        pass
 
 
 class _BinarySearchTree(object):
@@ -132,14 +102,7 @@ class _BinarySearchTree(object):
         Return the largest item in or under this node that satisfies
         *predicate*.
         """
-        if predicate(self.value):
-            max_ = self.value
-            next_node = self._greater
-        else:
-            next_node = self._lesser
-        if next_node is None:
-            return max_
-        return next_node.find_max(predicate, max_)
+        pass
 
     @classmethod
     def from_ordered_sequence(cls, iseq):
@@ -147,43 +110,28 @@ class _BinarySearchTree(object):
         Return the root of a balanced binary search tree populated with the
         values in iterable *iseq*.
         """
-        seq = list(iseq)
-        # optimize for usually all fits by making longest first
-        bst = cls(seq.pop())
-        bst._insert_from_ordered_sequence(seq)
-        return bst
+        pass
 
     def insert(self, value):
         """
         Insert a new node containing *value* into this tree such that its
         structure as a binary search tree is preserved.
         """
-        side = "_lesser" if value < self.value else "_greater"
-        child = getattr(self, side)
-        if child is None:
-            setattr(self, side, _BinarySearchTree(value))
-        else:
-            child.insert(value)
+        pass
 
     def tree(self, level=0, prefix=""):
         """
         A string representation of the tree rooted in this node, useful for
         debugging purposes.
         """
-        text = "%s%s\n" % (prefix, self.value.text)
-        prefix = "%s└── " % ("    " * level)
-        if self._lesser:
-            text += self._lesser.tree(level + 1, prefix)
-        if self._greater:
-            text += self._greater.tree(level + 1, prefix)
-        return text
+        pass
 
     @property
     def value(self):
         """
         The value object contained in this node.
         """
-        return self._value
+        pass
 
     @staticmethod
     def _bisect(seq):
@@ -191,25 +139,14 @@ class _BinarySearchTree(object):
         Return a (medial_value, greater_values, lesser_values) 3-tuple
         obtained by bisecting sequence *seq*.
         """
-        if len(seq) == 0:
-            return [], None, []
-        mid_idx = int(len(seq) / 2)
-        mid = seq[mid_idx]
-        greater = seq[mid_idx + 1 :]
-        lesser = seq[:mid_idx]
-        return mid, greater, lesser
+        pass
 
     def _insert_from_ordered_sequence(self, seq):
         """
         Insert the new values contained in *seq* into this tree such that
         a balanced tree is produced.
         """
-        if len(seq) == 0:
-            return
-        mid, greater, lesser = self._bisect(seq)
-        self.insert(mid)
-        self._insert_from_ordered_sequence(greater)
-        self._insert_from_ordered_sequence(lesser)
+        pass
 
 
 class _LineSource(object):
@@ -282,11 +219,11 @@ class _Line(tuple):
 
     @property
     def remainder(self):
-        return self[1]
+        pass
 
     @property
     def text(self):
-        return self[0]
+        pass
 
 
 class _Fonts(object):
@@ -298,9 +235,7 @@ class _Fonts(object):
 
     @classmethod
     def font(cls, font_path, point_size):
-        if (font_path, point_size) not in cls.fonts:
-            cls.fonts[(font_path, point_size)] = ImageFont.truetype(font_path, point_size)
-        return cls.fonts[(font_path, point_size)]
+        pass
 
 
 def _rendered_size(text, point_size, font_file):
@@ -309,17 +244,4 @@ def _rendered_size(text, point_size, font_file):
     Metric Units (EMU) when rendered at *point_size* in the font defined in
     *font_file*.
     """
-    emu_per_inch = 914400
-    px_per_inch = 72.0
-
-    font = _Fonts.font(font_file, point_size)
-    try:
-        px_width, px_height = font.getsize(text)
-    except AttributeError:
-        left, top, right, bottom = font.getbbox(text)
-        px_width, px_height = right - left, bottom - top
-
-    emu_width = int(px_width / px_per_inch * emu_per_inch)
-    emu_height = int(px_height / px_per_inch * emu_per_inch)
-
-    return emu_width, emu_height
+    pass

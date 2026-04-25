@@ -34,7 +34,7 @@ class PackURI(str):
 
         For the package pseudo-partname "/", the baseURI is "/".
         """
-        return posixpath.split(self)[0]
+        pass
 
     @property
     def ext(self) -> str:
@@ -42,9 +42,7 @@ class PackURI(str):
 
         E.g. `"xml"` for `"/ppt/slides/slide1.xml"`. Note the leading period is not included.
         """
-        # -- raw_ext is either empty string or starts with period, e.g. ".xml" --
-        raw_ext = posixpath.splitext(self)[1]
-        return raw_ext[1:] if raw_ext.startswith(".") else raw_ext
+        pass
 
     @property
     def filename(self) -> str:
@@ -54,7 +52,7 @@ class PackURI(str):
 
         For the package pseudo-partname "/", `filename` is ''.
         """
-        return posixpath.split(self)[1]
+        pass
 
     @property
     def idx(self) -> int | None:
@@ -63,16 +61,7 @@ class PackURI(str):
         Value is an integer for an "array" partname or None for singleton partname, e.g. `21` for
         `"/ppt/slides/slide21.xml"` and |None| for `"/ppt/presentation.xml"`.
         """
-        filename = self.filename
-        if not filename:
-            return None
-        name_part = posixpath.splitext(filename)[0]  # filename w/ext removed
-        match = self._filename_re.match(name_part)
-        if match is None:
-            return None
-        if match.group(2):
-            return int(match.group(2))
-        return None
+        pass
 
     @property
     def membername(self) -> str:
@@ -81,7 +70,7 @@ class PackURI(str):
         This is the form used as the Zip file membername for the package item. Returns "" for the
         package pseudo-partname "/".
         """
-        return self[1:]
+        pass
 
     def relative_ref(self, baseURI: str) -> str:
         """Return string containing relative reference to package item from `baseURI`.
@@ -89,9 +78,7 @@ class PackURI(str):
         E.g. PackURI("/ppt/slideLayouts/slideLayout1.xml") would return
         "../slideLayouts/slideLayout1.xml" for baseURI "/ppt/slides".
         """
-        # workaround for posixpath bug in 2.6, doesn't generate correct
-        # relative path when `start` (second) parameter is root ("/")
-        return self[1:] if baseURI == "/" else posixpath.relpath(self, baseURI)
+        pass
 
     @property
     def rels_uri(self) -> PackURI:
@@ -100,9 +87,7 @@ class PackURI(str):
         Only produces sensible output if the pack URI is a partname or the package pseudo-partname
         "/".
         """
-        rels_filename = "%s.rels" % self.filename
-        rels_uri_str = posixpath.join(self.baseURI, "_rels", rels_filename)
-        return PackURI(rels_uri_str)
+        pass
 
 
 PACKAGE_URI = PackURI("/")

@@ -104,27 +104,21 @@ class CT_Path2D(BaseOxmlElement):
 
         The new `a:close` element is appended to this `a:path` element.
         """
-        return self._add_close()
+        pass
 
     def add_lnTo(self, x: Length, y: Length) -> CT_Path2DLineTo:
         """Return a newly created `a:lnTo` subtree with end point *(x, y)*.
 
         The new `a:lnTo` element is appended to this `a:path` element.
         """
-        lnTo = self._add_lnTo()
-        pt = lnTo._add_pt()
-        pt.x, pt.y = x, y
-        return lnTo
+        pass
 
     def add_moveTo(self, x: Length, y: Length):
         """Return a newly created `a:moveTo` subtree with point `(x, y)`.
 
         The new `a:moveTo` element is appended to this `a:path` element.
         """
-        moveTo = self._add_moveTo()
-        pt = moveTo._add_pt()
-        pt.x, pt.y = x, y
-        return moveTo
+        pass
 
 
 class CT_Path2DClose(BaseOxmlElement):
@@ -148,9 +142,7 @@ class CT_Path2DList(BaseOxmlElement):
 
     def add_path(self, w: Length, h: Length):
         """Return a newly created `a:path` child element."""
-        path = self._add_path()
-        path.w, path.h = w, h
-        return path
+        pass
 
 
 class CT_Path2DMoveTo(BaseOxmlElement):
@@ -175,19 +167,11 @@ class CT_PresetGeometry2D(BaseOxmlElement):
     @property
     def gd_lst(self) -> list[CT_GeomGuide]:
         """Sequence of `a:gd` element children of `a:avLst`. Empty if none are present."""
-        avLst = self.avLst
-        if avLst is None:
-            return []
-        return avLst.gd_lst
+        pass
 
     def rewrite_guides(self, guides: list[tuple[str, int]]):
         """Replace any `a:gd` element children of `a:avLst` with ones forme from `guides`."""
-        self._remove_avLst()
-        avLst = self._add_avLst()
-        for name, val in guides:
-            gd = avLst._add_gd()
-            gd.name = name
-            gd.fmla = "val %d" % val
+        pass
 
 
 class CT_Shape(BaseShapeElement):
@@ -200,15 +184,11 @@ class CT_Shape(BaseShapeElement):
     txBody: CT_TextBody | None = ZeroOrOne("p:txBody", successors=("p:extLst",))  # pyright: ignore
 
     def add_path(self, w: Length, h: Length) -> CT_Path2D:
-        custGeom = self.spPr.custGeom
-        if custGeom is None:
-            raise ValueError("shape must be freeform")
-        pathLst = custGeom.get_or_add_pathLst()
-        return pathLst.add_path(w=w, h=h)
+        pass
 
     def get_or_add_ln(self):
         """Return the `a:ln` grandchild element, newly added if not present."""
-        return self.spPr.get_or_add_ln()
+        pass
 
     @property
     def has_custom_geometry(self):
@@ -217,7 +197,7 @@ class CT_Shape(BaseShapeElement):
         A shape has custom geometry if it has a `p:spPr/a:custGeom`
         descendant (instead of `p:spPr/a:prstGeom`).
         """
-        return self.spPr.custGeom is not None
+        pass
 
     @property
     def is_autoshape(self):
@@ -226,10 +206,7 @@ class CT_Shape(BaseShapeElement):
         A shape is an auto shape if it has a `a:prstGeom` element and does not have a txBox="1"
         attribute on cNvSpPr.
         """
-        prstGeom = self.prstGeom
-        if prstGeom is None:
-            return False
-        return self.nvSpPr.cNvSpPr.txBox is not True
+        pass
 
     @property
     def is_textbox(self):
@@ -238,58 +215,19 @@ class CT_Shape(BaseShapeElement):
         A shape is a text box if it has a `txBox` attribute on cNvSpPr that resolves to |True|.
         The default when the txBox attribute is missing is |False|.
         """
-        return self.nvSpPr.cNvSpPr.txBox is True
+        pass
 
     @property
     def ln(self):
         """`a:ln` grand-child element or |None| if not present."""
-        return self.spPr.ln
+        pass
 
     @staticmethod
     def new_autoshape_sp(
         id_: int, name: str, prst: str, left: int, top: int, width: int, height: int
     ) -> CT_Shape:
         """Return a new `p:sp` element tree configured as a base auto shape."""
-        xml = (
-            "<p:sp %s>\n"
-            "  <p:nvSpPr>\n"
-            '    <p:cNvPr id="%s" name="%s"/>\n'
-            "    <p:cNvSpPr/>\n"
-            "    <p:nvPr/>\n"
-            "  </p:nvSpPr>\n"
-            "  <p:spPr>\n"
-            "    <a:xfrm>\n"
-            '      <a:off x="%s" y="%s"/>\n'
-            '      <a:ext cx="%s" cy="%s"/>\n'
-            "    </a:xfrm>\n"
-            '    <a:prstGeom prst="%s">\n'
-            "      <a:avLst/>\n"
-            "    </a:prstGeom>\n"
-            "  </p:spPr>\n"
-            "  <p:style>\n"
-            '    <a:lnRef idx="1">\n'
-            '      <a:schemeClr val="accent1"/>\n'
-            "    </a:lnRef>\n"
-            '    <a:fillRef idx="3">\n'
-            '      <a:schemeClr val="accent1"/>\n'
-            "    </a:fillRef>\n"
-            '    <a:effectRef idx="2">\n'
-            '      <a:schemeClr val="accent1"/>\n'
-            "    </a:effectRef>\n"
-            '    <a:fontRef idx="minor">\n'
-            '      <a:schemeClr val="lt1"/>\n'
-            "    </a:fontRef>\n"
-            "  </p:style>\n"
-            "  <p:txBody>\n"
-            '    <a:bodyPr rtlCol="0" anchor="ctr"/>\n'
-            "    <a:lstStyle/>\n"
-            "    <a:p>\n"
-            '      <a:pPr algn="ctr"/>\n'
-            "    </a:p>\n"
-            "  </p:txBody>\n"
-            "</p:sp>" % (nsdecls("a", "p"), "%d", "%s", "%d", "%d", "%d", "%d", "%s")
-        ) % (id_, name, left, top, width, height, prst)
-        return cast(CT_Shape, parse_xml(xml))
+        pass
 
     @staticmethod
     def new_freeform_sp(shape_id: int, name: str, x: int, y: int, cx: int, cy: int):
@@ -298,51 +236,7 @@ class CT_Shape(BaseShapeElement):
         The returned shape has a `a:custGeom` subtree but no paths in its
         path list.
         """
-        xml = (
-            "<p:sp %s>\n"
-            "  <p:nvSpPr>\n"
-            '    <p:cNvPr id="%s" name="%s"/>\n'
-            "    <p:cNvSpPr/>\n"
-            "    <p:nvPr/>\n"
-            "  </p:nvSpPr>\n"
-            "  <p:spPr>\n"
-            "    <a:xfrm>\n"
-            '      <a:off x="%s" y="%s"/>\n'
-            '      <a:ext cx="%s" cy="%s"/>\n'
-            "    </a:xfrm>\n"
-            "    <a:custGeom>\n"
-            "      <a:avLst/>\n"
-            "      <a:gdLst/>\n"
-            "      <a:ahLst/>\n"
-            "      <a:cxnLst/>\n"
-            '      <a:rect l="l" t="t" r="r" b="b"/>\n'
-            "      <a:pathLst/>\n"
-            "    </a:custGeom>\n"
-            "  </p:spPr>\n"
-            "  <p:style>\n"
-            '    <a:lnRef idx="1">\n'
-            '      <a:schemeClr val="accent1"/>\n'
-            "    </a:lnRef>\n"
-            '    <a:fillRef idx="3">\n'
-            '      <a:schemeClr val="accent1"/>\n'
-            "    </a:fillRef>\n"
-            '    <a:effectRef idx="2">\n'
-            '      <a:schemeClr val="accent1"/>\n'
-            "    </a:effectRef>\n"
-            '    <a:fontRef idx="minor">\n'
-            '      <a:schemeClr val="lt1"/>\n'
-            "    </a:fontRef>\n"
-            "  </p:style>\n"
-            "  <p:txBody>\n"
-            '    <a:bodyPr rtlCol="0" anchor="ctr"/>\n'
-            "    <a:lstStyle/>\n"
-            "    <a:p>\n"
-            '      <a:pPr algn="ctr"/>\n'
-            "    </a:p>\n"
-            "  </p:txBody>\n"
-            "</p:sp>" % (nsdecls("a", "p"), "%d", "%s", "%d", "%d", "%d", "%d")
-        ) % (shape_id, name, x, y, cx, cy)
-        return cast(CT_Shape, parse_xml(xml))
+        pass
 
     @staticmethod
     def new_placeholder_sp(
@@ -387,18 +281,12 @@ class CT_Shape(BaseShapeElement):
     @staticmethod
     def new_textbox_sp(id_, name, left, top, width, height):
         """Return a new `p:sp` element tree configured as a base textbox shape."""
-        tmpl = CT_Shape._textbox_sp_tmpl()
-        xml = tmpl % (id_, name, left, top, width, height)
-        sp = parse_xml(xml)
-        return sp
+        pass
 
     @property
     def prst(self):
         """Value of `prst` attribute of `a:prstGeom` element or |None| if not present."""
-        prstGeom = self.prstGeom
-        if prstGeom is None:
-            return None
-        return prstGeom.prst
+        pass
 
     @property
     def prstGeom(self) -> CT_PresetGeometry2D:
@@ -406,39 +294,14 @@ class CT_Shape(BaseShapeElement):
 
         |None| if this shape doesn't have one, for example, if it's a placeholder shape.
         """
-        return self.spPr.prstGeom
+        pass
 
     def _new_txBody(self):
-        return CT_TextBody.new_p_txBody()
+        pass
 
     @staticmethod
     def _textbox_sp_tmpl():
-        return (
-            "<p:sp %s>\n"
-            "  <p:nvSpPr>\n"
-            '    <p:cNvPr id="%s" name="%s"/>\n'
-            '    <p:cNvSpPr txBox="1"/>\n'
-            "    <p:nvPr/>\n"
-            "  </p:nvSpPr>\n"
-            "  <p:spPr>\n"
-            "    <a:xfrm>\n"
-            '      <a:off x="%s" y="%s"/>\n'
-            '      <a:ext cx="%s" cy="%s"/>\n'
-            "    </a:xfrm>\n"
-            '    <a:prstGeom prst="rect">\n'
-            "      <a:avLst/>\n"
-            "    </a:prstGeom>\n"
-            "    <a:noFill/>\n"
-            "  </p:spPr>\n"
-            "  <p:txBody>\n"
-            '    <a:bodyPr wrap="none">\n'
-            "      <a:spAutoFit/>\n"
-            "    </a:bodyPr>\n"
-            "    <a:lstStyle/>\n"
-            "    <a:p/>\n"
-            "  </p:txBody>\n"
-            "</p:sp>" % (nsdecls("a", "p"), "%d", "%s", "%d", "%d", "%d", "%d")
-        )
+        pass
 
 
 class CT_ShapeNonVisual(BaseShapeElement):

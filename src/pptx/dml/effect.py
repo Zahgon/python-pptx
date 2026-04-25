@@ -26,16 +26,8 @@ class ShadowFormat(object):
         Assigning |False| causes the inheritance link to be broken and **no**
         effects to appear on the shape.
         """
-        if self._element.effectLst is None:
-            return True
-        return False
+        pass
 
     @inherit.setter
     def inherit(self, value):
-        inherit = bool(value)
-        if inherit:
-            # ---remove any explicitly-defined effects
-            self._element._remove_effectLst()
-        else:
-            # ---ensure at least the effectLst element is present
-            self._element.get_or_add_effectLst()
+        pass

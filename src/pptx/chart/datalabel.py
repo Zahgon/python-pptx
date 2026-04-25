@@ -25,9 +25,7 @@ class DataLabels(object):
         The |Font| object that provides access to the text properties for
         these data labels, such as bold, italic, etc.
         """
-        defRPr = self._element.defRPr
-        font = Font(defRPr)
-        return font
+        pass
 
     @property
     def number_format(self):
@@ -39,15 +37,11 @@ class DataLabels(object):
         string to this property automatically sets
         :meth:`number_format_is_linked` to |False|.
         """
-        numFmt = self._element.numFmt
-        if numFmt is None:
-            return "General"
-        return numFmt.formatCode
+        pass
 
     @number_format.setter
     def number_format(self, value):
-        self._element.get_or_add_numFmt().formatCode = value
-        self.number_format_is_linked = False
+        pass
 
     @property
     def number_format_is_linked(self):
@@ -56,18 +50,11 @@ class DataLabels(object):
         taken from the source spreadsheet rather than the value of
         :meth:`number_format`.
         """
-        numFmt = self._element.numFmt
-        if numFmt is None:
-            return True
-        souceLinked = numFmt.sourceLinked
-        if souceLinked is None:
-            return True
-        return numFmt.sourceLinked
+        pass
 
     @number_format_is_linked.setter
     def number_format_is_linked(self, value):
-        numFmt = self._element.get_or_add_numFmt()
-        numFmt.sourceLinked = value
+        pass
 
     @property
     def position(self):
@@ -78,35 +65,29 @@ class DataLabels(object):
         PowerPoint to choose the default position, which varies by chart
         type.
         """
-        dLblPos = self._element.dLblPos
-        if dLblPos is None:
-            return None
-        return dLblPos.val
+        pass
 
     @position.setter
     def position(self, value):
-        if value is None:
-            self._element._remove_dLblPos()
-            return
-        self._element.get_or_add_dLblPos().val = value
+        pass
 
     @property
     def show_category_name(self):
         """Read/write. True when name of category should appear in label."""
-        return self._element.get_or_add_showCatName().val
+        pass
 
     @show_category_name.setter
     def show_category_name(self, value):
-        self._element.get_or_add_showCatName().val = bool(value)
+        pass
 
     @property
     def show_legend_key(self):
         """Read/write. True when data label displays legend-color swatch."""
-        return self._element.get_or_add_showLegendKey().val
+        pass
 
     @show_legend_key.setter
     def show_legend_key(self, value):
-        self._element.get_or_add_showLegendKey().val = bool(value)
+        pass
 
     @property
     def show_percentage(self):
@@ -115,29 +96,29 @@ class DataLabels(object):
         This option is not operative on all chart types. Percentage appears
         on polar charts such as pie and donut.
         """
-        return self._element.get_or_add_showPercent().val
+        pass
 
     @show_percentage.setter
     def show_percentage(self, value):
-        self._element.get_or_add_showPercent().val = bool(value)
+        pass
 
     @property
     def show_series_name(self):
         """Read/write. True when data label displays series name."""
-        return self._element.get_or_add_showSerName().val
+        pass
 
     @show_series_name.setter
     def show_series_name(self, value):
-        self._element.get_or_add_showSerName().val = bool(value)
+        pass
 
     @property
     def show_value(self):
         """Read/write. True when label displays numeric value of datapoint."""
-        return self._element.get_or_add_showVal().val
+        pass
 
     @show_value.setter
     def show_value(self, value):
-        self._element.get_or_add_showVal().val = bool(value)
+        pass
 
 
 class DataLabel(object):
@@ -160,10 +141,7 @@ class DataLabel(object):
         data label text is controlled by a font object on runs in the text
         frame.
         """
-        txPr = self._get_or_add_txPr()
-        text_frame = TextFrame(txPr, self)
-        paragraph = text_frame.paragraphs[0]
-        return paragraph.font
+        pass
 
     @property
     def has_text_frame(self):
@@ -174,19 +152,11 @@ class DataLabel(object):
         |False| causes any existing text frame to be removed along with any
         text contained in the text frame.
         """
-        dLbl = self._dLbl
-        if dLbl is None:
-            return False
-        if dLbl.xpath("c:tx/c:rich"):
-            return True
-        return False
+        pass
 
     @has_text_frame.setter
     def has_text_frame(self, value):
-        if bool(value) is True:
-            self._get_or_add_tx_rich()
-        else:
-            self._remove_tx_rich()
+        pass
 
     @property
     def position(self):
@@ -196,24 +166,11 @@ class DataLabel(object):
         position is specified. Assigning |None| causes PowerPoint to choose
         the default position, which varies by chart type.
         """
-        dLbl = self._dLbl
-        if dLbl is None:
-            return None
-        dLblPos = dLbl.dLblPos
-        if dLblPos is None:
-            return None
-        return dLblPos.val
+        pass
 
     @position.setter
     def position(self, value):
-        if value is None:
-            dLbl = self._dLbl
-            if dLbl is None:
-                return
-            dLbl._remove_dLblPos()
-            return
-        dLbl = self._get_or_add_dLbl()
-        dLbl.get_or_add_dLblPos().val = value
+        pass
 
     @property
     def text_frame(self):
@@ -221,8 +178,7 @@ class DataLabel(object):
         |TextFrame| instance for this data label, containing the text of the
         data label and providing access to its text formatting properties.
         """
-        rich = self._get_or_add_rich()
-        return TextFrame(rich, self)
+        pass
 
     @property
     def _dLbl(self):
@@ -231,42 +187,28 @@ class DataLabel(object):
         individual data label (having the same index value), or |None| if not
         present.
         """
-        return self._ser.get_dLbl(self._idx)
+        pass
 
     def _get_or_add_dLbl(self):
         """
         The ``CT_DLbl`` instance referring specifically to this individual
         data label, newly created if not yet present in the XML.
         """
-        return self._ser.get_or_add_dLbl(self._idx)
+        pass
 
     def _get_or_add_rich(self):
         """
         Return the `c:rich` element representing the text frame for this data
         label, newly created with its ancestors if not present.
         """
-        dLbl = self._get_or_add_dLbl()
-
-        # having a c:spPr or c:txPr when a c:tx is present causes the "can't
-        # save" bug on bubble charts. Remove c:spPr and c:txPr when present.
-        dLbl._remove_spPr()
-        dLbl._remove_txPr()
-
-        return dLbl.get_or_add_rich()
+        pass
 
     def _get_or_add_tx_rich(self):
         """
         Return the `c:tx` element for this data label, with its `c:rich`
         child and descendants, newly created if not yet present.
         """
-        dLbl = self._get_or_add_dLbl()
-
-        # having a c:spPr or c:txPr when a c:tx is present causes the "can't
-        # save" bug on bubble charts. Remove c:spPr and c:txPr when present.
-        dLbl._remove_spPr()
-        dLbl._remove_txPr()
-
-        return dLbl.get_or_add_tx_rich()
+        pass
 
     def _get_or_add_txPr(self):
         """Return the `c:txPr` element for this data label.
@@ -274,15 +216,11 @@ class DataLabel(object):
         The `c:txPr` element and its parent `c:dLbl` element are created if
         not yet present.
         """
-        dLbl = self._get_or_add_dLbl()
-        return dLbl.get_or_add_txPr()
+        pass
 
     def _remove_tx_rich(self):
         """
         Remove any `c:tx/c:rich` child of the `c:dLbl` element for this data
         label. Do nothing if that element is not present.
         """
-        dLbl = self._dLbl
-        if dLbl is None:
-            return
-        dLbl.remove_tx_rich()
+        pass

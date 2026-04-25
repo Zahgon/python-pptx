@@ -51,18 +51,13 @@ class CT_DLbl(BaseOxmlElement):
         data label, newly created if not present. Any existing `c:strRef`
         element is removed along with its contents.
         """
-        tx = self.get_or_add_tx()
-        tx._remove_strRef()
-        return tx.get_or_add_rich()
+        pass
 
     def get_or_add_tx_rich(self):
         """
         Return the `c:tx[c:rich]` subtree, newly created if not present.
         """
-        tx = self.get_or_add_tx()
-        tx._remove_strRef()
-        tx.get_or_add_rich()
-        return tx
+        pass
 
     @property
     def idx_val(self):
@@ -70,7 +65,7 @@ class CT_DLbl(BaseOxmlElement):
         The integer value of the `val` attribute on the required `c:idx`
         child.
         """
-        return self.idx.val
+        pass
 
     @classmethod
     def new_dLbl(cls):
@@ -82,40 +77,16 @@ class CT_DLbl(BaseOxmlElement):
         client. Failure to set the idx value will likely result in any
         changes not being visible and may result in a repair error on open.
         """
-        return parse_xml(
-            "<c:dLbl %s>\n"
-            '  <c:idx val="666"/>\n'
-            "  <c:spPr/>\n"
-            "  <c:txPr>\n"
-            "    <a:bodyPr/>\n"
-            "    <a:lstStyle/>\n"
-            "    <a:p>\n"
-            "      <a:pPr>\n"
-            "        <a:defRPr/>\n"
-            "      </a:pPr>\n"
-            "    </a:p>\n"
-            "  </c:txPr>\n"
-            '  <c:showLegendKey val="0"/>\n'
-            '  <c:showVal val="1"/>\n'
-            '  <c:showCatName val="0"/>\n'
-            '  <c:showSerName val="0"/>\n'
-            '  <c:showPercent val="0"/>\n'
-            '  <c:showBubbleSize val="0"/>\n'
-            "</c:dLbl>" % nsdecls("c", "a")
-        )
+        pass
 
     def remove_tx_rich(self):
         """
         Remove any `c:tx[c:rich]` child, or do nothing if not present.
         """
-        matches = self.xpath("c:tx[c:rich]")
-        if not matches:
-            return
-        tx = matches[0]
-        self.remove(tx)
+        pass
 
     def _new_txPr(self):
-        return CT_TextBody.new_txPr()
+        pass
 
 
 class CT_DLblPos(BaseOxmlElement):
@@ -164,44 +135,26 @@ class CT_DLbls(BaseOxmlElement):
         ``<a:defRPr>`` great-great-grandchild element, added with its
         ancestors if not present.
         """
-        txPr = self.get_or_add_txPr()
-        defRPr = txPr.defRPr
-        return defRPr
+        pass
 
     def get_dLbl_for_point(self, idx):
         """
         Return the `c:dLbl` child representing the label for the data point
         at index *idx*.
         """
-        matches = self.xpath('c:dLbl[c:idx[@val="%d"]]' % idx)
-        if matches:
-            return matches[0]
-        return None
+        pass
 
     def get_or_add_dLbl_for_point(self, idx):
         """
         Return the `c:dLbl` element representing the label of the point at
         index *idx*.
         """
-        matches = self.xpath('c:dLbl[c:idx[@val="%d"]]' % idx)
-        if matches:
-            return matches[0]
-        return self._insert_dLbl_in_sequence(idx)
+        pass
 
     @classmethod
     def new_dLbls(cls):
         """Return a newly created "loose" `c:dLbls` element."""
-        return parse_xml(
-            "<c:dLbls %s>\n"
-            '  <c:showLegendKey val="0"/>\n'
-            '  <c:showVal val="0"/>\n'
-            '  <c:showCatName val="0"/>\n'
-            '  <c:showSerName val="0"/>\n'
-            '  <c:showPercent val="0"/>\n'
-            '  <c:showBubbleSize val="0"/>\n'
-            '  <c:showLeaderLines val="1"/>\n'
-            "</c:dLbls>" % nsdecls("c")
-        )
+        pass
 
     def _insert_dLbl_in_sequence(self, idx):
         """
@@ -209,22 +162,10 @@ class CT_DLbls(BaseOxmlElement):
         and inserted in numeric sequence among the `c:dLbl` children of this
         element.
         """
-        new_dLbl = self._new_dLbl()
-        new_dLbl.idx.val = idx
-
-        dLbl = None
-        for dLbl in self.dLbl_lst:
-            if dLbl.idx_val > idx:
-                dLbl.addprevious(new_dLbl)
-                return new_dLbl
-        if dLbl is not None:
-            dLbl.addnext(new_dLbl)
-        else:
-            self.insert(0, new_dLbl)
-        return new_dLbl
+        pass
 
     def _new_dLbl(self):
-        return CT_DLbl.new_dLbl()
+        pass
 
     def _new_showCatName(self):
         """Return a new `c:showCatName` with value initialized.
@@ -234,19 +175,19 @@ class CT_DLbls(BaseOxmlElement):
         `val=true`, which is not what we need so we override to make val
         explicitly False.
         """
-        return parse_xml('<c:showCatName %s val="0"/>' % nsdecls("c"))
+        pass
 
     def _new_showLegendKey(self):
-        return parse_xml('<c:showLegendKey %s val="0"/>' % nsdecls("c"))
+        pass
 
     def _new_showPercent(self):
-        return parse_xml('<c:showPercent %s val="0"/>' % nsdecls("c"))
+        pass
 
     def _new_showSerName(self):
-        return parse_xml('<c:showSerName %s val="0"/>' % nsdecls("c"))
+        pass
 
     def _new_showVal(self):
-        return parse_xml('<c:showVal %s val="0"/>' % nsdecls("c"))
+        pass
 
     def _new_txPr(self):
-        return CT_TextBody.new_txPr()
+        pass

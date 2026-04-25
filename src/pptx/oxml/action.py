@@ -23,17 +23,7 @@ class CT_Hyperlink(BaseOxmlElement):
         Returns an empty dict if the URL contains no query string or if no action attribute is
         present.
         """
-        url = self.action
-
-        if url is None:
-            return {}
-
-        halves = url.split("?")
-        if len(halves) == 1:
-            return {}
-
-        key_value_pairs = halves[1].split("&")
-        return dict([pair.split("=") for pair in key_value_pairs])
+        pass
 
     @property
     def action_verb(self) -> str | None:
@@ -42,12 +32,4 @@ class CT_Hyperlink(BaseOxmlElement):
         For example 'customshow' in 'ppaction://customshow?id=0&return=true'. Returns |None| if no
         action attribute is present.
         """
-        url = self.action
-
-        if url is None:
-            return None
-
-        protocol_and_host = url.split("?")[0]
-        host = protocol_and_host[11:]
-
-        return host
+        pass

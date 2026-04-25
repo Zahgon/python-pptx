@@ -24,9 +24,7 @@ class BaseAxisElement(BaseOxmlElement):
         ``<a:defRPr>`` great-great-grandchild element, added with its
         ancestors if not present.
         """
-        txPr = self.get_or_add_txPr()
-        defRPr = txPr.defRPr
-        return defRPr
+        pass
 
     @property
     def orientation(self):
@@ -35,23 +33,18 @@ class BaseAxisElement(BaseOxmlElement):
         Defaults to `ST_Orientation.MIN_MAX` if attribute or any ancestors are not
         present.
         """
-        orientation = self.scaling.orientation
-        if orientation is None:
-            return ST_Orientation.MIN_MAX
-        return orientation.val
+        pass
 
     @orientation.setter
     def orientation(self, value):
         """`value` is a member of `ST_Orientation`."""
-        self.scaling._remove_orientation()
-        if value == ST_Orientation.MAX_MIN:
-            self.scaling.get_or_add_orientation().val = value
+        pass
 
     def _new_title(self):
-        return CT_Title.new_title()
+        pass
 
     def _new_txPr(self):
-        return CT_TextBody.new_txPr()
+        pass
 
 
 class CT_AxisUnit(BaseOxmlElement):
@@ -201,10 +194,7 @@ class CT_Scaling(BaseOxmlElement):
         The float value of the ``<c:max>`` child element, or |None| if no max
         element is present.
         """
-        max = self.max
-        if max is None:
-            return None
-        return max.val
+        pass
 
     @maximum.setter
     def maximum(self, value):
@@ -212,10 +202,7 @@ class CT_Scaling(BaseOxmlElement):
         Set the value of the ``<c:max>`` child element to the float *value*,
         or remove the max element if *value* is |None|.
         """
-        self._remove_max()
-        if value is None:
-            return
-        self._add_max(val=value)
+        pass
 
     @property
     def minimum(self):
@@ -223,10 +210,7 @@ class CT_Scaling(BaseOxmlElement):
         The float value of the ``<c:min>`` child element, or |None| if no min
         element is present.
         """
-        min = self.min
-        if min is None:
-            return None
-        return min.val
+        pass
 
     @minimum.setter
     def minimum(self, value):
@@ -234,10 +218,7 @@ class CT_Scaling(BaseOxmlElement):
         Set the value of the ``<c:min>`` child element to the float *value*,
         or remove the min element if *value* is |None|.
         """
-        self._remove_min()
-        if value is None:
-            return
-        self._add_min(val=value)
+        pass
 
 
 class CT_TickLblPos(BaseOxmlElement):

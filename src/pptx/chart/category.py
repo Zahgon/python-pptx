@@ -46,12 +46,7 @@ class Categories(Sequence):
         and 0 if no categories are present (generally meaning no series are
         present).
         """
-        cat = self._xChart.cat
-        if cat is None:
-            return 0
-        if cat.multiLvlStrRef is None:
-            return 1
-        return len(cat.lvls)
+        pass
 
     @property
     def flattened_labels(self):
@@ -64,19 +59,7 @@ class Categories(Sequence):
         If the plot has no series (and therefore no categories), an empty
         tuple is returned.
         """
-        cat = self._xChart.cat
-        if cat is None:
-            return ()
-
-        if cat.multiLvlStrRef is None:
-            return tuple([(category.label,) for category in self])
-
-        return tuple(
-            [
-                tuple([category.label for category in reversed(flat_cat)])
-                for flat_cat in self._iter_flattened_categories()
-            ]
-        )
+        pass
 
     @property
     def levels(self):
@@ -88,10 +71,7 @@ class Categories(Sequence):
         the root level; so the first level will contain the same categories
         as this category collection.
         """
-        cat = self._xChart.cat
-        if cat is None:
-            return []
-        return [CategoryLevel(lvl) for lvl in cat.lvls]
+        pass
 
     def _iter_flattened_categories(self):
         """
@@ -101,12 +81,7 @@ class Categories(Sequence):
         the same length as the number of levels (excepting certain edge
         cases which I believe always indicate a chart construction error).
         """
-        levels = self.levels
-        if not levels:
-            return
-        leaf_level, remaining_levels = levels[0], levels[1:]
-        for category in leaf_level:
-            yield self._parentage((category,), remaining_levels)
+        pass
 
     def _parentage(self, categories, levels):
         """
@@ -117,29 +92,7 @@ class Categories(Sequence):
         Category object in a next level having the maximum idx value not
         exceeding that of the leaf category.
         """
-        # exhausting levels is the expected recursion termination condition
-        if not levels:
-            return tuple(categories)
-
-        # guard against edge case where next level is present but empty. That
-        # situation is not prohibited for some reason.
-        if not levels[0]:
-            return tuple(categories)
-
-        parent_level, remaining_levels = levels[0], levels[1:]
-        leaf_node = categories[0]
-
-        # Make the first parent the default. A possible edge case is where no
-        # parent is defined for one or more leading values, e.g. idx > 0 for
-        # the first parent.
-        parent = parent_level[0]
-        for category in parent_level:
-            if category.idx > leaf_node.idx:
-                break
-            parent = category
-
-        extended_categories = tuple(categories) + (parent,)
-        return self._parentage(extended_categories, remaining_levels)
+        pass
 
 
 class Category(str):
@@ -170,16 +123,14 @@ class Category(str):
         other ancestor) category, the index specifies the first leaf category
         that ancestor encloses.
         """
-        if self._pt is None:
-            return self._idx
-        return self._pt.idx
+        pass
 
     @property
     def label(self):
         """
         Return the label of this category as a string.
         """
-        return str(self)
+        pass
 
 
 class CategoryLevel(Sequence):

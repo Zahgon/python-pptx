@@ -28,9 +28,7 @@ class LineFormat(object):
         case, use ``line.fill.type`` to non-destructively discover the
         existing fill type.
         """
-        if self.fill.type != MSO_FILL.SOLID:
-            self.fill.solid()
-        return self.fill.fore_color
+        pass
 
     @property
     def dash_style(self):
@@ -42,22 +40,11 @@ class LineFormat(object):
 
         Assigning |None| removes any existing explicitly-defined dash style.
         """
-        ln = self._ln
-        if ln is None:
-            return None
-        return ln.prstDash_val
+        pass
 
     @dash_style.setter
     def dash_style(self, dash_style):
-        if dash_style is None:
-            ln = self._ln
-            if ln is None:
-                return
-            ln._remove_prstDash()
-            ln._remove_custDash()
-            return
-        ln = self._get_or_add_ln()
-        ln.prstDash_val = dash_style
+        pass
 
     @lazyproperty
     def fill(self):
@@ -65,8 +52,7 @@ class LineFormat(object):
         |FillFormat| instance for this line, providing access to fill
         properties such as foreground color.
         """
-        ln = self._get_or_add_ln()
-        return FillFormat.from_fill_parent(ln)
+        pass
 
     @property
     def width(self):
@@ -76,25 +62,19 @@ class LineFormat(object):
         a value class having properties such as `.inches`, `.cm`, and `.pt`
         for converting the value into convenient units.
         """
-        ln = self._ln
-        if ln is None:
-            return Emu(0)
-        return ln.w
+        pass
 
     @width.setter
     def width(self, emu):
-        if emu is None:
-            emu = 0
-        ln = self._get_or_add_ln()
-        ln.w = emu
+        pass
 
     def _get_or_add_ln(self):
         """
         Return the ``<a:ln>`` element containing the line format properties
         in the XML.
         """
-        return self._parent.get_or_add_ln()
+        pass
 
     @property
     def _ln(self):
-        return self._parent.ln
+        pass

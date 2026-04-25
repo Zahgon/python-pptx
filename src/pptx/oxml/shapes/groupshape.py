@@ -44,9 +44,7 @@ class CT_GroupShape(BaseShapeElement):
         self, id_: int, name: str, prst: str, x: int, y: int, cx: int, cy: int
     ) -> CT_Shape:
         """Return new `p:sp` appended to the group/shapetree with specified attributes."""
-        sp = CT_Shape.new_autoshape_sp(id_, name, prst, x, y, cx, cy)
-        self.insert_element_before(sp, "p:extLst")
-        return sp
+        pass
 
     def add_cxnSp(
         self,
@@ -61,18 +59,11 @@ class CT_GroupShape(BaseShapeElement):
         flipV: bool,
     ) -> CT_Connector:
         """Return new `p:cxnSp` appended to the group/shapetree with the specified attribues."""
-        prst = MSO_CONNECTOR_TYPE.to_xml(type_member)
-        cxnSp = CT_Connector.new_cxnSp(id_, name, prst, x, y, cx, cy, flipH, flipV)
-        self.insert_element_before(cxnSp, "p:extLst")
-        return cxnSp
+        pass
 
     def add_freeform_sp(self, x: int, y: int, cx: int, cy: int) -> CT_Shape:
         """Append a new freeform `p:sp` with specified position and size."""
-        shape_id = self._next_shape_id
-        name = "Freeform %d" % (shape_id - 1,)
-        sp = CT_Shape.new_freeform_sp(shape_id, name, x, y, cx, cy)
-        self.insert_element_before(sp, "p:extLst")
-        return sp
+        pass
 
     def add_grpSp(self) -> CT_GroupShape:
         """Return `p:grpSp` element newly appended to this shape tree.
@@ -80,19 +71,13 @@ class CT_GroupShape(BaseShapeElement):
         The element contains no sub-shapes, is positioned at (0, 0), and has
         width and height of zero.
         """
-        shape_id = self._next_shape_id
-        name = "Group %d" % (shape_id - 1,)
-        grpSp = CT_GroupShape.new_grpSp(shape_id, name)
-        self.insert_element_before(grpSp, "p:extLst")
-        return grpSp
+        pass
 
     def add_pic(
         self, id_: int, name: str, desc: str, rId: str, x: int, y: int, cx: int, cy: int
     ) -> CT_Picture:
         """Append a `p:pic` shape to the group/shapetree having properties as specified in call."""
-        pic = CT_Picture.new_pic(id_, name, desc, rId, x, y, cx, cy)
-        self.insert_element_before(pic, "p:extLst")
-        return pic
+        pass
 
     def add_placeholder(
         self, id_: int, name: str, ph_type: PP_PLACEHOLDER, orient: str, sz: str, idx: int
@@ -106,37 +91,29 @@ class CT_GroupShape(BaseShapeElement):
         self, id_: int, name: str, rows: int, cols: int, x: int, y: int, cx: int, cy: int
     ) -> CT_GraphicalObjectFrame:
         """Append a `p:graphicFrame` shape containing a table as specified in call."""
-        graphicFrame = CT_GraphicalObjectFrame.new_table_graphicFrame(
-            id_, name, rows, cols, x, y, cx, cy
-        )
-        self.insert_element_before(graphicFrame, "p:extLst")
-        return graphicFrame
+        pass
 
     def add_textbox(self, id_: int, name: str, x: int, y: int, cx: int, cy: int) -> CT_Shape:
         """Append a newly-created textbox `p:sp` shape having the specified position and size."""
-        sp = CT_Shape.new_textbox_sp(id_, name, x, y, cx, cy)
-        self.insert_element_before(sp, "p:extLst")
-        return sp
+        pass
 
     @property
     def chExt(self):
         """Descendent `p:grpSpPr/a:xfrm/a:chExt` element."""
-        return self.grpSpPr.get_or_add_xfrm().get_or_add_chExt()
+        pass
 
     @property
     def chOff(self):
         """Descendent `p:grpSpPr/a:xfrm/a:chOff` element."""
-        return self.grpSpPr.get_or_add_xfrm().get_or_add_chOff()
+        pass
 
     def get_or_add_xfrm(self) -> CT_Transform2D:
         """Return the `a:xfrm` grandchild element, newly-added if not present."""
-        return self.grpSpPr.get_or_add_xfrm()
+        pass
 
     def iter_ph_elms(self):
         """Generate each placeholder shape child element in document order."""
-        for e in self.iter_shape_elms():
-            if e.has_ph_elm:
-                yield e
+        pass
 
     def iter_shape_elms(self) -> Iterator[ShapeElement]:
         """Generate each child of this `p:spTree` element that corresponds to a shape.
@@ -158,32 +135,12 @@ class CT_GroupShape(BaseShapeElement):
         In practice, its minimum value is 1 because the spTree element itself
         is always assigned id="1".
         """
-        id_str_lst = self.xpath("//@id")
-        used_ids = [int(id_str) for id_str in id_str_lst if id_str.isdigit()]
-        return max(used_ids) if used_ids else 0
+        pass
 
     @classmethod
     def new_grpSp(cls, id_: int, name: str) -> CT_GroupShape:
         """Return new "loose" `p:grpSp` element having `id_` and `name`."""
-        xml = (
-            "<p:grpSp %s>\n"
-            "  <p:nvGrpSpPr>\n"
-            '    <p:cNvPr id="%%d" name="%%s"/>\n'
-            "    <p:cNvGrpSpPr/>\n"
-            "    <p:nvPr/>\n"
-            "  </p:nvGrpSpPr>\n"
-            "  <p:grpSpPr>\n"
-            "    <a:xfrm>\n"
-            '      <a:off x="0" y="0"/>\n'
-            '      <a:ext cx="0" cy="0"/>\n'
-            '      <a:chOff x="0" y="0"/>\n'
-            '      <a:chExt cx="0" cy="0"/>\n'
-            "    </a:xfrm>\n"
-            "  </p:grpSpPr>\n"
-            "</p:grpSp>" % nsdecls("a", "p", "r")
-        ) % (id_, name)
-        grpSp = parse_xml(xml)
-        return grpSp
+        pass
 
     def recalculate_extents(self) -> None:
         """Adjust x, y, cx, and cy to incorporate all contained shapes.
@@ -194,21 +151,12 @@ class CT_GroupShape(BaseShapeElement):
         This method is recursive "upwards" since a change in a group shape
         can change the position and size of its containing group.
         """
-        if not self.tag == qn("p:grpSp"):
-            return
-
-        x, y, cx, cy = self._child_extents
-
-        self.chOff.x = self.x = x
-        self.chOff.y = self.y = y
-        self.chExt.cx = self.cx = cx
-        self.chExt.cy = self.cy = cy
-        self.getparent().recalculate_extents()
+        pass
 
     @property
     def xfrm(self) -> CT_Transform2D | None:
         """The `a:xfrm` grandchild element or |None| if not found."""
-        return self.grpSpPr.xfrm
+        pass
 
     @property
     def _child_extents(self) -> tuple[int, int, int, int]:
@@ -216,22 +164,7 @@ class CT_GroupShape(BaseShapeElement):
 
         The values are formed as a composite of the contained child shapes.
         """
-        child_shape_elms = list(self.iter_shape_elms())
-
-        if not child_shape_elms:
-            return Emu(0), Emu(0), Emu(0), Emu(0)
-
-        min_x = min([xSp.x for xSp in child_shape_elms])
-        min_y = min([xSp.y for xSp in child_shape_elms])
-        max_x = max([(xSp.x + xSp.cx) for xSp in child_shape_elms])
-        max_y = max([(xSp.y + xSp.cy) for xSp in child_shape_elms])
-
-        x = min_x
-        y = min_y
-        cx = max_x - min_x
-        cy = max_y - min_y
-
-        return x, y, cx, cy
+        pass
 
     @property
     def _next_shape_id(self) -> int:
@@ -242,11 +175,7 @@ class CT_GroupShape(BaseShapeElement):
         numbering. In practice, the minimum id is 2 because the spTree
         element itself is always assigned id="1".
         """
-        id_str_lst = self.xpath("//@id")
-        used_ids = [int(id_str) for id_str in id_str_lst if id_str.isdigit()]
-        for n in range(1, len(used_ids) + 2):
-            if n not in used_ids:
-                return n
+        pass
 
 
 class CT_GroupShapeNonVisual(BaseShapeElement):

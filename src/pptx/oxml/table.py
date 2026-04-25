@@ -43,39 +43,39 @@ class CT_Table(BaseOxmlElement):
 
     def add_tr(self, height: Length) -> CT_TableRow:
         """Return a newly created `a:tr` child element having its `h` attribute set to `height`."""
-        return self._add_tr(h=height)
+        pass
 
     @property
     def bandCol(self) -> bool:
-        return self._get_boolean_property("bandCol")
+        pass
 
     @bandCol.setter
     def bandCol(self, value: bool):
-        self._set_boolean_property("bandCol", value)
+        pass
 
     @property
     def bandRow(self) -> bool:
-        return self._get_boolean_property("bandRow")
+        pass
 
     @bandRow.setter
     def bandRow(self, value: bool):
-        self._set_boolean_property("bandRow", value)
+        pass
 
     @property
     def firstCol(self) -> bool:
-        return self._get_boolean_property("firstCol")
+        pass
 
     @firstCol.setter
     def firstCol(self, value: bool):
-        self._set_boolean_property("firstCol", value)
+        pass
 
     @property
     def firstRow(self) -> bool:
-        return self._get_boolean_property("firstRow")
+        pass
 
     @firstRow.setter
     def firstRow(self, value: bool):
-        self._set_boolean_property("firstRow", value)
+        pass
 
     def iter_tcs(self) -> Iterator[CT_TableCell]:
         """Generate each `a:tc` element in this tbl.
@@ -86,51 +86,26 @@ class CT_Table(BaseOxmlElement):
 
     @property
     def lastCol(self) -> bool:
-        return self._get_boolean_property("lastCol")
+        pass
 
     @lastCol.setter
     def lastCol(self, value: bool):
-        self._set_boolean_property("lastCol", value)
+        pass
 
     @property
     def lastRow(self) -> bool:
-        return self._get_boolean_property("lastRow")
+        pass
 
     @lastRow.setter
     def lastRow(self, value: bool):
-        self._set_boolean_property("lastRow", value)
+        pass
 
     @classmethod
     def new_tbl(
         cls, rows: int, cols: int, width: int, height: int, tableStyleId: str | None = None
     ) -> CT_Table:
         """Return a new `p:tbl` element tree."""
-        # working hypothesis is this is the default table style GUID
-        if tableStyleId is None:
-            tableStyleId = "{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}"
-
-        xml = cls._tbl_tmpl() % (tableStyleId)
-        tbl = cast(CT_Table, parse_xml(xml))
-
-        # add specified number of rows and columns
-        rowheight = height // rows
-        colwidth = width // cols
-
-        for col in range(cols):
-            # adjust width of last col to absorb any div error
-            if col == cols - 1:
-                colwidth = width - ((cols - 1) * colwidth)
-            tbl.tblGrid.add_gridCol(width=Emu(colwidth))
-
-        for row in range(rows):
-            # adjust height of last row to absorb any div error
-            if row == rows - 1:
-                rowheight = height - ((rows - 1) * rowheight)
-            tr = tbl.add_tr(height=Emu(rowheight))
-            for col in range(cols):
-                tr.add_tc()
-
-        return tbl
+        pass
 
     def tc(self, row_idx: int, col_idx: int) -> CT_TableCell:
         """Return `a:tc` element at `row_idx`, `col_idx`."""
@@ -142,11 +117,7 @@ class CT_Table(BaseOxmlElement):
         Defaults to False if `propname` attribute is missing or `a:tblPr` element itself is not
         present.
         """
-        tblPr = self.tblPr
-        if tblPr is None:
-            return False
-        propval = getattr(tblPr, propname)
-        return {True: True, False: False, None: False}[propval]
+        pass
 
     def _set_boolean_property(self, propname: str, value: bool) -> None:
         """Generalized setter for boolean properties on the `a:tblPr` child element.
@@ -156,21 +127,11 @@ class CT_Table(BaseOxmlElement):
         the `propname` attribute is removed if present, allowing its default value of False to be
         its effective value.
         """
-        if value not in (True, False):
-            raise ValueError("assigned value must be either True or False, got %s" % value)
-        tblPr = self.get_or_add_tblPr()
-        setattr(tblPr, propname, value)
+        pass
 
     @classmethod
     def _tbl_tmpl(cls):
-        return (
-            "<a:tbl %s>\n"
-            '  <a:tblPr firstRow="1" bandRow="1">\n'
-            "    <a:tableStyleId>%s</a:tableStyleId>\n"
-            "  </a:tblPr>\n"
-            "  <a:tblGrid/>\n"
-            "</a:tbl>" % (nsdecls("a"), "%s")
-        )
+        pass
 
 
 class CT_TableCell(BaseOxmlElement):
@@ -204,17 +165,12 @@ class CT_TableCell(BaseOxmlElement):
     @property
     def anchor(self) -> MSO_VERTICAL_ANCHOR | None:
         """String held in `anchor` attribute of `a:tcPr` child element of this `a:tc` element."""
-        if self.tcPr is None:
-            return None
-        return self.tcPr.anchor
+        pass
 
     @anchor.setter
     def anchor(self, anchor_enum_idx: MSO_VERTICAL_ANCHOR | None):
         """Set value of anchor attribute on `a:tcPr` child element."""
-        if anchor_enum_idx is None and self.tcPr is None:
-            return
-        tcPr = self.get_or_add_tcPr()
-        tcPr.anchor = anchor_enum_idx
+        pass
 
     def append_ps_from(self, spanned_tc: CT_TableCell):
         """Append `a:p` elements taken from `spanned_tc`.
@@ -223,41 +179,22 @@ class CT_TableCell(BaseOxmlElement):
         text-frame of this cell. If `spanned_tc` is left with no content after this process, a
         single empty `a:p` element is added to ensure the cell is compliant with the spec.
         """
-        source_txBody = spanned_tc.get_or_add_txBody()
-        target_txBody = self.get_or_add_txBody()
-
-        # ---if source is empty, there's nothing to do---
-        if source_txBody.is_empty:
-            return
-
-        # ---a single empty paragraph in target is overwritten---
-        if target_txBody.is_empty:
-            target_txBody.clear_content()
-
-        for p in source_txBody.p_lst:
-            target_txBody.append(p)
-
-        # ---neither source nor target can be left without ps---
-        source_txBody.unclear_content()
-        target_txBody.unclear_content()
+        pass
 
     @property
     def col_idx(self) -> int:
         """Offset of this cell's column in its table."""
-        # ---tc elements come before any others in `a:tr` element---
-        return cast(CT_TableRow, self.getparent()).index(self)
+        pass
 
     @property
     def is_merge_origin(self) -> bool:
         """True if cell is top-left in merged cell range."""
-        if self.gridSpan > 1 and not self.vMerge:
-            return True
-        return self.rowSpan > 1 and not self.hMerge
+        pass
 
     @property
     def is_spanned(self) -> bool:
         """True if cell is in merged cell range but not merge origin cell."""
-        return self.hMerge or self.vMerge
+        pass
 
     @property
     def marT(self) -> Length:
@@ -270,38 +207,38 @@ class CT_TableCell(BaseOxmlElement):
         Assigning |None| to any `marX` property clears that attribute from the element,
         effectively setting it to the default value.
         """
-        return self._get_marX("marT", Emu(45720))
+        pass
 
     @marT.setter
     def marT(self, value: Length | None):
-        self._set_marX("marT", value)
+        pass
 
     @property
     def marR(self) -> Length:
         """Right margin value represented in `marR` attribute."""
-        return self._get_marX("marR", Emu(91440))
+        pass
 
     @marR.setter
     def marR(self, value: Length | None):
-        self._set_marX("marR", value)
+        pass
 
     @property
     def marB(self) -> Length:
         """Bottom margin value represented in `marB` attribute."""
-        return self._get_marX("marB", Emu(45720))
+        pass
 
     @marB.setter
     def marB(self, value: Length | None):
-        self._set_marX("marB", value)
+        pass
 
     @property
     def marL(self) -> Length:
         """Left margin value represented in `marL` attribute."""
-        return self._get_marX("marL", Emu(91440))
+        pass
 
     @marL.setter
     def marL(self, value: Length | None):
-        self._set_marX("marL", value)
+        pass
 
     @classmethod
     def new(cls) -> CT_TableCell:
@@ -323,30 +260,24 @@ class CT_TableCell(BaseOxmlElement):
     @property
     def row_idx(self) -> int:
         """Offset of this cell's row in its table."""
-        return cast(CT_TableRow, self.getparent()).row_idx
+        pass
 
     @property
     def tbl(self) -> CT_Table:
         """Table element this cell belongs to."""
-        return cast(CT_Table, self.xpath("ancestor::a:tbl")[0])
+        pass
 
     @property
     def text(self) -> str:  # pyright: ignore[reportIncompatibleMethodOverride]
         """str text contained in cell"""
-        # ---note this shadows lxml _Element.text---
-        txBody = self.txBody
-        if txBody is None:
-            return ""
-        return "\n".join([p.text for p in txBody.p_lst])
+        pass
 
     def _get_marX(self, attr_name: str, default: Length) -> Length:
         """Generalized method to get margin values."""
-        if self.tcPr is None:
-            return Emu(default)
-        return Emu(int(self.tcPr.get(attr_name, default)))
+        pass
 
     def _new_txBody(self) -> CT_TextBody:
-        return CT_TextBody.new_a_txBody()
+        pass
 
     def _set_marX(self, marX: str, value: Length | None) -> None:
         """Set value of marX attribute on `a:tcPr` child element.
@@ -354,10 +285,7 @@ class CT_TableCell(BaseOxmlElement):
         If `marX` is |None|, the marX attribute is removed. `marX` is a string, one of `('marL',
         'marR', 'marT', 'marB')`.
         """
-        if value is None and self.tcPr is None:
-            return
-        tcPr = self.get_or_add_tcPr()
-        setattr(tcPr, marX, value)
+        pass
 
 
 class CT_TableCellProperties(BaseOxmlElement):
@@ -391,7 +319,7 @@ class CT_TableCellProperties(BaseOxmlElement):
     )
 
     def _new_gradFill(self):
-        return CT_GradientFillProperties.new_gradFill()
+        pass
 
 
 class CT_TableCol(BaseOxmlElement):
@@ -410,7 +338,7 @@ class CT_TableGrid(BaseOxmlElement):
 
     def add_gridCol(self, width: Length) -> CT_TableCol:
         """A newly appended `a:gridCol` child element having its `w` attribute set to `width`."""
-        return self._add_gridCol(w=width)
+        pass
 
 
 class CT_TableProperties(BaseOxmlElement):
@@ -435,15 +363,15 @@ class CT_TableRow(BaseOxmlElement):
 
     def add_tc(self) -> CT_TableCell:
         """A newly added minimal valid `a:tc` child element."""
-        return self._add_tc()
+        pass
 
     @property
     def row_idx(self) -> int:
         """Offset of this row in its table."""
-        return cast(CT_Table, self.getparent()).tr_lst.index(self)
+        pass
 
     def _new_tc(self):
-        return CT_TableCell.new()
+        pass
 
 
 class TcRange(object):
@@ -472,47 +400,29 @@ class TcRange(object):
     @lazyproperty
     def contains_merged_cell(self) -> bool:
         """True if one or more cells in range are part of a merged cell."""
-        for tc in self.iter_tcs():
-            if tc.gridSpan > 1:
-                return True
-            if tc.rowSpan > 1:
-                return True
-            if tc.hMerge:
-                return True
-            if tc.vMerge:
-                return True
-        return False
+        pass
 
     @lazyproperty
     def dimensions(self) -> tuple[int, int]:
         """(row_count, col_count) pair describing size of range."""
-        _, _, width, height = self._extents
-        return height, width
+        pass
 
     @lazyproperty
     def in_same_table(self):
         """True if both cells provided to constructor are in same table."""
-        if self._tc.tbl is self._other_tc.tbl:
-            return True
-        return False
+        pass
 
     def iter_except_left_col_tcs(self):
         """Generate each `a:tc` element not in leftmost column of range."""
-        for tr in self._tbl.tr_lst[self._top : self._bottom]:
-            for tc in tr.tc_lst[self._left + 1 : self._right]:
-                yield tc
+        pass
 
     def iter_except_top_row_tcs(self):
         """Generate each `a:tc` element in non-first rows of range."""
-        for tr in self._tbl.tr_lst[self._top + 1 : self._bottom]:
-            for tc in tr.tc_lst[self._left : self._right]:
-                yield tc
+        pass
 
     def iter_left_col_tcs(self):
         """Generate each `a:tc` element in leftmost column of range."""
-        col_idx = self._left
-        for tr in self._tbl.tr_lst[self._top : self._bottom]:
-            yield tr.tc_lst[col_idx]
+        pass
 
     def iter_tcs(self):
         """Generate each `a:tc` element in this range.
@@ -527,22 +437,16 @@ class TcRange(object):
 
     def iter_top_row_tcs(self):
         """Generate each `a:tc` element in topmost row of range."""
-        tr = self._tbl.tr_lst[self._top]
-        for tc in tr.tc_lst[self._left : self._right]:
-            yield tc
+        pass
 
     def move_content_to_origin(self):
         """Move all paragraphs in range to origin cell."""
-        tcs = list(self.iter_tcs())
-        origin_tc = tcs[0]
-        for spanned_tc in tcs[1:]:
-            origin_tc.append_ps_from(spanned_tc)
+        pass
 
     @lazyproperty
     def _bottom(self):
         """Index of row following last row of range"""
-        _, top, _, height = self._extents
-        return top + height
+        pass
 
     @lazyproperty
     def _extents(self) -> tuple[int, int, int, int]:
@@ -552,37 +456,24 @@ class TcRange(object):
         on construction, which may be in any of four configurations such as (top-left,
         bottom-right), (bottom-left, top-right), etc.
         """
-
-        def start_and_size(idx: int, other_idx: int) -> tuple[int, int]:
-            """Return beginning and length of range based on two indexes."""
-            return min(idx, other_idx), abs(idx - other_idx) + 1
-
-        tc, other_tc = self._tc, self._other_tc
-
-        left, width = start_and_size(tc.col_idx, other_tc.col_idx)
-        top, height = start_and_size(tc.row_idx, other_tc.row_idx)
-
-        return left, top, width, height
+        pass
 
     @lazyproperty
     def _left(self):
         """Index of leftmost column in range."""
-        left, _, _, _ = self._extents
-        return left
+        pass
 
     @lazyproperty
     def _right(self):
         """Index of column following the last column in range."""
-        left, _, width, _ = self._extents
-        return left + width
+        pass
 
     @lazyproperty
     def _tbl(self):
         """`a:tbl` element containing this cell range."""
-        return self._tc.tbl
+        pass
 
     @lazyproperty
     def _top(self):
         """Index of topmost row in range."""
-        _, top, _, _ = self._extents
-        return top
+        pass

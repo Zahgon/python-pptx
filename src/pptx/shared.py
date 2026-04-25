@@ -61,12 +61,12 @@ class ParentedElementProxy(ElementProxy):
 
         For example, the parent of a shape is generally the |SlideShapes| object that contains it.
         """
-        return self._parent
+        pass
 
     @property
     def part(self) -> XmlPart:
         """The package part containing this object."""
-        return self._parent.part
+        pass
 
 
 class PartElementProxy(ElementProxy):
@@ -79,4 +79,4 @@ class PartElementProxy(ElementProxy):
     @property
     def part(self) -> XmlPart:
         """The package part containing this object."""
-        return self._part
+        pass

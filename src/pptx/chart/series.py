@@ -28,7 +28,7 @@ class _BaseSeries(object):
         The |ChartFormat| instance for this series, providing access to shape
         properties such as fill and line.
         """
-        return ChartFormat(self._ser)
+        pass
 
     @property
     def index(self):
@@ -45,9 +45,7 @@ class _BaseSeries(object):
         column for this series in the Excel worksheet. It also appears as the
         label for this series in the legend.
         """
-        names = self._element.xpath("./c:tx//c:pt/c:v/text()")
-        name = names[0] if names else ""
-        return name
+        pass
 
 
 class _BaseCategorySeries(_BaseSeries):
@@ -56,7 +54,7 @@ class _BaseCategorySeries(_BaseSeries):
     @lazyproperty
     def data_labels(self):
         """|DataLabels| object controlling data labels for this series."""
-        return DataLabels(self._ser.get_or_add_dLbls())
+        pass
 
     @lazyproperty
     def points(self):
@@ -64,7 +62,7 @@ class _BaseCategorySeries(_BaseSeries):
         The |CategoryPoints| object providing access to individual data
         points in this series.
         """
-        return CategoryPoints(self._ser)
+        pass
 
     @property
     def values(self):
@@ -97,7 +95,7 @@ class _MarkerMixin(object):
         determines the appearance of markers for all points in this series
         that are not overridden by settings at the point level.
         """
-        return Marker(self._ser)
+        pass
 
 
 class AreaSeries(_BaseCategorySeries):
@@ -120,15 +118,11 @@ class BarSeries(_BaseCategorySeries):
         instead of light -> dark. The term "invert" here should be understood
         to mean "invert the *direction* of the *fill gradient*".
         """
-        invertIfNegative = self._element.invertIfNegative
-        if invertIfNegative is None:
-            return True
-        return invertIfNegative.val
+        pass
 
     @invert_if_negative.setter
     def invert_if_negative(self, value):
-        invertIfNegative = self._element.get_or_add_invertIfNegative()
-        invertIfNegative.val = value
+        pass
 
 
 class LineSeries(_BaseCategorySeries, _MarkerMixin):
@@ -144,14 +138,11 @@ class LineSeries(_BaseCategorySeries, _MarkerMixin):
         a continuous curve. If |False|, a series of straight line segments
         are used to connect the points.
         """
-        smooth = self._element.smooth
-        if smooth is None:
-            return True
-        return smooth.val
+        pass
 
     @smooth.setter
     def smooth(self, value):
-        self._element.get_or_add_smooth().val = value
+        pass
 
 
 class PieSeries(_BaseCategorySeries):
@@ -190,7 +181,7 @@ class XySeries(_BaseSeries, _MarkerMixin):
         The |XyPoints| object providing access to individual data points in
         this series.
         """
-        return XyPoints(self._ser)
+        pass
 
     @property
     def values(self):
@@ -213,7 +204,7 @@ class BubbleSeries(XySeries):
         objects used to discover and adjust the formatting and data labels of
         a data point.
         """
-        return BubblePoints(self._ser)
+        pass
 
 
 class SeriesCollection(Sequence):
@@ -239,20 +230,4 @@ def _SeriesFactory(ser):
     Return an instance of the appropriate subclass of _BaseSeries based on the
     xChart element *ser* appears in.
     """
-    xChart_tag = ser.getparent().tag
-
-    try:
-        SeriesCls = {
-            qn("c:areaChart"): AreaSeries,
-            qn("c:barChart"): BarSeries,
-            qn("c:bubbleChart"): BubbleSeries,
-            qn("c:doughnutChart"): PieSeries,
-            qn("c:lineChart"): LineSeries,
-            qn("c:pieChart"): PieSeries,
-            qn("c:radarChart"): RadarSeries,
-            qn("c:scatterChart"): XySeries,
-        }[xChart_tag]
-    except KeyError:
-        raise NotImplementedError("series class for %s not yet implemented" % xChart_tag)
-
-    return SeriesCls(ser)
+    pass

@@ -158,26 +158,23 @@ class _BaseShapes(ParentedElementProxy):
         collection creates a new |Slide| object each time a slide is accessed (e.g. `slide =
         prs.slides[0]`, so you must be careful to limit use to a single |Slide| object.
         """
-        return self._cached_max_shape_id is not None
+        pass
 
     @turbo_add_enabled.setter
     def turbo_add_enabled(self, value: bool):
-        enable = bool(value)
-        self._cached_max_shape_id = self._spTree.max_shape_id if enable else None
+        pass
 
     @staticmethod
     def _is_member_elm(shape_elm: ShapeElement) -> bool:
         """Return true if `shape_elm` represents a member of this collection, False otherwise."""
-        return True
+        pass
 
     def _iter_member_elms(self) -> Iterator[ShapeElement]:
         """Generate each child of the `p:spTree` element that corresponds to a shape.
 
         Items appear in XML document order.
         """
-        for shape_elm in self._spTree.iter_shape_elms():
-            if self._is_member_elm(shape_elm):
-                yield shape_elm
+        pass
 
     def _next_ph_name(self, ph_type: PP_PLACEHOLDER, id: int, orient: str) -> str:
         """Next unique placeholder name for placeholder shape of type `ph_type`.
@@ -211,16 +208,11 @@ class _BaseShapes(ParentedElementProxy):
         The returned id is 1 greater than the maximum shape id used so far. In practice, the
         minimum id is 2 because the spTree element is always assigned id="1".
         """
-        # ---presence of cached-max-shape-id indicates turbo mode is on---
-        if self._cached_max_shape_id is not None:
-            self._cached_max_shape_id += 1
-            return self._cached_max_shape_id
-
-        return self._spTree.max_shape_id + 1
+        pass
 
     def _shape_factory(self, shape_elm: ShapeElement) -> BaseShape:
         """Return an instance of the appropriate shape proxy class for `shape_elm`."""
-        return BaseShapeFactory(shape_elm, self)
+        pass
 
 
 class _BaseGroupShapes(_BaseShapes):
@@ -252,10 +244,7 @@ class _BaseGroupShapes(_BaseShapes):
         that graphic frame shape. The chart object may be accessed using the :attr:`chart`
         property of the returned |GraphicFrame| object.
         """
-        rId = self.part.add_chart_part(chart_type, chart_data)
-        graphicFrame = self._add_chart_graphicFrame(rId, x, y, cx, cy)
-        self._recalculate_extents()
-        return cast("Chart", self._shape_factory(graphicFrame))
+        pass
 
     def add_connector(
         self,
@@ -271,9 +260,7 @@ class _BaseGroupShapes(_BaseShapes):
         values are specified as EMU values. The returned connector is of type `connector_type` and
         has begin and end points as specified.
         """
-        cxnSp = self._add_cxnSp(connector_type, begin_x, begin_y, end_x, end_y)
-        self._recalculate_extents()
-        return cast(Connector, self._shape_factory(cxnSp))
+        pass
 
     def add_group_shape(self, shapes: Iterable[BaseShape] = ()) -> GroupShape:
         """Return a |GroupShape| object newly appended to this shape tree.
@@ -283,15 +270,7 @@ class _BaseGroupShapes(_BaseShapes):
         determined by the shapes it contains; its position and extents are recalculated each time
         a shape is added to it.
         """
-        shapes = tuple(shapes)
-        grpSp = self._element.add_grpSp()
-        for shape in shapes:
-            grpSp.insert_element_before(
-                shape._element, "p:extLst"  # pyright: ignore[reportPrivateUsage]
-            )
-        if shapes:
-            grpSp.recalculate_extents()
-        return cast(GroupShape, self._shape_factory(grpSp))
+        pass
 
     def add_ole_object(
         self,
@@ -333,22 +312,7 @@ class _BaseGroupShapes(_BaseShapes):
         these values are not as set by PowerPoint. This behavior may only manifest in the Windows
         version of PowerPoint.
         """
-        graphicFrame = _OleObjectElementCreator.graphicFrame(
-            self,
-            self._next_shape_id,
-            object_file,
-            prog_id,
-            left,
-            top,
-            width,
-            height,
-            icon_file,
-            icon_width,
-            icon_height,
-        )
-        self._spTree.append(graphicFrame)
-        self._recalculate_extents()
-        return cast(GraphicFrame, self._shape_factory(graphicFrame))
+        pass
 
     def add_picture(
         self,
@@ -367,10 +331,7 @@ class _BaseGroupShapes(_BaseShapes):
         If both are specified, the picture is stretched to fit, without regard to its native
         aspect ratio.
         """
-        image_part, rId = self.part.get_or_add_image_part(image_file)
-        pic = self._add_pic_from_image_part(image_part, rId, left, top, width, height)
-        self._recalculate_extents()
-        return cast(Picture, self._shape_factory(pic))
+        pass
 
     def add_shape(
         self, autoshape_type_id: MSO_SHAPE, left: Length, top: Length, width: Length, height: Length
@@ -381,19 +342,14 @@ class _BaseGroupShapes(_BaseShapes):
         specifying the type of shape to be added. The remaining arguments specify the new shape's
         position and size.
         """
-        autoshape_type = AutoShapeType(autoshape_type_id)
-        sp = self._add_sp(autoshape_type, left, top, width, height)
-        self._recalculate_extents()
-        return cast(Shape, self._shape_factory(sp))
+        pass
 
     def add_textbox(self, left: Length, top: Length, width: Length, height: Length) -> Shape:
         """Return newly added text box shape appended to this shape tree.
 
         The text box is of the specified size, located at the specified position on the slide.
         """
-        sp = self._add_textbox_sp(left, top, width, height)
-        self._recalculate_extents()
-        return cast(Shape, self._shape_factory(sp))
+        pass
 
     def build_freeform(
         self, start_x: float = 0, start_y: float = 0, scale: tuple[float, float] | float = 1.0
@@ -414,9 +370,7 @@ class _BaseGroupShapes(_BaseShapes):
         count of local coordinate units, e.g. `scale = Inches(1)/1000` for 1000 local units per
         inch.
         """
-        x_scale, y_scale = scale if isinstance(scale, tuple) else (scale, scale)
-
-        return FreeformBuilder.new(self, start_x, start_y, x_scale, y_scale)
+        pass
 
     def index(self, shape: BaseShape) -> int:
         """Return the index of `shape` in this sequence.
@@ -434,13 +388,7 @@ class _BaseGroupShapes(_BaseShapes):
         The `p:graphicFrame` element has the specified position and size and refers to the chart
         part identified by `rId`.
         """
-        shape_id = self._next_shape_id
-        name = "Chart %d" % (shape_id - 1)
-        graphicFrame = CT_GraphicalObjectFrame.new_chart_graphicFrame(
-            shape_id, name, rId, x, y, cx, cy
-        )
-        self._spTree.append(graphicFrame)
-        return graphicFrame
+        pass
 
     def _add_cxnSp(
         self,
@@ -455,14 +403,7 @@ class _BaseGroupShapes(_BaseShapes):
         The `p:cxnSp` element is for a connector of `connector_type` beginning at (`begin_x`,
         `begin_y`) and extending to (`end_x`, `end_y`).
         """
-        id_ = self._next_shape_id
-        name = "Connector %d" % (id_ - 1)
-
-        flipH, flipV = begin_x > end_x, begin_y > end_y
-        x, y = min(begin_x, end_x), min(begin_y, end_y)
-        cx, cy = abs(end_x - begin_x), abs(end_y - begin_y)
-
-        return self._element.add_cxnSp(id_, name, connector_type, x, y, cx, cy, flipH, flipV)
+        pass
 
     def _add_pic_from_image_part(
         self,
@@ -479,12 +420,7 @@ class _BaseGroupShapes(_BaseShapes):
         `x`, `y`, `cx`, and `cy`. The element is appended to the shape tree, causing it to be
         displayed first in z-order on the slide.
         """
-        id_ = self._next_shape_id
-        scaled_cx, scaled_cy = image_part.scale(cx, cy)
-        name = "Picture %d" % (id_ - 1)
-        desc = image_part.desc
-        pic = self._grpSp.add_pic(id_, name, desc, rId, x, y, scaled_cx, scaled_cy)
-        return pic
+        pass
 
     def _add_sp(
         self, autoshape_type: AutoShapeType, x: Length, y: Length, cx: Length, cy: Length
@@ -493,20 +429,14 @@ class _BaseGroupShapes(_BaseShapes):
 
         `p:sp` element is of `autoshape_type` at position (`x`, `y`) and of size (`cx`, `cy`).
         """
-        id_ = self._next_shape_id
-        name = "%s %d" % (autoshape_type.basename, id_ - 1)
-        sp = self._grpSp.add_autoshape(id_, name, autoshape_type.prst, x, y, cx, cy)
-        return sp
+        pass
 
     def _add_textbox_sp(self, x: Length, y: Length, cx: Length, cy: Length) -> CT_Shape:
         """Return newly-appended textbox `p:sp` element.
 
         Element has position (`x`, `y`) and size (`cx`, `cy`).
         """
-        id_ = self._next_shape_id
-        name = "TextBox %d" % (id_ - 1)
-        sp = self._spTree.add_textbox(id_, name, x, y, cx, cy)
-        return sp
+        pass
 
     def _recalculate_extents(self) -> None:
         """Adjust position and size to incorporate all contained shapes.
@@ -532,7 +462,7 @@ class GroupShapes(_BaseGroupShapes):
         This would typically be called when a contained shape is added, removed, or its position
         or size updated.
         """
-        self._grpSp.recalculate_extents()
+        pass
 
 
 class SlideShapes(_BaseGroupShapes):
@@ -571,20 +501,7 @@ class SlideShapes(_BaseGroupShapes):
         (`width`, `height`), and containing `movie_file`. Before the video is started,
         `poster_frame_image` is displayed as a placeholder for the video.
         """
-        movie_pic = _MoviePicElementCreator.new_movie_pic(
-            self,
-            self._next_shape_id,
-            movie_file,
-            left,
-            top,
-            width,
-            height,
-            poster_frame_image,
-            mime_type,
-        )
-        self._spTree.append(movie_pic)
-        self._add_video_timing(movie_pic)
-        return cast(GraphicFrame, self._shape_factory(movie_pic))
+        pass
 
     def add_table(
         self, rows: int, cols: int, left: Length, top: Length, width: Length, height: Length
@@ -596,8 +513,7 @@ class SlideShapes(_BaseGroupShapes):
         `height` is evenly distributed between the rows. Note that the `.table` property on the
         returned |GraphicFrame| shape must be used to access the enclosed |Table| object.
         """
-        graphicFrame = self._add_graphicFrame_containing_table(rows, cols, left, top, width, height)
-        return cast(GraphicFrame, self._shape_factory(graphicFrame))
+        pass
 
     def clone_layout_placeholders(self, slide_layout: SlideLayout) -> None:
         """Add placeholder shapes based on those in `slide_layout`.
@@ -605,13 +521,12 @@ class SlideShapes(_BaseGroupShapes):
         Z-order of placeholders is preserved. Latent placeholders (date, slide number, and footer)
         are not cloned.
         """
-        for placeholder in slide_layout.iter_cloneable_placeholders():
-            self.clone_placeholder(placeholder)
+        pass
 
     @property
     def placeholders(self) -> SlidePlaceholders:
         """Sequence of placeholder shapes in this slide."""
-        return self.parent.placeholders
+        pass
 
     @property
     def title(self) -> Shape | None:
@@ -619,19 +534,13 @@ class SlideShapes(_BaseGroupShapes):
 
         |None| if the slide has no title placeholder.
         """
-        for elm in self._spTree.iter_ph_elms():
-            if elm.ph_idx == 0:
-                return cast(Shape, self._shape_factory(elm))
-        return None
+        pass
 
     def _add_graphicFrame_containing_table(
         self, rows: int, cols: int, x: Length, y: Length, cx: Length, cy: Length
     ) -> CT_GraphicalObjectFrame:
         """Return a newly added `p:graphicFrame` element containing a table as specified."""
-        _id = self._next_shape_id
-        name = "Table %d" % (_id - 1)
-        graphicFrame = self._spTree.add_table(_id, name, rows, cols, x, y, cx, cy)
-        return graphicFrame
+        pass
 
     def _add_video_timing(self, pic: CT_Picture) -> None:
         """Add a `p:video` element under `p:sld/p:timing`.
@@ -639,13 +548,11 @@ class SlideShapes(_BaseGroupShapes):
         The element will refer to the specified `pic` element by its shape id, and cause the video
         play controls to appear for that video.
         """
-        sld = self._spTree.xpath("/p:sld")[0]
-        childTnLst = sld.get_or_add_childTnLst()
-        childTnLst.add_video(pic.shape_id)
+        pass
 
     def _shape_factory(self, shape_elm: ShapeElement) -> BaseShape:
         """Return an instance of the appropriate shape proxy class for `shape_elm`."""
-        return SlideShapeFactory(shape_elm, self)
+        pass
 
 
 class LayoutShapes(_BaseShapes):
@@ -657,7 +564,7 @@ class LayoutShapes(_BaseShapes):
 
     def _shape_factory(self, shape_elm: ShapeElement) -> BaseShape:
         """Return an instance of the appropriate shape proxy class for `shape_elm`."""
-        return _LayoutShapeFactory(shape_elm, self)
+        pass
 
 
 class MasterShapes(_BaseShapes):
@@ -669,7 +576,7 @@ class MasterShapes(_BaseShapes):
 
     def _shape_factory(self, shape_elm: ShapeElement) -> BaseShape:
         """Return an instance of the appropriate shape proxy class for `shape_elm`."""
-        return _MasterShapeFactory(shape_elm, self)
+        pass
 
 
 class NotesSlideShapes(_BaseShapes):
@@ -696,7 +603,7 @@ class NotesSlideShapes(_BaseShapes):
 
     def _shape_factory(self, shape_elm: ShapeElement) -> BaseShape:
         """Return appropriate shape object for `shape_elm` appearing on a notes slide."""
-        return _NotesSlideShapeFactory(shape_elm, self)
+        pass
 
 
 class BasePlaceholders(_BaseShapes):
@@ -710,7 +617,7 @@ class BasePlaceholders(_BaseShapes):
     @staticmethod
     def _is_member_elm(shape_elm: ShapeElement) -> bool:
         """True if `shape_elm` is a placeholder shape, False otherwise."""
-        return shape_elm.has_ph_elm
+        pass
 
 
 class LayoutPlaceholders(BasePlaceholders):
@@ -729,7 +636,7 @@ class LayoutPlaceholders(BasePlaceholders):
 
     def _shape_factory(self, shape_elm: ShapeElement) -> BaseShape:
         """Return an instance of the appropriate shape proxy class for `shape_elm`."""
-        return _LayoutShapeFactory(shape_elm, self)
+        pass
 
 
 class MasterPlaceholders(BasePlaceholders):
@@ -753,7 +660,7 @@ class MasterPlaceholders(BasePlaceholders):
         self, placeholder_elm: CT_Shape
     ) -> MasterPlaceholder:
         """Return an instance of the appropriate shape proxy class for `shape_elm`."""
-        return cast(MasterPlaceholder, _MasterShapeFactory(placeholder_elm, self))
+        pass
 
 
 class NotesSlidePlaceholders(MasterPlaceholders):
@@ -767,7 +674,7 @@ class NotesSlidePlaceholders(MasterPlaceholders):
         self, placeholder_elm: CT_Shape
     ) -> NotesSlidePlaceholder:
         """Return an instance of the appropriate placeholder proxy class for `placeholder_elm`."""
-        return cast(NotesSlidePlaceholder, _NotesSlideShapeFactory(placeholder_elm, self))
+        pass
 
 
 class SlidePlaceholders(ParentedElementProxy):
@@ -802,69 +709,32 @@ class SlidePlaceholders(ParentedElementProxy):
 
 def BaseShapeFactory(shape_elm: ShapeElement, parent: ProvidesPart) -> BaseShape:
     """Return an instance of the appropriate shape proxy class for `shape_elm`."""
-    tag = shape_elm.tag
-
-    if isinstance(shape_elm, CT_Picture):
-        videoFiles = shape_elm.xpath("./p:nvPicPr/p:nvPr/a:videoFile")
-        if videoFiles:
-            return Movie(shape_elm, parent)
-        return Picture(shape_elm, parent)
-
-    shape_cls = {
-        qn("p:cxnSp"): Connector,
-        qn("p:grpSp"): GroupShape,
-        qn("p:sp"): Shape,
-        qn("p:graphicFrame"): GraphicFrame,
-    }.get(tag, BaseShape)
-
-    return shape_cls(shape_elm, parent)  # pyright: ignore[reportArgumentType]
+    pass
 
 
 def _LayoutShapeFactory(shape_elm: ShapeElement, parent: ProvidesPart) -> BaseShape:
     """Return appropriate shape object for `shape_elm` on a slide layout."""
-    if isinstance(shape_elm, CT_Shape) and shape_elm.has_ph_elm:
-        return LayoutPlaceholder(shape_elm, parent)
-    return BaseShapeFactory(shape_elm, parent)
+    pass
 
 
 def _MasterShapeFactory(shape_elm: ShapeElement, parent: ProvidesPart) -> BaseShape:
     """Return appropriate shape object for `shape_elm` on a slide master."""
-    if isinstance(shape_elm, CT_Shape) and shape_elm.has_ph_elm:
-        return MasterPlaceholder(shape_elm, parent)
-    return BaseShapeFactory(shape_elm, parent)
+    pass
 
 
 def _NotesSlideShapeFactory(shape_elm: ShapeElement, parent: ProvidesPart) -> BaseShape:
     """Return appropriate shape object for `shape_elm` on a notes slide."""
-    if isinstance(shape_elm, CT_Shape) and shape_elm.has_ph_elm:
-        return NotesSlidePlaceholder(shape_elm, parent)
-    return BaseShapeFactory(shape_elm, parent)
+    pass
 
 
 def _SlidePlaceholderFactory(shape_elm: ShapeElement, parent: ProvidesPart):
     """Return a placeholder shape of the appropriate type for `shape_elm`."""
-    tag = shape_elm.tag
-    if tag == qn("p:sp"):
-        Constructor = {
-            PP_PLACEHOLDER.BITMAP: PicturePlaceholder,
-            PP_PLACEHOLDER.CHART: ChartPlaceholder,
-            PP_PLACEHOLDER.PICTURE: PicturePlaceholder,
-            PP_PLACEHOLDER.TABLE: TablePlaceholder,
-        }.get(shape_elm.ph_type, SlidePlaceholder)
-    elif tag == qn("p:graphicFrame"):
-        Constructor = PlaceholderGraphicFrame
-    elif tag == qn("p:pic"):
-        Constructor = PlaceholderPicture
-    else:
-        Constructor = BaseShapeFactory
-    return Constructor(shape_elm, parent)  # pyright: ignore[reportArgumentType]
+    pass
 
 
 def SlideShapeFactory(shape_elm: ShapeElement, parent: ProvidesPart) -> BaseShape:
     """Return appropriate shape object for `shape_elm` on a slide."""
-    if shape_elm.has_ph_elm:
-        return _SlidePlaceholderFactory(shape_elm, parent)
-    return BaseShapeFactory(shape_elm, parent)
+    pass
 
 
 class _MoviePicElementCreator(object):
@@ -914,7 +784,7 @@ class _MoviePicElementCreator(object):
         If `mime_type` is None, 'video/unknown' is used. If `poster_frame_file` is None, the
         default "media loudspeaker" image is used.
         """
-        return cls(shapes, shape_id, movie_file, x, y, cx, cy, poster_frame_image, mime_type)._pic
+        pass
 
     @property
     def _media_rId(self) -> str:
@@ -923,22 +793,12 @@ class _MoviePicElementCreator(object):
         For historical reasons, there are two relationships to the same part; one is the video rId
         and the other is the media rId.
         """
-        return self._video_part_rIds[0]
+        pass
 
     @lazyproperty
     def _pic(self) -> CT_Picture:
         """Return the new `p:pic` element referencing the video."""
-        return CT_Picture.new_video_pic(
-            self._shape_id,
-            self._shape_name,
-            self._video_rId,
-            self._media_rId,
-            self._poster_frame_rId,
-            self._x,
-            self._y,
-            self._cx,
-            self._cy,
-        )
+        pass
 
     @lazyproperty
     def _poster_frame_image_file(self) -> str | IO[bytes]:
@@ -946,10 +806,7 @@ class _MoviePicElementCreator(object):
 
         If no poster frame file is provided, the default "media loudspeaker" image is used.
         """
-        poster_frame_file = self._poster_frame_file
-        if poster_frame_file is None:
-            return io.BytesIO(SPEAKER_IMAGE_BYTES)
-        return poster_frame_file
+        pass
 
     @lazyproperty
     def _poster_frame_rId(self) -> str:
@@ -957,8 +814,7 @@ class _MoviePicElementCreator(object):
 
         The poster frame is the image used to represent the video before it's played.
         """
-        _, poster_frame_rId = self._slide_part.get_or_add_image_part(self._poster_frame_image_file)
-        return poster_frame_rId
+        pass
 
     @property
     def _shape_name(self) -> str:
@@ -966,17 +822,17 @@ class _MoviePicElementCreator(object):
 
         A movie shape is named with the base filename of the video.
         """
-        return self._video.filename
+        pass
 
     @property
     def _slide_part(self) -> SlidePart:
         """Return SlidePart object for slide containing this movie."""
-        return self._shapes.part
+        pass
 
     @lazyproperty
     def _video(self) -> Video:
         """Return a |Video| object containing the movie file."""
-        return Video.from_path_or_file_like(self._movie_file, self._mime_type)
+        pass
 
     @lazyproperty
     def _video_part_rIds(self) -> tuple[str, str]:
@@ -984,8 +840,7 @@ class _MoviePicElementCreator(object):
 
         This is where the media part and its relationships to the slide are actually created.
         """
-        media_rId, video_rId = self._slide_part.get_or_add_video_media_part(self._video)
-        return media_rId, video_rId
+        pass
 
     @property
     def _video_rId(self) -> str:
@@ -994,7 +849,7 @@ class _MoviePicElementCreator(object):
         For historical reasons, there are two relationships to the same part; one is the video rId
         and the other is the media rId.
         """
-        return self._video_part_rIds[1]
+        pass
 
 
 class _OleObjectElementCreator(object):
@@ -1049,62 +904,22 @@ class _OleObjectElementCreator(object):
         icon_height: Length | None,
     ) -> CT_GraphicalObjectFrame:
         """Return new `p:graphicFrame` element containing embedded `ole_object_file`."""
-        return cls(
-            shapes,
-            shape_id,
-            ole_object_file,
-            prog_id,
-            x,
-            y,
-            cx,
-            cy,
-            icon_file,
-            icon_width,
-            icon_height,
-        )._graphicFrame
+        pass
 
     @lazyproperty
     def _graphicFrame(self) -> CT_GraphicalObjectFrame:
         """Newly-created `p:graphicFrame` element referencing embedded OLE-object."""
-        return CT_GraphicalObjectFrame.new_ole_object_graphicFrame(
-            self._shape_id,
-            self._shape_name,
-            self._ole_object_rId,
-            self._progId,
-            self._icon_rId,
-            self._x,
-            self._y,
-            self._cx,
-            self._cy,
-            self._icon_width,
-            self._icon_height,
-        )
+        pass
 
     @lazyproperty
     def _cx(self) -> Length:
         """Emu object specifying width of "show-as-icon" image for OLE shape."""
-        # --- a user-specified width overrides any default ---
-        if self._cx_arg is not None:
-            return self._cx_arg
-
-        # --- the default width is specified by the PROG_ID member if prog_id is one,
-        # --- otherwise it gets the default icon width.
-        return (
-            Emu(self._prog_id_arg.width) if isinstance(self._prog_id_arg, PROG_ID) else Emu(965200)
-        )
+        pass
 
     @lazyproperty
     def _cy(self) -> Length:
         """Emu object specifying height of "show-as-icon" image for OLE shape."""
-        # --- a user-specified width overrides any default ---
-        if self._cy_arg is not None:
-            return self._cy_arg
-
-        # --- the default height is specified by the PROG_ID member if prog_id is one,
-        # --- otherwise it gets the default icon height.
-        return (
-            Emu(self._prog_id_arg.height) if isinstance(self._prog_id_arg, PROG_ID) else Emu(609600)
-        )
+        pass
 
     @lazyproperty
     def _icon_height(self) -> Length:
@@ -1116,7 +931,7 @@ class _OleObjectElementCreator(object):
         The correct size can be determined by creating an example PPTX using PowerPoint and then
         inspecting the XML of the OLE graphics-frame (p:oleObj.imgH).
         """
-        return self._icon_height_arg if self._icon_height_arg is not None else Emu(609600)
+        pass
 
     @lazyproperty
     def _icon_image_file(self) -> str | IO[bytes]:
@@ -1124,26 +939,12 @@ class _OleObjectElementCreator(object):
 
         This can be either a str path or a file-like object (io.BytesIO typically).
         """
-        # --- a user-specified icon overrides any default ---
-        if self._icon_file_arg is not None:
-            return self._icon_file_arg
-
-        # --- A prog_id belonging to PROG_ID gets its icon filename from there. A
-        # --- user-specified (str) prog_id gets the default icon.
-        icon_filename = (
-            self._prog_id_arg.icon_filename
-            if isinstance(self._prog_id_arg, PROG_ID)
-            else "generic-icon.emf"
-        )
-
-        _thisdir = os.path.split(__file__)[0]
-        return os.path.abspath(os.path.join(_thisdir, "..", "templates", icon_filename))
+        pass
 
     @lazyproperty
     def _icon_rId(self) -> str:
         """str rId like "rId7" of rel to icon (image) representing OLE-object part."""
-        _, rId = self._slide_part.get_or_add_image_part(self._icon_image_file)
-        return rId
+        pass
 
     @lazyproperty
     def _icon_width(self) -> Length:
@@ -1152,7 +953,7 @@ class _OleObjectElementCreator(object):
         This must be specified when a custom icon is used, to avoid stretching of the image and
         possible undesired resizing by PowerPoint when the OLE shape is double-clicked to open it.
         """
-        return self._icon_width_arg if self._icon_width_arg is not None else Emu(965200)
+        pass
 
     @lazyproperty
     def _ole_object_rId(self) -> str:
@@ -1160,9 +961,7 @@ class _OleObjectElementCreator(object):
 
         This is where the ole_object part and its relationship to the slide are actually created.
         """
-        return self._slide_part.add_embedded_ole_object_part(
-            self._prog_id_arg, self._ole_object_file
-        )
+        pass
 
     @lazyproperty
     def _progId(self) -> str:
@@ -1170,11 +969,7 @@ class _OleObjectElementCreator(object):
 
         This value appears in the `progId` attribute of the `p:oleObj` element for the object.
         """
-        prog_id_arg = self._prog_id_arg
-
-        # --- member of PROG_ID enumeration knows its progId keyphrase, otherwise caller
-        # --- has specified it explicitly (as str)
-        return prog_id_arg.progId if isinstance(prog_id_arg, PROG_ID) else prog_id_arg
+        pass
 
     @lazyproperty
     def _shape_name(self) -> str:
@@ -1182,9 +977,9 @@ class _OleObjectElementCreator(object):
 
         The name is formed from the prefix "Object " and the shape-id decremented by 1.
         """
-        return "Object %d" % (self._shape_id - 1)
+        pass
 
     @lazyproperty
     def _slide_part(self) -> SlidePart:
         """SlidePart object for this slide."""
-        return self._shapes.part
+        pass

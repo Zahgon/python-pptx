@@ -113,29 +113,21 @@ class _Font(object):
         """
         |True| if this font is marked as a bold style of its font family.
         """
-        try:
-            return self._tables["head"].is_bold
-        except KeyError:
-            # some files don't have a head table
-            return False
+        pass
 
     @property
     def is_italic(self):
         """
         |True| if this font is marked as an italic style of its font family.
         """
-        try:
-            return self._tables["head"].is_italic
-        except KeyError:
-            # some files don't have a head table
-            return False
+        pass
 
     @classmethod
     def open(cls, font_file_path):
         """
         Return a |_Font| instance loaded from *font_file_path*.
         """
-        return cls(_Stream.open(font_file_path))
+        pass
 
     @property
     def family_name(self):
@@ -145,7 +137,7 @@ class _Font(object):
         'Bold Italic'. This attribute is only the common base name shared by
         all fonts in the family.
         """
-        return self._tables["name"].family_name
+        pass
 
     @lazyproperty
     def _fields(self):
@@ -153,21 +145,14 @@ class _Font(object):
 
         Also known as the offset table.
         """
-        # sfnt_version, tbl_count, search_range, entry_selector, range_shift
-        return self._stream.read_fields(">4sHHHH", 0)
+        pass
 
     def _iter_table_records(self):
         """
         Generate a (tag, offset, length) 3-tuple for each of the tables in
         this font file.
         """
-        count = self._table_count
-        bufr = self._stream.read(offset=12, length=count * 16)
-        tmpl = ">4sLLL"
-        for i in range(count):
-            offset = i * 16
-            tag, checksum, off, len_ = unpack_from(tmpl, bufr, offset)
-            yield tag.decode("utf-8"), off, len_
+        pass
 
     @lazyproperty
     def _tables(self):
@@ -175,17 +160,14 @@ class _Font(object):
         A mapping of OpenType table tag, e.g. 'name', to a table object
         providing access to the contents of that table.
         """
-        return dict(
-            (tag, _TableFactory(tag, self._stream, off, len_))
-            for tag, off, len_ in self._iter_table_records()
-        )
+        pass
 
     @property
     def _table_count(self):
         """
         The number of tables in this OpenType font file.
         """
-        return self._fields[1]
+        pass
 
 
 class _Stream(object):
@@ -197,14 +179,14 @@ class _Stream(object):
     @classmethod
     def open(cls, path):
         """Return |_Stream| providing binary access to contents of file at `path`."""
-        return cls(open(path, "rb"))
+        pass
 
     def close(self):
         """
         Close the wrapped file. Using the stream after closing raises an
         exception.
         """
-        self._file.close()
+        pass
 
     def read(self, offset, length):
         """
@@ -218,9 +200,7 @@ class _Stream(object):
         Return a tuple containing the C-struct fields in this stream
         specified by *template* and starting at *offset*.
         """
-        self._file.seek(offset)
-        bufr = self._file.read(calcsize(template))
-        return unpack_from(template, bufr)
+        pass
 
 
 class _BaseTable(object):
@@ -249,28 +229,28 @@ class _HeadTable(_BaseTable):
         """
         |True| if this font is marked as having emboldened characters.
         """
-        return bool(self._macStyle & 1)
+        pass
 
     @property
     def is_italic(self):
         """
         |True| if this font is marked as having italicized characters.
         """
-        return bool(self._macStyle & 2)
+        pass
 
     @lazyproperty
     def _fields(self):
         """
         A 17-tuple containing the fields in this table.
         """
-        return self._stream.read_fields(">4s4sLLHHqqhhhhHHHHH", self._offset)
+        pass
 
     @property
     def _macStyle(self):
         """
         The unsigned short value of the 'macStyle' field in this head table.
         """
-        return self._fields[12]
+        pass
 
 
 class _NameTable(_BaseTable):
@@ -287,16 +267,7 @@ class _NameTable(_BaseTable):
         """
         The name of the typeface family for this font, e.g. 'Arial'.
         """
-
-        def find_first(dict_, keys, default=None):
-            for key in keys:
-                value = dict_.get(key)
-                if value is not None:
-                    return value
-            return default
-
-        # keys for Unicode, Mac, and Windows family name, respectively
-        return find_first(self._names, ((0, 1), (1, 1), (3, 1)))
+        pass
 
     @staticmethod
     def _decode_name(raw_name, platform_id, encoding_id):
@@ -304,15 +275,7 @@ class _NameTable(_BaseTable):
         Return the unicode name decoded from *raw_name* using the encoding
         implied by the combination of *platform_id* and *encoding_id*.
         """
-        if platform_id == 1:
-            # reject non-Roman Mac font names
-            if encoding_id != 0:
-                return None
-            return raw_name.decode("mac-roman")
-        elif platform_id in (0, 3):
-            return raw_name.decode("utf-16-be")
-        else:
-            return None
+        pass
 
     def _iter_names(self):
         """Generate a key/value pair for each name in this table.
@@ -320,14 +283,7 @@ class _NameTable(_BaseTable):
         The key is a (platform_id, name_id) 2-tuple and the value is the unicode text
         corresponding to that key.
         """
-        table_format, count, strings_offset = self._table_header
-        table_bytes = self._table_bytes
-
-        for idx in range(count):
-            platform_id, name_id, name = self._read_name(table_bytes, idx, strings_offset)
-            if name is None:
-                continue
-            yield ((platform_id, name_id), name)
+        pass
 
     @staticmethod
     def _name_header(bufr, idx):
@@ -335,8 +291,7 @@ class _NameTable(_BaseTable):
         The (platform_id, encoding_id, language_id, name_id, length,
         name_str_offset) 6-tuple encoded in each name record C-struct.
         """
-        name_hdr_offset = 6 + idx * 12
-        return unpack_from(">HHHHHH", bufr, name_hdr_offset)
+        pass
 
     @staticmethod
     def _raw_name_string(bufr, strings_offset, str_offset, length):
@@ -344,9 +299,7 @@ class _NameTable(_BaseTable):
         Return the *length* bytes comprising the encoded string in *bufr* at
         *str_offset* in the strings area beginning at *strings_offset*.
         """
-        offset = strings_offset + str_offset
-        tmpl = "%ds" % length
-        return unpack_from(tmpl, bufr, offset)[0]
+        pass
 
     def _read_name(self, bufr, idx, strings_offset):
         """Return a (platform_id, name_id, name) 3-tuple for name at `idx` in `bufr`.
@@ -355,9 +308,7 @@ class _NameTable(_BaseTable):
         `idx` position in `bufr`. `strings_offset` is the index into `bufr` where actual
         name strings begin. The returned name is a unicode string.
         """
-        platform_id, enc_id, lang_id, name_id, length, str_offset = self._name_header(bufr, idx)
-        name = self._read_name_text(bufr, platform_id, enc_id, strings_offset, str_offset, length)
-        return platform_id, name_id, name
+        pass
 
     def _read_name_text(
         self, bufr, platform_id, encoding_id, strings_offset, name_str_offset, length
@@ -366,15 +317,14 @@ class _NameTable(_BaseTable):
         Return the unicode name string at *name_str_offset* or |None| if
         decoding its format is not supported.
         """
-        raw_name = self._raw_name_string(bufr, strings_offset, name_str_offset, length)
-        return self._decode_name(raw_name, platform_id, encoding_id)
+        pass
 
     @lazyproperty
     def _table_bytes(self):
         """
         The binary contents of this name table.
         """
-        return self._stream.read(self._offset, self._length)
+        pass
 
     @property
     def _table_header(self):
@@ -382,12 +332,12 @@ class _NameTable(_BaseTable):
         The (table_format, name_count, strings_offset) 3-tuple contained
         in the header of this table.
         """
-        return unpack_from(">HHH", self._table_bytes)
+        pass
 
     @lazyproperty
     def _names(self):
         """A mapping of (platform_id, name_id) keys to string names for this font."""
-        return dict(self._iter_names())
+        pass
 
 
 def _TableFactory(tag, stream, offset, length):
@@ -395,5 +345,4 @@ def _TableFactory(tag, stream, offset, length):
     Return an instance of |Table| appropriate to *tag*, loaded from
     *font_file* with content of *length* starting at *offset*.
     """
-    TableClass = {"head": _HeadTable, "name": _NameTable}.get(tag, _BaseTable)
-    return TableClass(tag, stream, offset, length)
+    pass

@@ -38,11 +38,11 @@ class _InheritsDimensions(object):
         height if it has one, otherwise the height of its parent layout
         placeholder.
         """
-        return self._effective_value("height")
+        pass
 
     @height.setter
     def height(self, value):
-        self._element.cy = value
+        pass
 
     @property
     def left(self):
@@ -51,11 +51,11 @@ class _InheritsDimensions(object):
         left if it has one, otherwise the left of its parent layout
         placeholder.
         """
-        return self._effective_value("left")
+        pass
 
     @left.setter
     def left(self, value):
-        self._element.x = value
+        pass
 
     @property
     def shape_type(self):
@@ -64,7 +64,7 @@ class _InheritsDimensions(object):
         Unconditionally ``MSO_SHAPE_TYPE.PLACEHOLDER`` in this case.
         Read-only.
         """
-        return MSO_SHAPE_TYPE.PLACEHOLDER
+        pass
 
     @property
     def top(self):
@@ -73,11 +73,11 @@ class _InheritsDimensions(object):
         top if it has one, otherwise the top of its parent layout
         placeholder.
         """
-        return self._effective_value("top")
+        pass
 
     @top.setter
     def top(self, value):
-        self._element.y = value
+        pass
 
     @property
     def width(self):
@@ -86,11 +86,11 @@ class _InheritsDimensions(object):
         width if it has one, otherwise the width of its parent layout
         placeholder.
         """
-        return self._effective_value("width")
+        pass
 
     @width.setter
     def width(self, value):
-        self._element.cx = value
+        pass
 
     @property
     def _base_placeholder(self):
@@ -107,21 +107,14 @@ class _InheritsDimensions(object):
         directly-applied value if it has one, otherwise the value on the
         layout placeholder it inherits from.
         """
-        directly_applied_value = getattr(super(_InheritsDimensions, self), attr_name)
-        if directly_applied_value is not None:
-            return directly_applied_value
-        return self._inherited_value(attr_name)
+        pass
 
     def _inherited_value(self, attr_name):
         """
         Return the attribute value, e.g. 'width' of the base placeholder this
         placeholder inherits from.
         """
-        base_placeholder = self._base_placeholder
-        if base_placeholder is None:
-            return None
-        inherited_value = getattr(base_placeholder, attr_name)
-        return inherited_value
+        pass
 
 
 class _BaseSlidePlaceholder(_InheritsDimensions, Shape):
@@ -136,7 +129,7 @@ class _BaseSlidePlaceholder(_InheritsDimensions, Shape):
         Boolean indicating whether this shape is a placeholder.
         Unconditionally |True| in this case.
         """
-        return True
+        pass
 
     @property
     def shape_type(self):
@@ -145,7 +138,7 @@ class _BaseSlidePlaceholder(_InheritsDimensions, Shape):
         Unconditionally ``MSO_SHAPE_TYPE.PLACEHOLDER`` in this case.
         Read-only.
         """
-        return MSO_SHAPE_TYPE.PLACEHOLDER
+        pass
 
     @property
     def _base_placeholder(self):
@@ -154,8 +147,7 @@ class _BaseSlidePlaceholder(_InheritsDimensions, Shape):
         Not to be confused with an instance of |BasePlaceholder|
         (necessarily).
         """
-        layout, idx = self.part.slide_layout, self._element.ph_idx
-        return layout.placeholders.get(idx=idx)
+        pass
 
     def _replace_placeholder_with(self, element):
         """
@@ -165,10 +157,7 @@ class _BaseSlidePlaceholder(_InheritsDimensions, Shape):
         (including a method call) on this placeholder after this call raises
         |AttributeError|.
         """
-        element._nvXxPr.nvPr._insert_ph(self._element.ph)
-        self._element.addprevious(element)
-        self._element.getparent().remove(self._element)
-        self._element = None
+        pass
 
 
 class BasePlaceholder(Shape):
@@ -188,28 +177,28 @@ class BasePlaceholder(Shape):
         """
         Integer placeholder 'idx' attribute, e.g. 0
         """
-        return self._sp.ph_idx
+        pass
 
     @property
     def orient(self):
         """
         Placeholder orientation, e.g. ST_Direction.HORZ
         """
-        return self._sp.ph_orient
+        pass
 
     @property
     def ph_type(self):
         """
         Placeholder type, e.g. PP_PLACEHOLDER.CENTER_TITLE
         """
-        return self._sp.ph_type
+        pass
 
     @property
     def sz(self):
         """
         Placeholder 'sz' attribute, e.g. ST_PlaceholderSize.FULL
         """
-        return self._sp.ph_sz
+        pass
 
 
 class LayoutPlaceholder(_InheritsDimensions, Shape):
@@ -226,24 +215,7 @@ class LayoutPlaceholder(_InheritsDimensions, Shape):
         """
         Return the master placeholder this layout placeholder inherits from.
         """
-        base_ph_type = {
-            PP_PLACEHOLDER.BODY: PP_PLACEHOLDER.BODY,
-            PP_PLACEHOLDER.CHART: PP_PLACEHOLDER.BODY,
-            PP_PLACEHOLDER.BITMAP: PP_PLACEHOLDER.BODY,
-            PP_PLACEHOLDER.CENTER_TITLE: PP_PLACEHOLDER.TITLE,
-            PP_PLACEHOLDER.ORG_CHART: PP_PLACEHOLDER.BODY,
-            PP_PLACEHOLDER.DATE: PP_PLACEHOLDER.DATE,
-            PP_PLACEHOLDER.FOOTER: PP_PLACEHOLDER.FOOTER,
-            PP_PLACEHOLDER.MEDIA_CLIP: PP_PLACEHOLDER.BODY,
-            PP_PLACEHOLDER.OBJECT: PP_PLACEHOLDER.BODY,
-            PP_PLACEHOLDER.PICTURE: PP_PLACEHOLDER.BODY,
-            PP_PLACEHOLDER.SLIDE_NUMBER: PP_PLACEHOLDER.SLIDE_NUMBER,
-            PP_PLACEHOLDER.SUBTITLE: PP_PLACEHOLDER.BODY,
-            PP_PLACEHOLDER.TABLE: PP_PLACEHOLDER.BODY,
-            PP_PLACEHOLDER.TITLE: PP_PLACEHOLDER.TITLE,
-        }[self._element.ph_type]
-        slide_master = self.part.slide_master
-        return slide_master.placeholders.get(base_ph_type, None)
+        pass
 
 
 class MasterPlaceholder(BasePlaceholder):
@@ -265,9 +237,7 @@ class NotesSlidePlaceholder(_InheritsDimensions, Shape):
         inherits from, or |None| if no placeholder of the matching type is
         present.
         """
-        notes_master = self.part.notes_master
-        ph_type = self.element.ph_type
-        return notes_master.placeholders.get(ph_type=ph_type)
+        pass
 
 
 class SlidePlaceholder(_BaseSlidePlaceholder):
@@ -292,20 +262,14 @@ class ChartPlaceholder(_BaseSlidePlaceholder):
         :attr:`~.PlaceholderGraphicFrame.chart` property of the returned
         |PlaceholderGraphicFrame| object.
         """
-        rId = self.part.add_chart_part(chart_type, chart_data)
-        graphicFrame = self._new_chart_graphicFrame(
-            rId, self.left, self.top, self.width, self.height
-        )
-        self._replace_placeholder_with(graphicFrame)
-        return PlaceholderGraphicFrame(graphicFrame, self._parent)
+        pass
 
     def _new_chart_graphicFrame(self, rId, x, y, cx, cy):
         """
         Return a newly created `p:graphicFrame` element having the specified
         position and size and containing the chart identified by *rId*.
         """
-        id_, name = self.shape_id, self.name
-        return CT_GraphicalObjectFrame.new_chart_graphicFrame(id_, name, rId, x, y, cx, cy)
+        pass
 
 
 class PicturePlaceholder(_BaseSlidePlaceholder):
@@ -320,9 +284,7 @@ class PicturePlaceholder(_BaseSlidePlaceholder):
         value of its :attr:`~._BaseSlidePlaceholder.shape_type` property is
         `MSO_SHAPE_TYPE.PLACEHOLDER` instead of `MSO_SHAPE_TYPE.PICTURE`.
         """
-        pic = self._new_placeholder_pic(image_file)
-        self._replace_placeholder_with(pic)
-        return PlaceholderPicture(pic, self._parent)
+        pass
 
     def _new_placeholder_pic(self, image_file):
         """
@@ -331,20 +293,14 @@ class PicturePlaceholder(_BaseSlidePlaceholder):
         having an `a:xfrm` element, allowing its extents to be inherited from
         its layout placeholder.
         """
-        rId, desc, image_size = self._get_or_add_image(image_file)
-        shape_id, name = self.shape_id, self.name
-        pic = CT_Picture.new_ph_pic(shape_id, name, desc, rId)
-        pic.crop_to_fit(image_size, (self.width, self.height))
-        return pic
+        pass
 
     def _get_or_add_image(self, image_file):
         """
         Return an (rId, description, image_size) 3-tuple identifying the
         related image part containing *image_file* and describing the image.
         """
-        image_part, rId = self.part.get_or_add_image_part(image_file)
-        desc, image_size = image_part.desc, image_part._px_size
-        return rId, desc, image_size
+        pass
 
 
 class PlaceholderGraphicFrame(GraphicFrame):
@@ -358,7 +314,7 @@ class PlaceholderGraphicFrame(GraphicFrame):
         Boolean indicating whether this shape is a placeholder.
         Unconditionally |True| in this case.
         """
-        return True
+        pass
 
 
 class PlaceholderPicture(_InheritsDimensions, Picture):
@@ -371,8 +327,7 @@ class PlaceholderPicture(_InheritsDimensions, Picture):
         """
         Return the layout placeholder this picture placeholder inherits from.
         """
-        layout, idx = self.part.slide_layout, self._element.ph_idx
-        return layout.placeholders.get(idx=idx)
+        pass
 
 
 class TablePlaceholder(_BaseSlidePlaceholder):
@@ -390,9 +345,7 @@ class TablePlaceholder(_BaseSlidePlaceholder):
         :attr:`~.PlaceholderGraphicFrame.table` property of the returned
         |PlaceholderGraphicFrame| object.
         """
-        graphicFrame = self._new_placeholder_table(rows, cols)
-        self._replace_placeholder_with(graphicFrame)
-        return PlaceholderGraphicFrame(graphicFrame, self._parent)
+        pass
 
     def _new_placeholder_table(self, rows, cols):
         """
@@ -401,7 +354,4 @@ class TablePlaceholder(_BaseSlidePlaceholder):
         of this placeholder and having its same width. The table's height is
         determined by the number of rows.
         """
-        shape_id, name, height = self.shape_id, self.name, Emu(rows * 370840)
-        return CT_GraphicalObjectFrame.new_table_graphicFrame(
-            shape_id, name, rows, cols, self.left, self.top, self.width, height
-        )
+        pass

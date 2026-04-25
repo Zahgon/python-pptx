@@ -33,7 +33,7 @@ class _BaseAxis(object):
         present. Use :attr:`has_title` to test for presence of axis title
         non-destructively.
         """
-        return AxisTitle(self._element.get_or_add_title())
+        pass
 
     @lazyproperty
     def format(self):
@@ -41,7 +41,7 @@ class _BaseAxis(object):
         The |ChartFormat| object providing access to the shape formatting
         properties of this axis, such as its line color and fill.
         """
-        return ChartFormat(self._element)
+        pass
 
     @property
     def has_major_gridlines(self):
@@ -51,16 +51,11 @@ class _BaseAxis(object):
         causes major gridlines to be displayed. Assigning |False| causes them
         to be removed.
         """
-        if self._element.majorGridlines is None:
-            return False
-        return True
+        pass
 
     @has_major_gridlines.setter
     def has_major_gridlines(self, value):
-        if bool(value) is True:
-            self._element.get_or_add_majorGridlines()
-        else:
-            self._element._remove_majorGridlines()
+        pass
 
     @property
     def has_minor_gridlines(self):
@@ -70,16 +65,11 @@ class _BaseAxis(object):
         causes minor gridlines to be displayed. Assigning |False| causes them
         to be removed.
         """
-        if self._element.minorGridlines is None:
-            return False
-        return True
+        pass
 
     @has_minor_gridlines.setter
     def has_minor_gridlines(self, value):
-        if bool(value) is True:
-            self._element.get_or_add_minorGridlines()
-        else:
-            self._element._remove_minorGridlines()
+        pass
 
     @property
     def has_title(self):
@@ -89,16 +79,11 @@ class _BaseAxis(object):
         causes an axis title to be added if not already present. Assigning
         |False| causes any existing title to be deleted.
         """
-        if self._element.title is None:
-            return False
-        return True
+        pass
 
     @has_title.setter
     def has_title(self, value):
-        if bool(value) is True:
-            self._element.get_or_add_title()
-        else:
-            self._element._remove_title()
+        pass
 
     @lazyproperty
     def major_gridlines(self):
@@ -106,7 +91,7 @@ class _BaseAxis(object):
         The |MajorGridlines| object representing the major gridlines for
         this axis.
         """
-        return MajorGridlines(self._element)
+        pass
 
     @property
     def major_tick_mark(self):
@@ -114,17 +99,11 @@ class _BaseAxis(object):
         Read/write :ref:`XlTickMark` value specifying the type of major tick
         mark to display on this axis.
         """
-        majorTickMark = self._element.majorTickMark
-        if majorTickMark is None:
-            return XL_TICK_MARK.CROSS
-        return majorTickMark.val
+        pass
 
     @major_tick_mark.setter
     def major_tick_mark(self, value):
-        self._element._remove_majorTickMark()
-        if value is XL_TICK_MARK.CROSS:
-            return
-        self._element._add_majorTickMark(val=value)
+        pass
 
     @property
     def maximum_scale(self):
@@ -135,12 +114,11 @@ class _BaseAxis(object):
         upper limit should be determined automatically based on the range of
         data point values associated with the axis.
         """
-        return self._element.scaling.maximum
+        pass
 
     @maximum_scale.setter
     def maximum_scale(self, value):
-        scaling = self._element.scaling
-        scaling.maximum = value
+        pass
 
     @property
     def minimum_scale(self):
@@ -151,12 +129,11 @@ class _BaseAxis(object):
         be determined automatically based on the range of data point values
         associated with the axis.
         """
-        return self._element.scaling.minimum
+        pass
 
     @minimum_scale.setter
     def minimum_scale(self, value):
-        scaling = self._element.scaling
-        scaling.minimum = value
+        pass
 
     @property
     def minor_tick_mark(self):
@@ -164,17 +141,11 @@ class _BaseAxis(object):
         Read/write :ref:`XlTickMark` value specifying the type of minor tick
         mark for this axis.
         """
-        minorTickMark = self._element.minorTickMark
-        if minorTickMark is None:
-            return XL_TICK_MARK.CROSS
-        return minorTickMark.val
+        pass
 
     @minor_tick_mark.setter
     def minor_tick_mark(self, value):
-        self._element._remove_minorTickMark()
-        if value is XL_TICK_MARK.CROSS:
-            return
-        self._element._add_minorTickMark(val=value)
+        pass
 
     @property
     def reverse_order(self):
@@ -189,13 +160,11 @@ class _BaseAxis(object):
         For a value axis, it reverses the direction of increasing value from
         bottom-to-top to top-to-bottom.
         """
-        return self._element.orientation == ST_Orientation.MAX_MIN
+        pass
 
     @reverse_order.setter
     def reverse_order(self, value):
-        self._element.orientation = (
-            ST_Orientation.MAX_MIN if bool(value) is True else ST_Orientation.MIN_MAX
-        )
+        pass
 
     @lazyproperty
     def tick_labels(self):
@@ -204,7 +173,7 @@ class _BaseAxis(object):
         formatting properties. Tick labels are the numbers appearing on
         a value axis or the category names appearing on a category axis.
         """
-        return TickLabels(self._element)
+        pass
 
     @property
     def tick_label_position(self):
@@ -212,34 +181,22 @@ class _BaseAxis(object):
         Read/write :ref:`XlTickLabelPosition` value specifying where the tick
         labels for this axis should appear.
         """
-        tickLblPos = self._element.tickLblPos
-        if tickLblPos is None:
-            return XL_TICK_LABEL_POSITION.NEXT_TO_AXIS
-        if tickLblPos.val is None:
-            return XL_TICK_LABEL_POSITION.NEXT_TO_AXIS
-        return tickLblPos.val
+        pass
 
     @tick_label_position.setter
     def tick_label_position(self, value):
-        tickLblPos = self._element.get_or_add_tickLblPos()
-        tickLblPos.val = value
+        pass
 
     @property
     def visible(self):
         """
         Read/write. |True| if axis is visible, |False| otherwise.
         """
-        delete = self._element.delete_
-        if delete is None:
-            return False
-        return False if delete.val else True
+        pass
 
     @visible.setter
     def visible(self, value):
-        if value not in (True, False):
-            raise ValueError("assigned value must be True or False, got: %s" % value)
-        delete = self._element.get_or_add_delete_()
-        delete.val = not value
+        pass
 
 
 class AxisTitle(ElementProxy):
@@ -256,7 +213,7 @@ class AxisTitle(ElementProxy):
         Return the |ChartFormat| object providing shape formatting properties
         for this axis title, such as its line color and fill.
         """
-        return ChartFormat(self._element)
+        pass
 
     @property
     def has_text_frame(self):
@@ -267,16 +224,11 @@ class AxisTitle(ElementProxy):
         already present. Assigning |False| causes any existing text frame to
         be removed along with any text contained in the text frame.
         """
-        if self._title.tx_rich is None:
-            return False
-        return True
+        pass
 
     @has_text_frame.setter
     def has_text_frame(self, value):
-        if bool(value) is True:
-            self._title.get_or_add_tx_rich()
-        else:
-            self._title._remove_tx()
+        pass
 
     @property
     def text_frame(self):
@@ -287,8 +239,7 @@ class AxisTitle(ElementProxy):
         property is destructive as it adds a new text frame if not already
         present.
         """
-        rich = self._title.get_or_add_tx_rich()
-        return TextFrame(rich, self)
+        pass
 
 
 class CategoryAxis(_BaseAxis):
@@ -300,7 +251,7 @@ class CategoryAxis(_BaseAxis):
         A member of :ref:`XlCategoryType` specifying the scale type of this
         axis. Unconditionally ``CATEGORY_SCALE`` for a |CategoryAxis| object.
         """
-        return XL_CATEGORY_TYPE.CATEGORY_SCALE
+        pass
 
 
 class DateAxis(_BaseAxis):
@@ -316,7 +267,7 @@ class DateAxis(_BaseAxis):
         A member of :ref:`XlCategoryType` specifying the scale type of this
         axis. Unconditionally ``TIME_SCALE`` for a |DateAxis| object.
         """
-        return XL_CATEGORY_TYPE.TIME_SCALE
+        pass
 
 
 class MajorGridlines(ElementProxy):
@@ -332,8 +283,7 @@ class MajorGridlines(ElementProxy):
         The |ChartFormat| object providing access to the shape formatting
         properties of this data point, such as line and fill.
         """
-        majorGridlines = self._xAx.get_or_add_majorGridlines()
-        return ChartFormat(majorGridlines)
+        pass
 
 
 class TickLabels(object):
@@ -349,9 +299,7 @@ class TickLabels(object):
         The |Font| object that provides access to the text properties for
         these tick labels, such as bold, italic, etc.
         """
-        defRPr = self._element.defRPr
-        font = Font(defRPr)
-        return font
+        pass
 
     @property
     def number_format(self):
@@ -364,16 +312,11 @@ class TickLabels(object):
         Assigning a format string to this property automatically sets
         :meth:`number_format_is_linked` to |False|.
         """
-        numFmt = self._element.numFmt
-        if numFmt is None:
-            return "General"
-        return numFmt.formatCode
+        pass
 
     @number_format.setter
     def number_format(self, value):
-        numFmt = self._element.get_or_add_numFmt()
-        numFmt.formatCode = value
-        self.number_format_is_linked = False
+        pass
 
     @property
     def number_format_is_linked(self):
@@ -382,18 +325,11 @@ class TickLabels(object):
         taken from the source spreadsheet rather than the value of
         :meth:`number_format`.
         """
-        numFmt = self._element.numFmt
-        if numFmt is None:
-            return False
-        souceLinked = numFmt.sourceLinked
-        if souceLinked is None:
-            return True
-        return numFmt.sourceLinked
+        pass
 
     @number_format_is_linked.setter
     def number_format_is_linked(self, value):
-        numFmt = self._element.get_or_add_numFmt()
-        numFmt.sourceLinked = value
+        pass
 
     @property
     def offset(self):
@@ -402,20 +338,11 @@ class TickLabels(object):
         the tick mark labels and the axis as a percentange of the default
         value. 100 if no label offset setting is present.
         """
-        lblOffset = self._element.lblOffset
-        if lblOffset is None:
-            return 100
-        return lblOffset.val
+        pass
 
     @offset.setter
     def offset(self, value):
-        if self._element.tag != qn("c:catAx"):
-            raise ValueError("only a category axis has an offset")
-        self._element._remove_lblOffset()
-        if value == 100:
-            return
-        lblOffset = self._element._add_lblOffset()
-        lblOffset.val = value
+        pass
 
 
 class ValueAxis(_BaseAxis):
@@ -433,23 +360,11 @@ class ValueAxis(_BaseAxis):
         or maximum. Returns `XL_AXIS_CROSSES.CUSTOM` when a specific numeric
         crossing point (e.g. 1.5) is defined.
         """
-        crosses = self._cross_xAx.crosses
-        if crosses is None:
-            return XL_AXIS_CROSSES.CUSTOM
-        return crosses.val
+        pass
 
     @crosses.setter
     def crosses(self, value):
-        cross_xAx = self._cross_xAx
-        if value == XL_AXIS_CROSSES.CUSTOM:
-            if cross_xAx.crossesAt is not None:
-                return
-        cross_xAx._remove_crosses()
-        cross_xAx._remove_crossesAt()
-        if value == XL_AXIS_CROSSES.CUSTOM:
-            cross_xAx._add_crossesAt(val=0.0)
-        else:
-            cross_xAx._add_crosses(val=value)
+        pass
 
     @property
     def crosses_at(self):
@@ -457,19 +372,11 @@ class ValueAxis(_BaseAxis):
         Numeric value on this axis at which the perpendicular axis crosses.
         Returns |None| if no crossing value is set.
         """
-        crossesAt = self._cross_xAx.crossesAt
-        if crossesAt is None:
-            return None
-        return crossesAt.val
+        pass
 
     @crosses_at.setter
     def crosses_at(self, value):
-        cross_xAx = self._cross_xAx
-        cross_xAx._remove_crosses()
-        cross_xAx._remove_crossesAt()
-        if value is None:
-            return
-        cross_xAx._add_crossesAt(val=value)
+        pass
 
     @property
     def major_unit(self):
@@ -479,17 +386,11 @@ class ValueAxis(_BaseAxis):
         specifies the value should be calculated by PowerPoint based on the
         underlying chart data.
         """
-        majorUnit = self._element.majorUnit
-        if majorUnit is None:
-            return None
-        return majorUnit.val
+        pass
 
     @major_unit.setter
     def major_unit(self, value):
-        self._element._remove_majorUnit()
-        if value is None:
-            return
-        self._element._add_majorUnit(val=value)
+        pass
 
     @property
     def minor_unit(self):
@@ -499,17 +400,11 @@ class ValueAxis(_BaseAxis):
         specifies the value should be calculated by PowerPoint based on the
         underlying chart data.
         """
-        minorUnit = self._element.minorUnit
-        if minorUnit is None:
-            return None
-        return minorUnit.val
+        pass
 
     @minor_unit.setter
     def minor_unit(self, value):
-        self._element._remove_minorUnit()
-        if value is None:
-            return
-        self._element._add_minorUnit(val=value)
+        pass
 
     @property
     def _cross_xAx(self):
@@ -517,7 +412,4 @@ class ValueAxis(_BaseAxis):
         The axis element in the same group (primary/secondary) that crosses
         this axis.
         """
-        crossAx_id = self._element.crossAx.val
-        expr = '(../c:catAx | ../c:valAx | ../c:dateAx)/c:axId[@val="%d"]' % crossAx_id
-        cross_axId = self._element.xpath(expr)[0]
-        return cross_axId.getparent()
+        pass
